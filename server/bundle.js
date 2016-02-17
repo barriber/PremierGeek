@@ -20,7 +20,6 @@ module.exports = function () {
     var bundler = new WebpackDevServer(compiler, {
         publicPath: '/build/',
         hot: true,
-        lazy: true,
         stats: {
             colors: true
         }
