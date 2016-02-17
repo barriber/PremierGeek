@@ -1,8 +1,8 @@
-//var createStore = require('redux');
-//var rootReducer = require('./reducers');
+import {createStore} from 'redux';
+import rootReducer from './reducers';
 
-module.exports = function configureStore() {
-    console.log('BLA BLA BLA');
-    return {};
-
+export default function configureStore() {
+    return createStore(
+        rootReducer
+    );
 }

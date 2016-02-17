@@ -1,17 +1,22 @@
-var React = require('react');
-//var Provider = require('react-redux').Provider;
-var TeamList = require('../components/TeamList');
-var configureStore = require('../configureStore');
+import React, {Component} from 'react';
+import {Provider} from 'react-redux';
+import configureStore from '../configureStore';
+import TeamList from './../components/TeamList';
 
 //const store = configureStore();
-/* <Provider store={store}>
- <TeamList/>
- </Provider> */
-module.exports = React.createClass({
-    render: function () {
+
+export default class Root extends Component {
+    render() {
         return (
             <div>
                 <TeamList/>
-            </div>);
+            </div>
+
+        );
     }
-});
+}
+
+
+//<Provider store={store}>
+//    <TeamList/>
+//</Provider>

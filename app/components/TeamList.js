@@ -1,9 +1,6 @@
-var React = require('react');
-//var AddTeam = require('./AddTeam')
-var _ = require('lodash');
+import  React from 'react';
 
-
-module.exports = React.createClass({
+var TeamList = React.createClass({
     render: function () {
         return (
             <div>
@@ -12,4 +9,6 @@ module.exports = React.createClass({
         );
 
     }
-})
+});
+
+export default TeamList;

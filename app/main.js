@@ -1,8 +1,6 @@
 import  React from 'react';
 import ReactDOM from 'react-dom';
-//import X from './containers/Root'
+import Root from './containers/Root'
 
 
-ReactDOM.render(<div>
-    xxxxs
-</div>, app);
+ReactDOM.render(<Root/>, app);
