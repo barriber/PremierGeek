@@ -7,9 +7,9 @@ var srcPath = path.join(__dirname, 'app');
 var buildPath = path.join(__dirname, 'public', 'build');
 
 module.exports = {
-    devtool : 'eval',
+    devtool : 'source-map',
     entry: [
-        'webpack-dev-server/client?http://localhost:8080/public/',
+        'webpack-dev-server/client?http://localhost:8080/',
         'webpack/hot/only-dev-server',
         path.join(srcPath, 'main.js')
     ],

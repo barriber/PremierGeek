@@ -1,14 +1,36 @@
-import  React from 'react';
+import  React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {fetchPostsIfNeeded} from '../actions/actions';
 
-var TeamList = React.createClass({
-    render: function () {
+class MainPage extends Component {
+    componentDidMount() {
+        const {dispatch, games} = this.props;
+        dispatch(fetchPostsIfNeeded(games));
+    }
+    render() {
         return (
             <div>
-                MANCHESTER UNITED!!
+                Boris
             </div>
         );
-
     }
-});
+}
 
-export default TeamList;
+//var TeamList = React.createClass({
+//    render: function () {
+//        return (
+//            <div>
+//                MANCHESTER !!
+//            </div>
+//        );
+//
+//    }
+//});
+
+function mapStateToProps(state) {
+    const {basicReducer} = state;
+
+    return basicReducer;
+}
+
+export default connect(mapStateToProps)(MainPage);
