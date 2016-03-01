@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import {REQUEST_GAMES} from './actions/actions';
+import {REQUEST_GAMES, RECEIVE_NEXT_ROUND} from './actions/actions';
 
 function footballMatch(state = {
     isFetching: false,
@@ -21,8 +21,17 @@ function basicReducer(state = {}, action) {
             return Object.assign({}, state, {
                 [action.currentRound]: footballMatch(state[action.currentRound], action)
             });
+        case RECEIVE_NEXT_ROUND:
+            return Object.assign({}, state, {
+                isFetching: false,
+                didInvalidate: false,
+                nextRound: action.nextRound,
+                matches: action.matches,
+                lastUpdated: action.receivedAt
+            });
+        default:
+            return state;
     }
-    return state;
 }
 
 const rootReducer = combineReducers({
