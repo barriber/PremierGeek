@@ -29,17 +29,10 @@ module.exports = {
         root: path.join(__dirname, 'node_modules')
     },
     module: {
-        loaders: [
-            {
-                test: /\.js$/,
-                include: srcPath,
-                loader: 'babel',
-
-                query: {
-                    plugins: ['transform-runtime'],
-                    presets: ['es2015', 'react']
-                }
-            }
-        ]
+        loaders: [ {
+            test: /\.js$/,
+            loaders: ['react-hot', 'babel?presets[]=es2015&presets[]=react'],
+            include: srcPath
+        }]
     }
 };
