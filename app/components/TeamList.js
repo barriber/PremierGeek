@@ -1,16 +1,19 @@
 import  React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {fetchPostsIfNeeded} from '../actions/actions';
+import RoundBetList from './RoundBetList';
 
 class MainPage extends Component {
     componentDidMount() {
         const {dispatch, games} = this.props;
-        dispatch(fetchPostsIfNeeded(games));
+        dispatch(fetchPostsIfNeeded());
     }
+
     render() {
+        const {isFetching, lastUpdated, nextRound, matches} = this.props;
         return (
             <div>
-                Boris
+                <RoundBetList nextRound={nextRound} matches={matches}/>
             </div>
         );
     }
@@ -30,7 +33,13 @@ class MainPage extends Component {
 function mapStateToProps(state) {
     const {basicReducer} = state;
 
-    return basicReducer;
+    const {isFetching, lastUpdated, nextRound, matches} = basicReducer.nextBetRound || {
+        isFetching: true,
+        matches: [],
+        nextRound: -1
+    }
+
+    return {isFetching, lastUpdated, nextRound, matches}
 }
 
 export default connect(mapStateToProps)(MainPage);

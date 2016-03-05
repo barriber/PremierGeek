@@ -25,9 +25,9 @@ function receiveMatches(allGames) {
     }
 }
 
-function fetchGames(currentRound) {
+function fetchGames() {
     return dispatch => {
-        dispatch(requestGames(currentRound))
+        dispatch(requestGames())
         return fetch('http://api.football-data.org/v1/soccerseasons/398/fixtures', {
             headers: { 'X-Auth-Token': '5aab4c2c6c8a4af188e5be626459fb78'},
         }).then(response => response.json())
@@ -39,10 +39,10 @@ function shouldFetchGames(state, currentRound) {
     return true; //TODO add functionality
 }
 
-export function fetchPostsIfNeeded(currentRound) {
+export function fetchPostsIfNeeded() {
     return (dispatch, getState) => {
-        if(shouldFetchGames(getState(), currentRound)) {
-            return dispatch(fetchGames(currentRound));
+        if(shouldFetchGames(getState())) {
+            return dispatch(fetchGames());
         }
     }
 }
