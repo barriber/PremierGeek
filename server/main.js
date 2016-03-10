@@ -16,15 +16,15 @@ var isProduction = process.env.NODE_ENV === 'production';
 var port = isProduction ? process.env.PORT : 3000;
 console.log('=====server main ======');
 
-app.use(express.static(buildPath))
-    .get('/', function (req, res) {
-        res.sendFile('index.html', {
-            root: buildPath
-        });
-    }).listen(process.env.PORT || 8080, function (err) {
-    if (err) { console.log(err) };
-    console.log('Listening at localhost:8080');
-})
+//app.use(express.static(buildPath))
+//    .get('/', function (req, res) {
+//        res.sendFile('index.html', {
+//            root: buildPath
+//        });
+//    }).listen(process.env.PORT || 8080, function (err) {
+//    if (err) { console.log(err) };
+//    console.log('Listening at localhost:8080');
+//})
 
 if(!isProduction) {
     console.log('=====DEVELOPMENT MODE ======');
