@@ -12,8 +12,9 @@ var proxy = httpProxy.createProxyServer({
 
 var isProduction = process.env.NODE_ENV === 'production';
 var port = isProduction ? process.env.PORT : 3000;
-
+console.log('=====server main ======');
 if(!isProduction) {
+    console.log('=====DEVELOPMENT MODE ======');
     var bundle = require('../server/bundle');
 
     bundle();
