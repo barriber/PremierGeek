@@ -8,7 +8,9 @@ require('./database');
 
 
 var app = new express();
-app.use(express.static(publicPath));
+app.use(express.static(publicPath)).get('/', function (req, res) {
+   console.log('-=====GOT REQUEST===============');
+});
 var proxy = httpProxy.createProxyServer({
     changeOrigin: true
 });
