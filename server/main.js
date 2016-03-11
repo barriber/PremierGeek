@@ -1,23 +1,21 @@
 var express = require('express');
 var path = require('path');
 var httpProxy = require('http-proxy');
-
+process.env.PWD = process.cwd();
 var publicPath = path.resolve(__dirname, 'public');
 var correctPath = '../public/';
-
+var pwdFile = path.join(process.env.PWD, 'public');
+console.log('====pwdFile==' + pwdFile);
+console.log('=====publicPath=='+publicPath);
 require('./database');
 
 
 var app = new express();
-console.log('====DIRNAME+++++++')
-console.log(__dirname);
-console.log('-------BEFOR PUBLIC PATH-----');
-console.log(publicPath);
-app.use(express.static(correctPath)).get('/', function (req, res) {
-    console.log('-------PUBLIC PATH-----');
-    console.log(correctPath);
+app.use(express.static(pwdFile)).get('/', function (req, res) {
+    console.log('====pwdFile==' + pwdFile);
+    console.log('=====publicPath=='+publicPath);
    res.sendFile('index.html', {
-       root: correctPath
+       root: pwdFile
    });
 });
 var proxy = httpProxy.createProxyServer({
