@@ -8,7 +8,10 @@ require('./database');
 
 
 var app = new express();
-
+console.log('====DIRNAME+++++++')
+console.log(__dirname);
+console.log('-------BEFOR PUBLIC PATH-----');
+console.log(publicPath);
 app.use(express.static(publicPath)).get('/', function (req, res) {
     console.log('-------PUBLIC PATH-----');
     console.log(publicPath);
