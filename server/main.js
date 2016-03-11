@@ -3,6 +3,7 @@ var path = require('path');
 var httpProxy = require('http-proxy');
 
 var publicPath = path.resolve(__dirname, 'public');
+var correctPath = '/public';
 
 require('./database');
 
@@ -12,11 +13,11 @@ console.log('====DIRNAME+++++++')
 console.log(__dirname);
 console.log('-------BEFOR PUBLIC PATH-----');
 console.log(publicPath);
-app.use(express.static(publicPath)).get('/', function (req, res) {
+app.use(express.static(correctPath)).get('/', function (req, res) {
     console.log('-------PUBLIC PATH-----');
-    console.log(publicPath);
+    console.log(correctPath);
    res.sendFile('index.html', {
-       root: publicPath
+       root: correctPath
    });
 });
 var proxy = httpProxy.createProxyServer({
