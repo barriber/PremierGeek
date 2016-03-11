@@ -8,7 +8,10 @@ require('./database');
 
 
 var app = new express();
+
 app.use(express.static(publicPath)).get('/', function (req, res) {
+    console.log('-------PUBLIC PATH-----');
+    console.log(publicPath);
    res.sendFile('index.html', {
        root: publicPath
    });
