@@ -3,7 +3,7 @@ var path = require('path');
 var httpProxy = require('http-proxy');
 
 var publicPath = path.resolve(__dirname, 'public');
-var correctPath = '/public';
+var correctPath = '../public/';
 
 require('./database');
 
