@@ -1,5 +1,4 @@
 var webpack = require('webpack');
-var config = require('config');
 var path = require('path');
 var nodeModulesPath = path.resolve(__dirname, 'node_modules');
 var buildPath = path.join(__dirname, 'public', 'build');
@@ -16,8 +15,16 @@ var config = {
         filename: 'bundle.js'
     },
     plugins: [
+        new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': `"${process.env.NODE_ENV || 'development'}"`
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            compressor: {
+                warnings: false
+            }
         })
     ],
     module: {
