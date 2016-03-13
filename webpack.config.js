@@ -5,6 +5,7 @@ require('html-webpack-plugin');
 var path = require('path');
 var srcPath = path.join(__dirname, 'app');
 var buildPath = path.join(__dirname, 'public', 'build');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     devtool : 'source-map',
@@ -20,7 +21,8 @@ module.exports = {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin()
+        new webpack.NoErrorsPlugin(),
+        new ExtractTextPlugin('styles.css')
     ],
     resolve: {
         extensions: ['', '.js', '.jsx']
@@ -33,6 +35,13 @@ module.exports = {
             test: /\.js$/,
             loaders: ['react-hot', 'babel?presets[]=es2015&presets[]=react'],
             include: srcPath
-        }]
+        },{
+            test: /\.less$/,
+            loader: "style!css!less"
+        },{
+            test: /\.css$/,
+            loader: 'style-loader!css-loader'
+        },
+        ]
     }
 };
