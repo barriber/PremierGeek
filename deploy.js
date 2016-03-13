@@ -1,4 +1,3 @@
-console.log('=====enter deploy.js ==========')
 if (process.env.NODE_ENV === 'production') {
     console.log('=====PRODUCTION MODE ==========')
     var child_process = require('child_process');
