@@ -14,6 +14,9 @@ var config = {
         path: buildPath,
         filename: 'bundle.js'
     },
+    resolve: {
+        extensions: ['', '.js', '.jsx']
+    },
     plugins: [
         //new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.DefinePlugin({
@@ -37,10 +40,10 @@ var config = {
             },
             exclude: [nodeModulesPath]
         },
-            {
-                test: /\.less$/,
-                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader')
-            }]
+        {
+            test: /\.less$/,
+            loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader')
+        }]
     }
 };
 
