@@ -37,11 +37,8 @@ module.exports = {
             include: srcPath
         },{
             test: /\.less$/,
-            loader: "style!css!less"
-        },{
-            test: /\.css$/,
-            loader: 'style-loader!css-loader'
-        },
+            loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader')
+        }
         ]
     }
 };

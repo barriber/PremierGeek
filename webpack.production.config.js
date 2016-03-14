@@ -2,7 +2,7 @@ var webpack = require('webpack');
 var path = require('path');
 var nodeModulesPath = path.resolve(__dirname, 'node_modules');
 var buildPath = path.join(__dirname, 'public', 'build');
-var mainPath = path.resolve(__dirname, 'app', 'main.js');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var srcPath = path.join(__dirname, 'app');
 console.log('process.env.NODE_ENV ++++++' + process.env.NODE_ENV);
 var config = {
@@ -21,6 +21,7 @@ var config = {
                 'NODE_ENV': JSON.stringify('production')
             }
         }),
+        new ExtractTextPlugin('styles.css')
         //new webpack.optimize.UglifyJsPlugin({
         //    compressor: {
         //        warnings: false
@@ -35,7 +36,11 @@ var config = {
                 presets: ['react', 'es2015']
             },
             exclude: [nodeModulesPath]
-        }]
+        },
+            {
+                test: /\.less$/,
+                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader')
+            }]
     }
 };
 
