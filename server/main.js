@@ -2,29 +2,23 @@ var express = require('express');
 var path = require('path');
 var httpProxy = require('http-proxy');
 process.env.PWD = process.cwd();
-var publicPath = path.resolve(__dirname, 'public');
-var correctPath = '../public/';
-var pwdFile = path.join(process.env.PWD, 'public');
-console.log('====pwdFile==' + pwdFile);
-console.log('=====publicPath=='+publicPath);
+var pwdPublicPuth = path.join(process.env.PWD, 'public');
 require('./database');
 
 
 var app = new express();
-app.use(express.static(pwdFile)).get('/', function (req, res) {
-    console.log('====pwdFile==' + pwdFile);
-    console.log('=====publicPath=='+publicPath);
+app.use(express.static(pwdPublicPuth)).get('/', function (req, res) {
    res.sendFile('index.html', {
-       root: pwdFile
+       root: pwdPublicPuth
    });
 });
+
 var proxy = httpProxy.createProxyServer({
     changeOrigin: true
 });
 
 var isProduction = process.env.NODE_ENV === 'production';
 var port = isProduction ? process.env.PORT : 3000;
-console.log('=====server main ======');
 
 if(!isProduction) {
     console.log('=====DEVELOPMENT MODE ======');
