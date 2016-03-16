@@ -24,7 +24,7 @@ var config = {
                 'NODE_ENV': JSON.stringify('production')
             }
         }),
-        //new ExtractTextPlugin('styles.css')
+        new ExtractTextPlugin('styles.css')
         //new webpack.optimize.UglifyJsPlugin({
         //    compressor: {
         //        warnings: false
@@ -42,7 +42,7 @@ var config = {
         },
         {
             test: /\.less$/,
-            loader: "style!css!less"
+            loader:  ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader')
         }]
     }
 };
