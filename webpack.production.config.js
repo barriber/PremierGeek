@@ -15,7 +15,7 @@ var config = {
         filename: 'bundle.js'
     },
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        extensions: ['', '.js', '.jsx', '.less']
     },
     plugins: [
         //new webpack.optimize.OccurenceOrderPlugin(),
