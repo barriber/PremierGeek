@@ -1,4 +1,5 @@
 import  React, {Component} from 'react';
+import {Grid, Row, Col } from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {fetchPostsIfNeeded} from '../actions/actions';
 import RoundBetList from './RoundBetList';
@@ -12,9 +13,21 @@ class MainPage extends Component {
     render() {
         const {isFetching, lastUpdated, nextRound, matches} = this.props;
         return (
-            <div>
-                <RoundBetList nextRound={nextRound} matches={matches}/>
-            </div>
+            <Grid>
+                <Row className="header">
+                </Row>
+                <Row className="body">
+                    <Col className="left_pane" md={2}>
+                    </Col>
+                    <Col className="main_section" md={8}>
+                        <RoundBetList nextRound={nextRound} matches={matches}/>
+                    </Col>
+                    <Col className="right_pane" md={2}>
+                    </Col>
+                </Row>
+                <Row className="footer">
+                </Row>
+            </Grid>
         );
     }
 }

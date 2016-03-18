@@ -40,10 +40,13 @@ var config = {
             },
             exclude: [nodeModulesPath]
         },
-        {
-            test: /\.less$/,
-            loader:  ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader')
-        }]
+            {
+                test: /\.less$/,
+                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader')
+            }, {
+                test: /\.(otf|eot|svg|ttf|woff)/,
+                loader: 'url-loader?limit=8192'
+            }]
     }
 };
 
