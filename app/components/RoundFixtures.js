@@ -1,8 +1,10 @@
 import React from 'react';
 import Fixture from './Fixture';
+import {placeBet} from '../actions/actions';
+
 var RoundFixtures = React.createClass({
     betAction: function(team) {
-       console.log(team);
+        dispatch(placeBet(team));
     },
     render: function () {
         const {nextRound, matches} = this.props;

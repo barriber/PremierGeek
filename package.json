@@ -27,6 +27,7 @@
     "file-loader": "^0.8.5",
     "html-webpack-plugin": "^2.8.1",
     "http-proxy": "^1.13.2",
+    "immutable": "^3.7.6",
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^2.2.0",
     "less": "^2.6.1",

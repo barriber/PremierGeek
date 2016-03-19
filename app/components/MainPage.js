@@ -32,21 +32,10 @@ class MainPage extends Component {
     }
 }
 
-//var TeamList = React.createClass({
-//    render: function () {
-//        return (
-//            <div>
-//                MANCHESTER !!
-//            </div>
-//        );
-//
-//    }
-//});
-
 function mapStateToProps(state) {
     const {basicReducer} = state;
-
-    const {isFetching, lastUpdated, nextRound, matches} = basicReducer.nextBetRound || {
+    let basicReducerJsObj = basicReducer.toJS();
+    const {isFetching, lastUpdated, nextRound, matches} = basicReducerJsObj || {
         isFetching: true,
         matches: [],
         nextRound: -1

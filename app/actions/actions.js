@@ -3,6 +3,7 @@ import _ from  'lodash';
 
 export const REQUEST_GAMES = 'REQUEST_GAMES';
 export const RECEIVE_NEXT_ROUND = 'RECEIVE_NEXT_ROUND';
+export const PLACE_BET = 'PLACE_BET';
 
 function requestGames(currentRound) {
     return {
@@ -13,14 +14,17 @@ function requestGames(currentRound) {
 
 function receiveMatches(allGames) {
     var unplayedMatches = _.chain(allGames).groupBy('status').get('TIMED').groupBy('matchday').value();
-    var nextUnplayedRound = _.findKey(unplayedMatches, function(matchDay) {
+    var nextRoundNumber = _.findKey(unplayedMatches, function(matchDay) {
         return matchDay.length === 10; //TODO Assume there are 10 games per league, need to be changed for Multiple leagues
     });
 
+    var fixturesObj = _.map(unplayedMatches[nextRoundNumber], (fixture) => {
+       return  _.assign(fixture, {bet: ''});
+    });
     return {
         type: RECEIVE_NEXT_ROUND,
-        nextRound: nextUnplayedRound,
-        matches: unplayedMatches[nextUnplayedRound],
+        nextRound: nextRoundNumber,
+        matches: fixturesObj,
         receivedAt: Date.now()
     }
 }
@@ -44,5 +48,12 @@ export function fetchPostsIfNeeded() {
         if(shouldFetchGames(getState())) {
             return dispatch(fetchGames());
         }
+    }
+}
+
+export function placeBet(team) {
+    return {
+        type: PLACE_BET,
+        team
     }
 }
