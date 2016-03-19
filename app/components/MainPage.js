@@ -19,7 +19,7 @@ class MainPage extends Component {
                 <Row className="body">
                     <Col className="left_pane" md={2}>
                     </Col>
-                    <Col className="main_section" md={8}>
+                    <Col className="main_section" md={8} sm={12}>
                         <RoundFixtures nextRound={nextRound} matches={matches}/>
                     </Col>
                     <Col className="right_pane" md={2}>

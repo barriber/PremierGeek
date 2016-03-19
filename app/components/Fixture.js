@@ -13,15 +13,15 @@ var Fixture = React.createClass({
         var awayTeamName = this.removeFC(awayTeam);
         return (
             <Row className='fixture row'>
-                <Col md={4}>
+                <Col md={4} sm={4}>
                     <Button className="team_button" bsStyle="info" onClick={() => betAction(homeTeamName)}>
                         {homeTeamName}
                     </Button>
                 </Col>
-                <Col className="vs" md={1}>
+                <Col className="vs" md={1} sm={2}>
                     vs
                 </Col>
-                <Col md={4}>
+                <Col md={4} sm={4}>
                     <Button className="team_button" bsStyle="info" onClick={() => betAction(homeTeamName)}>
                         {awayTeamName}
                     </Button>
