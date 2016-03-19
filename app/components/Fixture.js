@@ -1,5 +1,6 @@
 import  React from 'react';
 import _ from 'lodash';
+import {Button, Row, Col} from 'react-bootstrap'
 
 var Fixture = React.createClass({
     removeFC: function (teamName) {
@@ -7,12 +8,26 @@ var Fixture = React.createClass({
         return _.replace(removedAfc, 'FC', '');
     },
     render: function () {
-        const {homeTeam, awayTeam} = this.props;
+        const {homeTeam, awayTeam, betAction} = this.props;
+        var homeTeamName = this.removeFC(homeTeam);
+        var awayTeamName = this.removeFC(awayTeam);
         return (
-            <div className='match'>
-                {this.removeFC(homeTeam) + ' - ' + this.removeFC(awayTeam)}
-            </div>
-        )
+            <Row className='fixture row'>
+                <Col md={4}>
+                    <Button className="team_button" bsStyle="info" onClick={() => betAction(homeTeamName)}>
+                        {homeTeamName}
+                    </Button>
+                </Col>
+                <Col className="vs" md={1}>
+                    vs
+                </Col>
+                <Col md={4}>
+                    <Button className="team_button" bsStyle="info" onClick={() => betAction(homeTeamName)}>
+                        {awayTeamName}
+                    </Button>
+                </Col>
+            </Row>
+        );
     }
 });
 

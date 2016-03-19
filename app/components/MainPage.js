@@ -2,7 +2,7 @@ import  React, {Component} from 'react';
 import {Grid, Row, Col } from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {fetchPostsIfNeeded} from '../actions/actions';
-import RoundBetList from './RoundBetList';
+import RoundFixtures from './RoundFixtures';
 
 class MainPage extends Component {
     componentDidMount() {
@@ -20,7 +20,7 @@ class MainPage extends Component {
                     <Col className="left_pane" md={2}>
                     </Col>
                     <Col className="main_section" md={8}>
-                        <RoundBetList nextRound={nextRound} matches={matches}/>
+                        <RoundFixtures nextRound={nextRound} matches={matches}/>
                     </Col>
                     <Col className="right_pane" md={2}>
                     </Col>

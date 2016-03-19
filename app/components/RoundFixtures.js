@@ -1,6 +1,9 @@
 import React from 'react';
 import Fixture from './Fixture';
-var RoundBetList = React.createClass({
+var RoundFixtures = React.createClass({
+    betAction: function(team) {
+       console.log(team);
+    },
     render: function () {
         const {nextRound, matches} = this.props;
         return (
@@ -10,16 +13,14 @@ var RoundBetList = React.createClass({
                 </h1>
                 {
                     _.map(matches, (fixture) => {
-                        return (<Fixture homeTeam={fixture.homeTeamName} awayTeam={fixture.awayTeamName}
-                                         key={fixture.homeTeamName + fixture.awayTeamName}/>)
+                        return (
+                            <Fixture homeTeam={fixture.homeTeamName} awayTeam={fixture.awayTeamName}
+                                     key={fixture.homeTeamName + fixture.awayTeamName} betAction={this.betAction}/>)
                     })
                 }
-
             </div>
         );
-
     }
 });
 
-
-export default RoundBetList;
+export default RoundFixtures;
