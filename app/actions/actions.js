@@ -18,8 +18,9 @@ function receiveMatches(allGames) {
         return matchDay.length === 10; //TODO Assume there are 10 games per league, need to be changed for Multiple leagues
     });
 
+    var i = 0;
     var fixturesObj = _.map(unplayedMatches[nextRoundNumber], (fixture) => {
-       return  _.assign(fixture, {bet: ''});
+       return  _.assign(fixture, {bet: '', id: ++i});
     });
     return {
         type: RECEIVE_NEXT_ROUND,
