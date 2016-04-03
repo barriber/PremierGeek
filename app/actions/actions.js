@@ -20,7 +20,7 @@ function receiveMatches(allGames) {
 
     var i = 0;
     var fixturesObj = _.map(unplayedMatches[nextRoundNumber], (fixture) => {
-       return  _.assign(fixture, {bet: '', id: ++i});
+       return  _.assign(fixture, {bet: 'x', id: ++i});
     });
     return {
         type: RECEIVE_NEXT_ROUND,
@@ -52,9 +52,10 @@ export function fetchPostsIfNeeded() {
     }
 }
 
-export function placeBet(team) {
+export function placeBet(team, fixtureId) {
     return {
         type: PLACE_BET,
-        team
+        team,
+        fixtureId
     }
 }
