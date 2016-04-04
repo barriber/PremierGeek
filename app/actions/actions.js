@@ -33,8 +33,7 @@ function receiveMatches(allGames) {
 function fetchGames() {
     return dispatch => {
         dispatch(requestGames())
-        return fetch('http://api.football-data.org/v1/soccerseasons/398/fixtures', {
-            headers: { 'X-Auth-Token': '5aab4c2c6c8a4af188e5be626459fb78'},
+        return fetch('http://127.0.0.1:3000/test', {
         }).then(response => response.json())
         .then(json => dispatch(receiveMatches(json.fixtures)));
     }

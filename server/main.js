@@ -1,3 +1,4 @@
+
 var express = require('express');
 var path = require('path');
 var httpProxy = require('http-proxy');
@@ -13,12 +14,18 @@ app.use(express.static(pwdPublicPuth)).get('/', function (req, res) {
    });
 });
 
+app.get('/test', function(req, res) {
+    console.log('---------------------------------');
+    console.log('AJAX COLLLLLLL')
+});
 var proxy = httpProxy.createProxyServer({
     changeOrigin: true
 });
 
 var isProduction = process.env.NODE_ENV === 'production';
 var port = isProduction ? process.env.PORT : 3000;
+
+
 
 if(!isProduction) {
     console.log('=====DEVELOPMENT MODE ======');
@@ -40,3 +47,4 @@ app.listen(port, function () {
     console.log('Server running on port ' + port);
 });
 
+require('./routes/items.js')(app);
