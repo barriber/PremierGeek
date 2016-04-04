@@ -33,9 +33,8 @@ function receiveMatches(allGames) {
 function fetchGames() {
     return dispatch => {
         dispatch(requestGames())
-        return fetch('/test', {
-        }).then(response => response.json())
-        .then(json => dispatch(receiveMatches(json.fixtures)));
+        return fetch('/api/items').then(response => response.json())
+            .then(json => dispatch(receiveMatches(json.fixtures)));
     }
 }
 
