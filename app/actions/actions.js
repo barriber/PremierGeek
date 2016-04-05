@@ -14,13 +14,13 @@ function requestGames(currentRound) {
 
 function receiveMatches(allGames) {
     var unplayedMatches = _.chain(allGames).groupBy('status').get('TIMED').groupBy('matchday').value();
-    var nextRoundNumber = _.findKey(unplayedMatches, function(matchDay) {
+    var nextRoundNumber = _.findKey(unplayedMatches, function (matchDay) {
         return matchDay.length === 10; //TODO Assume there are 10 games per league, need to be changed for Multiple leagues
     });
 
     var i = 0;
     var fixturesObj = _.map(unplayedMatches[nextRoundNumber], (fixture) => {
-       return  _.assign(fixture, {bet: 'x', id: ++i});
+        return _.assign(fixture, {bet: 'x', id: ++i});
     });
     return {
         type: RECEIVE_NEXT_ROUND,
@@ -33,8 +33,13 @@ function receiveMatches(allGames) {
 function fetchGames() {
     return dispatch => {
         dispatch(requestGames())
-        return fetch('/api/items').then(response => response.json())
-            .then(json => dispatch(receiveMatches(json.fixtures)));
+        return fetch('/api/nextRound').then(response => response.json())
+            .then(result => dispatch({
+                type: RECEIVE_NEXT_ROUND,
+                nextRound: result.roundNumber,
+                fixtures: result.fixtures,
+                receivedAt: Date.now()
+            }));
     }
 }
 
@@ -44,7 +49,7 @@ function shouldFetchGames(state, currentRound) {
 
 export function fetchPostsIfNeeded() {
     return (dispatch, getState) => {
-        if(shouldFetchGames(getState())) {
+        if (shouldFetchGames(getState())) {
             return dispatch(fetchGames());
         }
     }

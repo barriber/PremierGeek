@@ -11,7 +11,7 @@ class MainPage extends Component {
     }
 
     render() {
-        const {isFetching, lastUpdated, nextRound, matches, dispatch} = this.props;
+        const {isFetching, lastUpdated, nextRound, fixtures, dispatch} = this.props;
         return (
             <Grid>
                 <Row className="header">
@@ -20,7 +20,7 @@ class MainPage extends Component {
                     <Col className="left_pane" md={2}>
                     </Col>
                     <Col className="main_section" md={8} sm={12}>
-                        <RoundFixtures nextRound={nextRound} matches={matches} dispatch={dispatch}/>
+                        <RoundFixtures nextRound={nextRound} fixtures={fixtures} dispatch={dispatch}/>
                     </Col>
                     <Col className="right_pane" md={2}>
                     </Col>
@@ -35,13 +35,13 @@ class MainPage extends Component {
 function mapStateToProps(state) {
     const {basicReducer} = state;
     let basicReducerJsObj = basicReducer.toJS();
-    const {isFetching, lastUpdated, nextRound, matches} = basicReducerJsObj || {
+    const {isFetching, lastUpdated, nextRound, fixtures} = basicReducerJsObj || {
         isFetching: true,
-        matches: [],
+        fixtures: [],
         nextRound: -1
     }
 
-    return {isFetching, lastUpdated, nextRound, matches}
+    return {isFetching, lastUpdated, nextRound, fixtures}
 }
 
 export default connect(mapStateToProps)(MainPage);

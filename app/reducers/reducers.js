@@ -7,7 +7,7 @@ var initilState = immutable.fromJS({
     isFetching: false,
     didInvalidate: false,
     nextRound: 0,
-    matches: immutable.List(),
+    fixtures: immutable.List(),
     lastUpdated: 0
 });
 
@@ -20,7 +20,7 @@ function footballMatch(state = initilState, action) {
         case RECEIVE_NEXT_ROUND:
             return state.withMutations(obj => {
                 obj.set('isFetching', false).set('didInvalidate', false).set('nextRound', action.nextRound)
-                .set('matches', immutable.fromJS(action.matches)).set('lastUpdated', action.receivedAt);
+                .set('fixtures', immutable.fromJS(action.fixtures)).set('lastUpdated', action.receivedAt);
             });
 
 
@@ -33,14 +33,14 @@ function basicReducer(state = initilState, action) {
         case RECEIVE_NEXT_ROUND:
             return footballMatch(state, action)
         case PLACE_BET:
-            var matches = state.get('matches');
-            var fixture = _.find(matches.toJS(), {id: action.fixtureId});
+            var fixtures = state.get('fixtures');
+            var fixture = _.find(fixtures.toJS(), {id: action.fixtureId});
             var usetBet = fixture.bet === action.team ? 'x' : action.team;
-            var index = matches.findIndex((fixture) => {
+            var index = fixtures.findIndex((fixture) => {
                 return fixture.get('id') === action.fixtureId;
             })
 
-            return state.setIn(['matches', index, 'bet'], usetBet);
+            return state.setIn(['fixtures', index, 'bet'], usetBet);
             break;
         default:
             return state;

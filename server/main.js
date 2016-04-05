@@ -14,10 +14,6 @@ app.use(express.static(pwdPublicPuth)).get('/', function (req, res) {
    });
 });
 
-app.get('/test', function(req, res) {
-    console.log('---------------------------------');
-    console.log('AJAX COLLLLLLL')
-});
 var proxy = httpProxy.createProxyServer({
     changeOrigin: true
 });

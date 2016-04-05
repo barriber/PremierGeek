@@ -9,19 +9,14 @@ var Fixture = React.createClass({
         }
         return team === bet ? 'success' : 'warning';
     },
-    removeFC: function (teamName) {
-        var removedAfc = _.replace(teamName, 'AFC', '');
-        return _.replace(removedAfc, 'FC', '');
-    },
+   
     render: function () {
         const {homeTeam, awayTeam, betAction, fixtureId, userBet} = this.props;
-        var homeTeamName = this.removeFC(homeTeam);
-        var awayTeamName = this.removeFC(awayTeam);
         return (
             <Row className='fixture row'>
                 <Col md={4} sm={4}>
                     <Button className="team_button" bsStyle={this.styleBet(1, userBet)} onClick={() => betAction(1, fixtureId)}>
-                        {homeTeamName}
+                        {homeTeam}
                     </Button>
                 </Col>
                 <Col className="vs" md={1} sm={2}>
@@ -29,7 +24,7 @@ var Fixture = React.createClass({
                 </Col>
                 <Col md={4} sm={4}>
                     <Button className="team_button" bsStyle={this.styleBet(2, userBet)} onClick={() => betAction(2, fixtureId)}>
-                        {awayTeamName}
+                        {awayTeam}
                     </Button>
                 </Col>
             </Row>

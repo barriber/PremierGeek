@@ -7,17 +7,17 @@ var RoundFixtures = React.createClass({
         this.props.dispatch(placeBet(bet, fixtureId));
     },
     render: function () {
-        const {nextRound, matches} = this.props;
+        const {nextRound, fixtures} = this.props;
         return (
             <div>
                 <h1>
                     NextRound: {nextRound}
                 </h1>
                 {
-                    _.map(matches, (fixture) => {
+                    _.map(fixtures, (fixture) => {
                         return (
-                            <Fixture homeTeam={fixture.homeTeamName} awayTeam={fixture.awayTeamName} fixtureId={fixture.id}
-                                     key={fixture.homeTeamName + fixture.awayTeamName} betAction={this.betAction}
+                            <Fixture homeTeam={fixture.homeTeam} awayTeam={fixture.awayTeam} fixtureId={fixture.id}
+                                     key={fixture.homeTeam + fixture.awayTeam} betAction={this.betAction}
                             userBet={fixture.bet}/>)
                     })
                 }
