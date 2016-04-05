@@ -3,7 +3,13 @@ var _ = require('lodash');
 
 var handleFixtureObj = function(allGames) {
     var unplayedMatches = _.chain(allGames).groupBy('status').get('TIMED').value();
-    unplayedMatches = _.groupBy(unplayedMatches,'awayTeamName')
+    var z = _.groupBy(unplayedMatches,'matchday');
+    console.log('GRROUUP BYYYYYY');
+    console.log(z);
+    _.forEach(unplayedMatches, fixtures => {
+        fixtures.matchday = fixtures.matchday.toString();
+    });
+    var x = _.groupBy(unplayedMatches,'matchday');
     var nextRoundNumber = _.findKey(unplayedMatches, function(matchDay) {
         return matchDay.length === 10; //TODO Assume there are 10 games per league, need to be changed for Multiple leagues
     });
