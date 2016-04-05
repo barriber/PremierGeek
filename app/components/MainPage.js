@@ -33,13 +33,12 @@ class MainPage extends Component {
 }
 
 function mapStateToProps(state) {
-    const {basicReducer} = state;
-    let basicReducerJsObj = basicReducer.toJS();
+    let basicReducerJsObj = state.basicReducer.toJS();
     const {isFetching, lastUpdated, nextRound, fixtures} = basicReducerJsObj || {
         isFetching: true,
         fixtures: [],
         nextRound: -1
-    }
+    };
 
     return {isFetching, lastUpdated, nextRound, fixtures}
 }

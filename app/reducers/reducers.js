@@ -31,14 +31,14 @@ function basicReducer(state = initilState, action) {
     switch (action.type) {
         case REQUEST_GAMES:
         case RECEIVE_NEXT_ROUND:
-            return footballMatch(state, action)
+            return footballMatch(state, action);
         case PLACE_BET:
             var fixtures = state.get('fixtures');
             var fixture = _.find(fixtures.toJS(), {id: action.fixtureId});
             var usetBet = fixture.bet === action.team ? 'x' : action.team;
             var index = fixtures.findIndex((fixture) => {
                 return fixture.get('id') === action.fixtureId;
-            })
+            });
 
             return state.setIn(['fixtures', index, 'bet'], usetBet);
             break;
