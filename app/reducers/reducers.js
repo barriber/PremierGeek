@@ -22,8 +22,6 @@ function footballMatch(state = initilState, action) {
                 obj.set('isFetching', false).set('didInvalidate', false).set('nextRound', action.nextRound)
                 .set('fixtures', immutable.fromJS(action.fixtures)).set('lastUpdated', action.receivedAt);
             });
-
-
     }
 }
 

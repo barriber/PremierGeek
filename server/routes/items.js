@@ -1,5 +1,7 @@
 require('isomorphic-fetch');
 var _ = require('lodash');
+var globals = require('../globals');
+var leagueCtrl = require('../controllers/LeagueController');
 
 var removeTeamNameOverHead = function(teamName) {
     var removedAfc = _.replace(teamName, 'AFC', '');
@@ -28,13 +30,21 @@ var generateNextRoundObj = function(allGames) {
         roundNumber: nextRoundNumber,
     }
 }
+
 module.exports = function (app) {
     app.route('/api/nextRound').get(function (req, res) {
-        fetch('http://api.football-data.org/v1/soccerseasons/398/fixtures', {
-            headers: { 'X-Auth-Token': '5aab4c2c6c8a4af188e5be626459fb78'},
+        var leagueId = 398;
+        // fetch('http://api.football-data.org/v1/soccerseasons/' + leagueId + '/fixtures', {
+        //     headers: { 'X-Auth-Token': globals.FOOTBALL_DATA_USER},
+        // }).then(response => response.json())
+        //     .then(json => {
+        //         res.send(generateNextRoundObj(json.fixtures));
+        //     })
+        fetch('http://api.football-data.org/v1/soccerseasons/' + leagueId, {
+            headers: { 'X-Auth-Token': globals.FOOTBALL_DATA_USER},
         }).then(response => response.json())
             .then(json => {
-                res.send(generateNextRoundObj(json.fixtures));
-            })
+                leagueCtrl.createLeague(json, 'england');
+            });
     })
 };

@@ -1,0 +1,2 @@
+
+exports.FOOTBALL_DATA_USER = '5aab4c2c6c8a4af188e5be626459fb78';

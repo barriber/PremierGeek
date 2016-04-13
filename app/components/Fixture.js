@@ -15,7 +15,8 @@ var Fixture = React.createClass({
         return (
             <Row className='fixture row'>
                 <Col md={4} sm={4}>
-                    <Button className="team_button" bsStyle={this.styleBet(1, userBet)} onClick={() => betAction(1, fixtureId)}>
+                    <Button className="team_button" bsStyle={this.styleBet(1, userBet)} bsSize="large"
+                            onClick={() => betAction(1, fixtureId)}>
                         {homeTeam}
                     </Button>
                 </Col>
@@ -23,7 +24,8 @@ var Fixture = React.createClass({
                     vs
                 </Col>
                 <Col md={4} sm={4}>
-                    <Button className="team_button" bsStyle={this.styleBet(2, userBet)} onClick={() => betAction(2, fixtureId)}>
+                    <Button className="team_button" bsStyle={this.styleBet(2, userBet)} bsSize="large"
+                            onClick={() => betAction(2, fixtureId)}>
                         {awayTeam}
                     </Button>
                 </Col>
