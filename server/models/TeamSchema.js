@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
-var teamSchema = new Schema({
+var teamSchema = new mongoose.Schema({
     name: String,
     logo: String
 });

@@ -1,4 +1,5 @@
 var League = require('../models/LeagueSchema');
+var moment = require('moment');
 
 exports.createLeague = function (obj, country) {
     var entry = new League({
@@ -6,8 +7,11 @@ exports.createLeague = function (obj, country) {
         country: country,
         numberOfTeams: obj.numberOfTeams,
         Teams: [],
-        nextRound: {},
-        lastUpdated: obj.lastUpdated
+        nextRound: {
+            roundNumber: 0,
+            startTime: moment().format()
+        },
+        football_data_id: obj.id
     });
 
     entry.save()

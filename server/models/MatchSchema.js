@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 
-var matchSchema = new Schema({
+var matchSchema = new mongoose.Schema({
     homeTeamId: Number,
     awayTeamId: Number,
     homeTeamName: String,
@@ -19,6 +19,6 @@ var matchSchema = new Schema({
     played: Boolean
 });
 
-var Match = mongoose.model('League', matchSchema);
+var Match = mongoose.model('Match', matchSchema);
 
 module.exports = Match;

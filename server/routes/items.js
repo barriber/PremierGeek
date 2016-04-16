@@ -3,6 +3,7 @@ var _ = require('lodash');
 var globals = require('../globals');
 var leagueCtrl = require('../controllers/LeagueController');
 var League = require('../models/LeagueSchema');
+var Match = require('../models/MatchSchema');
 var moment = require('moment');
 
 var removeTeamNameOverHead = function (teamName) {
@@ -18,6 +19,7 @@ var getNextRoundLastBidTime = function (fixtures) {
 
 var generateNextRoundObj = function (league) {
     var leagueId = league.football_data_id;
+
     var getLeagueFixtures = function (leagueId) {
         return fetch('http://api.football-data.org/v1/soccerseasons/' + leagueId + '/fixtures', {
             headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
@@ -35,13 +37,13 @@ var generateNextRoundObj = function (league) {
             };
         });
     };
-
     var getLeagueTable = function (leagueId) {
         return fetch('http://api.football-data.org/v1/soccerseasons/' + leagueId + '/leagueTable', {
             headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
         }).then(response => response.json())
     };
-    Promise.all([getLeagueFixtures(leagueId), getLeagueTable(leagueId)]).then(function (result) {
+
+    return Promise.all([getLeagueFixtures(leagueId), getLeagueTable(leagueId)]).then(function (result) {
         var nextRoundObj = result[0];
         var leagueTableObj = result[1].standing;
 
@@ -50,6 +52,8 @@ var generateNextRoundObj = function (league) {
             var homeTeamPosion = _.find(leagueTableObj, {teamName: fixture.homeTeamName});
 
             return {
+                homeTeamId: null,
+                awayTeamId: null,
                 homeTeamName: removeTeamNameOverHead(fixture.homeTeamName),
                 awayTeamName: removeTeamNameOverHead(fixture.awayTeamName),
                 homeTeamPosition: homeTeamPosion.position,
@@ -65,13 +69,16 @@ var generateNextRoundObj = function (league) {
                 played: false
             }
         });
-        var lastBidTime = getNextRoundLastBidTime(unplayedMatches[nextRoundNumber]);
+        var lastBidTime = getNextRoundLastBidTime(nextRoundObj.fixtures);
         league.nextRound = {
-            roundNumber: nextRoundNumber,
+            roundNumber: nextRoundObj.nextRoundNumber,
             startTime: lastBidTime
         }
 
-        league.save()
+        Match.collection.insert(upcomingFixtures)
+        league.save();
+
+        return upcomingFixtures;
     });
 
     // return _.map(unplayedMatches[nextRoundNumber], fixtureObj => {
