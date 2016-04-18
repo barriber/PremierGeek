@@ -67,7 +67,9 @@ var generateNextRoundObj = function (league) {
                 roundNumber: fixture.matchday,
                 seasonYear: 2015, //Fixme setgeneric number
                 date: fixture.date,
-                played: false
+                played: false,
+                awayTeamLogo: awayTeamPosion.crestURI,
+                homeTeamLogo: homeTeamPosion.crestURI
             }
         });
 
