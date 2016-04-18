@@ -61,7 +61,7 @@ var generateNextRoundObj = function (league) {
                 awayTeamPosition: awayTeamPosion.position,
                 homeTeamPoints: homeTeamPosion.points,
                 awayTeamPoints: awayTeamPosion.points,
-                leagueId: leagueId,
+                leagueId: league._id,
                 homeTeamScore: -1,
                 awayTeamScore: -1,
                 roundNumber: fixture.matchday,
@@ -70,56 +70,39 @@ var generateNextRoundObj = function (league) {
                 played: false
             }
         });
+
         var lastBidTime = getNextRoundLastBidTime(nextRoundObj.fixtures);
         league.nextRound = {
             roundNumber: nextRoundObj.nextRoundNumber,
             startTime: lastBidTime
-        }
+        };
 
         Match.collection.insert(upcomingFixtures)
         league.save();
 
         return upcomingFixtures;
     });
-
-    // return _.map(unplayedMatches[nextRoundNumber], fixtureObj => {
-    //     return {
-    //         id: ++id,
-    //         homeTeam: removeTeamNameOverHead(fixtureObj.homeTeamName),
-    //         awayTeam: removeTeamNameOverHead(fixtureObj.awayTeamName),
-    //         date: fixtureObj.date,
-    //         bet: 'x'
-    //     }
-    // });
-}
+};
 
 var getNextRound = function (leagueId) {
     return League.findOne({'football_data_id': leagueId}).then(function (league) {
-        var now = moment().format();
-        // if (moment(now).isSameOrAfter(league.nextRound.startTime)) {
-            return generateNextRoundObj(league).then(function(x) {
-                return x;
-            });
-        // }
-
-        if (_.isUndefined(league.nextRound.roundNumber)) {
-            var x = generateNextRoundObj(league).then(function (x) {
-                console.log(x);
-            });
-
-        }
+        return (moment(moment().format()).isSameOrAfter(league.nextRound.startTime)) ?
+            generateNextRoundObj(league) :
+            Match.find({seasonYear: 2015, leagueId: league._id, roundNumber: league.nextRound.roundNumber}).lean();
     })
-}
+};
 
 module.exports = function (app) {
     app.route('/api/nextRound').get(function (req, res) {
         var leagueId = 398;
-        getNextRound(leagueId).then(function (result) {
-            res.send(result)
+        getNextRound(leagueId).then(function (upcomingFixtures) {
+            var fixtures = _.map(upcomingFixtures, function(fixture) {
+                return _.extend({}, fixture, {bet: 'x'});
+            });
+
+            res.send(fixtures);
         });
-
     })
-
 };
 
 

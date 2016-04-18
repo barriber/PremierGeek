@@ -16,9 +16,9 @@ var RoundFixtures = React.createClass({
                 {
                     _.map(fixtures, (fixture) => {
                         return (
-                            <Fixture homeTeam={fixture.homeTeamName} awayTeam={fixture.awayTeamName} fixtureId={fixture.id}
-                                     key={fixture._id} betAction={this.betAction}
-                            userBet={fixture.bet}/>)
+                            <Fixture homeTeam={fixture.homeTeamName} awayTeam={fixture.awayTeamName} fixtureId={fixture._id}
+                                     key={fixture._id} betAction={this.betAction} userBet={fixture.bet}/>
+                        )
                     })
                 }
             </div>

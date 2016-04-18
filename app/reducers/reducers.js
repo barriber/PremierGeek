@@ -32,10 +32,10 @@ function basicReducer(state = initilState, action) {
             return footballMatch(state, action);
         case PLACE_BET:
             var fixtures = state.get('fixtures');
-            var fixture = _.find(fixtures.toJS(), {id: action.fixtureId});
+            var fixture = _.find(fixtures.toJS(), {_id: action.fixtureId});
             var usetBet = fixture.bet === action.team ? 'x' : action.team;
             var index = fixtures.findIndex((fixture) => {
-                return fixture.get('id') === action.fixtureId;
+                return fixture.get('_id') === action.fixtureId;
             });
 
             return state.setIn(['fixtures', index, 'bet'], usetBet);

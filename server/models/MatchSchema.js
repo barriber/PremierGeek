@@ -10,7 +10,7 @@ var matchSchema = new mongoose.Schema({
     awayTeamPosition: Number,
     homeTeamPoints: Number,
     awayTeamPoints: Number,
-    leagueId: Number,
+    leagueId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'League' }],
     homeTeamScore: Number,
     awayTeamScore: Number,
     roundNumber: Number,
