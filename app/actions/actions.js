@@ -34,10 +34,11 @@ function fetchGames() {
     return dispatch => {
         dispatch(requestGames())
         return fetch('/api/nextRound').then(response => response.json())
-            .then(result => dispatch({
+            .then(result =>
+                dispatch({
                 type: RECEIVE_NEXT_ROUND,
-                nextRound: result.roundNumber,
-                fixtures: result.fixtures,
+                nextRound: result[0].roundNumber,
+                fixtures: result,
                 receivedAt: Date.now()
             }));
     }

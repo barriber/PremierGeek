@@ -1,3 +1,4 @@
+'use strict';
 require('isomorphic-fetch');
 var _ = require('lodash');
 var globals = require('../globals');
@@ -15,7 +16,7 @@ var getNextRoundLastBidTime = function (fixtures) {
     var firstMatch = _.minBy(fixtures, 'date');
 
     return moment(firstMatch.date).subtract(30, 'minutes').format();
-}
+};
 
 var generateNextRoundObj = function (league) {
     var leagueId = league.football_data_id;
@@ -93,13 +94,13 @@ var generateNextRoundObj = function (league) {
 }
 
 var getNextRound = function (leagueId) {
-    League.findOne({'football_data_id': leagueId}).then(function (league) {
+    return League.findOne({'football_data_id': leagueId}).then(function (league) {
         var now = moment().format();
-        if (moment(now).isSameOrAfter(league.nextRound.startTime)) {
-            generateNextRoundObj(league).then(function (result) {
-                console.log(result)
-            })
-        }
+        // if (moment(now).isSameOrAfter(league.nextRound.startTime)) {
+            return generateNextRoundObj(league).then(function(x) {
+                return x;
+            });
+        // }
 
         if (_.isUndefined(league.nextRound.roundNumber)) {
             var x = generateNextRoundObj(league).then(function (x) {
@@ -113,7 +114,9 @@ var getNextRound = function (leagueId) {
 module.exports = function (app) {
     app.route('/api/nextRound').get(function (req, res) {
         var leagueId = 398;
-        getNextRound(leagueId);
+        getNextRound(leagueId).then(function (result) {
+            res.send(result)
+        });
 
     })
 
