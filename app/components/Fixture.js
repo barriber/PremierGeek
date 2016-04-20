@@ -14,12 +14,12 @@ var Fixture = React.createClass({
         const {homeTeam, awayTeam, betAction, fixtureId, userBet, homeTeamLogo, awayTeamLogo} = this.props;
         return (
             <Row className='fixture'>
-                <Col md={5} sm={4}>
+                <Col md={5} sm={5}>
                     <Row className='team home-team'>
-                        <Col md={4} sm={4}>
+                        <Col md={4} sm={3}>
                             <Image src={homeTeamLogo} responsive/>
                         </Col>
-                        <Col md={8} sm={8}>
+                        <Col md={8} sm={9}>
                             <Button className="team_button" bsStyle={this.styleBet(1, userBet)} bsSize="large"
                                     onClick={() => betAction(1, fixtureId)}>
                                 {homeTeam}
@@ -30,16 +30,16 @@ var Fixture = React.createClass({
                 <Col className="vs" md={2} sm={2}>
                     vs
                 </Col>
-                <Col md={5} sm={4}>
+                <Col md={5} sm={5}>
                     <Row className='team away-team'>
-                        <Col md={8} sm={8}>
+                        <Col md={8} sm={9}>
                             <Button className="team_button" bsStyle={this.styleBet(2, userBet)} bsSize="large"
 
                                     onClick={() => betAction(2, fixtureId)}>
                                 {awayTeam}
                             </Button>
                         </Col>
-                        <Col md={4} sm={4}>
+                        <Col md={4} sm={3}>
                             <Image src={awayTeamLogo} rounded responsive/>
                         </Col>
                     </Row>
