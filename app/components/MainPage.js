@@ -17,9 +17,9 @@ class MainPage extends Component {
                 <Row className="header">
                 </Row>
                 <Row className="body">
-                    <Col className="left_pane" md={2}>
+                    <Col className="left_pane" md={1}>
                     </Col>
-                    <Col className="main_section" md={8} sm={12}>
+                    <Col className="main_section" md={9} sm={12}>
                         <RoundFixtures nextRound={nextRound} fixtures={fixtures} dispatch={dispatch}/>
                     </Col>
                     <Col className="right_pane" md={2}>

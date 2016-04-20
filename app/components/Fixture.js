@@ -13,9 +13,9 @@ var Fixture = React.createClass({
     render: function () {
         const {homeTeam, awayTeam, betAction, fixtureId, userBet, homeTeamLogo, awayTeamLogo} = this.props;
         return (
-            <Row className='fixture row'>
-                <Col md={4} sm={4}>
-                    <Row>
+            <Row className='fixture'>
+                <Col md={5} sm={4}>
+                    <Row className='team home-team'>
                         <Col md={4} sm={4}>
                             <Image src={homeTeamLogo} responsive/>
                         </Col>
@@ -27,11 +27,11 @@ var Fixture = React.createClass({
                         </Col>
                     </Row>
                 </Col>
-                <Col className="vs" md={1} sm={2}>
+                <Col className="vs" md={2} sm={2}>
                     vs
                 </Col>
-                <Col md={4} sm={4}>
-                    <Row>
+                <Col md={5} sm={4}>
+                    <Row className='team away-team'>
                         <Col md={8} sm={8}>
                             <Button className="team_button" bsStyle={this.styleBet(2, userBet)} bsSize="large"
 

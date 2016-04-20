@@ -1,8 +1,28 @@
 .main_section {
-  .team_button {
+  .fixture {
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+
+  }
+  .team {
+    display: flex;
+    align-items: center;
+    img {
+      width: auto;
+      height: 55px;
+    }
+
+    &.home-team {
+      img {
+        float: right;
+      }
+    }
+  }
+  .team_button {
+    width: 100%;
   }
   .vs {
-    padding-left: 0px;
+    text-align: center;
   }
 }
