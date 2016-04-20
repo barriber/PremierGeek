@@ -1,13 +1,17 @@
-
 var express = require('express');
 var path = require('path');
 var httpProxy = require('http-proxy');
+var mongoose = require('mongoose');
+
 process.env.PWD = process.cwd();
 var pwdPublicPuth = path.join(process.env.PWD, 'public');
-require('./database');
-
 
 var app = new express();
+
+//conect to mongoDB
+var mongoPass = process.env.MLAB_SCHEME;
+mongoose.connect('mongodb://'+ mongoPass + '@ds019990.mlab.com:19990/premier-geek');
+
 app.use(express.static(pwdPublicPuth)).get('/', function (req, res) {
    res.sendFile('index.html', {
        root: pwdPublicPuth
