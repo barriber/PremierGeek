@@ -2,10 +2,8 @@ var mongoose = require('mongoose');
 
 
 var matchSchema = new mongoose.Schema({
-    homeTeamId: Number,
-    awayTeamId: Number,
-    homeTeamName: String,
-    awayTeamName: String,
+    homeTeamId: { type: mongoose.Schema.Types.ObjectId, ref: 'Team' },
+    awayTeamId: { type: mongoose.Schema.Types.ObjectId, ref: 'Team' },
     homeTeamPosition: Number,
     awayTeamPosition: Number,
     homeTeamPoints: Number,

@@ -8,7 +8,7 @@ var buildPath = path.join(__dirname, 'public', 'build');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-    devtool: 'source-map',
+    devtool: 'eval-source-map',
     entry: [
         'webpack-dev-server/client?http://0.0.0.0:8080/',
         'webpack/hot/only-dev-server',

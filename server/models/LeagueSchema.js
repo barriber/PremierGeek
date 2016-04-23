@@ -11,7 +11,6 @@ var leagueSchema = new Schema({
     name: String,
     country: String,
     numberOfTeams: Number,
-    Teams: [{type: Schema.Types.ObjectId, ref: teamSchema}],
     nextRound: NextRoundSchema,
     lastUpdated: Date,
     football_data_id: Number

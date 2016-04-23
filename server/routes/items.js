@@ -5,6 +5,7 @@ var globals = require('../globals');
 var leagueCtrl = require('../controllers/LeagueController');
 var League = require('../models/LeagueSchema');
 var Match = require('../models/MatchSchema');
+var Team = require('../models/TeamSchema').Team;
 var moment = require('moment');
 
 var removeTeamNameOverHead = function (teamName) {
@@ -38,51 +39,70 @@ var generateNextRoundObj = function (league) {
             };
         });
     };
+
     var getLeagueTable = function (leagueId) {
         return fetch('http://api.football-data.org/v1/soccerseasons/' + leagueId + '/leagueTable', {
             headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
-        }).then(response => response.json())
+        }).then(response => response.json());
     };
 
-    return Promise.all([getLeagueFixtures(leagueId), getLeagueTable(leagueId)]).then(function (result) {
+    var verifyTeams = function (leagueId) {
+        return fetch('http://api.football-data.org/v1/soccerseasons/' + leagueId + '/teams', {
+            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
+        }).then((response => response.json())).then(function (result) {
+            var x = _.map(result.teams, function (team) {
+                var fixedTeamName = removeTeamNameOverHead(team.name);
+
+                return Team.findOneAndUpdate({name: fixedTeamName}, {
+                    name: fixedTeamName,
+                    logo: team.crestUrl
+                }, {upsert: true});
+            });
+
+            return Promise.all(x);
+        });
+    };
+
+    return Promise.all([getLeagueFixtures(leagueId), getLeagueTable(leagueId), verifyTeams(leagueId)]).then(function (result) {
         var nextRoundObj = result[0];
         var leagueTableObj = result[1].standing;
 
         var upcomingFixtures = _.map(nextRoundObj.fixtures, (fixture) => {
-            var awayTeamPosion = _.find(leagueTableObj, {teamName: fixture.awayTeamName});
             var homeTeamPosion = _.find(leagueTableObj, {teamName: fixture.homeTeamName});
+            var awayTeamPosion = _.find(leagueTableObj, {teamName: fixture.awayTeamName});
+            return Promise.all([Team.findOne({name: removeTeamNameOverHead(fixture.homeTeamName)}),
+                Team.findOne({name: removeTeamNameOverHead(fixture.awayTeamName)})]).then(function (teams) {
+                return {
+                    homeTeamId: teams[0]._id,
+                    awayTeamId: teams[1]._id,
+                    homeTeamPosition: homeTeamPosion.position,
+                    awayTeamPosition: awayTeamPosion.position,
+                    homeTeamPoints: homeTeamPosion.points,
+                    awayTeamPoints: awayTeamPosion.points,
+                    leagueId: league._id,
+                    homeTeamScore: -1,
+                    awayTeamScore: -1,
+                    roundNumber: fixture.matchday,
+                    seasonYear: 2015, //Fixme setgeneric number
+                    date: fixture.date,
+                    played: false
+                }
+            });
 
-            return {
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: removeTeamNameOverHead(fixture.homeTeamName),
-                awayTeamName: removeTeamNameOverHead(fixture.awayTeamName),
-                homeTeamPosition: homeTeamPosion.position,
-                awayTeamPosition: awayTeamPosion.position,
-                homeTeamPoints: homeTeamPosion.points,
-                awayTeamPoints: awayTeamPosion.points,
-                leagueId: league._id,
-                homeTeamScore: -1,
-                awayTeamScore: -1,
-                roundNumber: fixture.matchday,
-                seasonYear: 2015, //Fixme setgeneric number
-                date: fixture.date,
-                played: false,
-                awayTeamLogo: awayTeamPosion.crestURI,
-                homeTeamLogo: homeTeamPosion.crestURI
-            }
         });
 
-        var lastBidTime = getNextRoundLastBidTime(nextRoundObj.fixtures);
-        league.nextRound = {
-            roundNumber: nextRoundObj.nextRoundNumber,
-            startTime: lastBidTime
-        };
+        return Promise.all(upcomingFixtures).then(function (fixtures) {
+            var lastBidTime = getNextRoundLastBidTime(nextRoundObj.fixtures);
+            league.nextRound = {
+                roundNumber: nextRoundObj.nextRoundNumber,
+                startTime: lastBidTime
+            };
 
-        Match.collection.insert(upcomingFixtures)
-        league.save();
+            Match.collection.insert(fixtures);
+            league.save();
 
-        return upcomingFixtures;
+            return fixtures;
+        });
     });
 };
 
@@ -90,7 +110,11 @@ var getNextRound = function (leagueId) {
     return League.findOne({'football_data_id': leagueId}).then(function (league) {
         return (moment(moment().format()).isSameOrAfter(league.nextRound.startTime)) ?
             generateNextRoundObj(league) :
-            Match.find({seasonYear: 2015, leagueId: league._id, roundNumber: league.nextRound.roundNumber}).lean();
+            Match.find({
+                seasonYear: 2015,
+                leagueId: league._id,
+                roundNumber: league.nextRound.roundNumber
+            }).lean();
     })
 };
 
@@ -98,13 +122,27 @@ module.exports = function (app) {
     app.route('/api/nextRound').get(function (req, res) {
         var leagueId = 398;
         getNextRound(leagueId).then(function (upcomingFixtures) {
-            var fixtures = _.map(upcomingFixtures, function(fixture) {
-                return _.extend({}, fixture, {bet: 'x'});
+            Match.populate(upcomingFixtures, 'homeTeamId awayTeamId').then(function (populatedFixtures) {
+                var fixtures = _.map(populatedFixtures, function (fixture) {
+                    var homeTeam = fixture.homeTeamId.toObject();
+                    var awayTeam = fixture.awayTeamId.toObject();
+                    return {
+                        id: fixture._id,
+                        homeTeam: homeTeam,
+                        awayTeam: awayTeam,
+                        homeTeamPoints: fixture.homeTeamPoints,
+                        awayTeamPoints: fixture.awayTeamPoints,
+                        homeTeamPosition: fixture.homeTeamPosition,
+                        awayTeamPosition: fixture.awayTeamPosition,
+                        roundNumber: fixture.roundNumber,
+                        date: fixture.date,
+                        bet: 'x'
+                    };
+                });
+                res.send(fixtures);
             });
-
-            res.send(fixtures);
         });
-    })
+    });
 };
 
 
