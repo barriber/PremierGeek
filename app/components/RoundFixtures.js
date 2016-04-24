@@ -2,11 +2,12 @@ import React from 'react';
 import Fixture from './Fixture';
 import {placeBet} from '../actions/actions';
 
-var RoundFixtures = React.createClass({
-    betAction: function(bet, fixtureId) {
+class RoundFixtures extends React.Component {
+    betAction(bet, fixtureId) {
         this.props.dispatch(placeBet(bet, fixtureId));
-    },
-    render: function () {
+    }
+
+    render() {
         const {nextRound, fixtures} = this.props;
         return (
             <div>
@@ -17,13 +18,14 @@ var RoundFixtures = React.createClass({
                     _.map(fixtures, (fixture) => {
                         return (
                             <Fixture homeTeam={fixture.homeTeam} awayTeam={fixture.awayTeam} fixtureId={fixture.id}
-                                     key={fixture.id} betAction={this.betAction} userBet={fixture.bet} />
+                                     key={fixture.id} betAction={this.betAction} userBet={fixture.bet}/>
                         );
                     })
                 }
             </div>
         );
     }
-});
+};
+    
 
 export default RoundFixtures;
