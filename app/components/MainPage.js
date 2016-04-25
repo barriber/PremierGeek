@@ -14,8 +14,7 @@ class MainPage extends Component {
         const {isFetching, lastUpdated, nextRound, fixtures, dispatch} = this.props;
         return (
             <Grid>
-                <Row className="header">
-                </Row>
+                
                 <Row className="body">
                     <Col className="left_pane" md={1}>
                     </Col>
