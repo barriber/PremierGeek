@@ -1,51 +1,21 @@
 import  React from 'react';
-import _ from 'lodash';
 import {Button, Row, Col, Image} from 'react-bootstrap'
+import MatchSide from './MatchSide'
 
-var Fixture = React.createClass({
-    styleBet: function (team, bet) {
-        if (bet === 'x') {
-            return 'info';
-        }
-        return team === bet ? 'success' : 'warning';
-    },
-
-    render: function () {
-        const {homeTeam, awayTeam, betAction, fixtureId, userBet} = this.props;
+class Fixture extends React.Component {
+    render() {
+        const {homeTeam, awayTeam, userBet, fixtureId, betAction} = this.props;
         return (
             <Row className='fixture'>
-                <Col md={5} sm={5}>
-                    <Row className='team home-team'>
-                        <Col md={4} sm={3}>
-                            <Image src={homeTeam.logo} responsive/>
-                        </Col>
-                        <Col md={8} sm={9}>
-                            <Button className="team_button" bsStyle={this.styleBet(1, userBet)} bsSize="large"
-                                    onClick={() => betAction(1, fixtureId)}>
-                                {homeTeam.name}
-                            </Button>
-                        </Col>
-                    </Row>
-                </Col>
+                <MatchSide team={homeTeam} userBet={userBet} isHomeTeam={true} betAction={betAction} fixtureId={fixtureId}/>
                 <Col className="vs" md={2} sm={2}>
                     vs
                 </Col>
-                <Col md={5} sm={5}>
-                    <Row className='team away-team'>
-                        <Col md={8} sm={9}>
-                            <Button className="team_button" bsStyle={this.styleBet(2, userBet)} bsSize="large"
-                                    onClick={() => betAction(2, fixtureId)}>
-                                {awayTeam.name}
-                            </Button>
-                        </Col>
-                        <Col md={4} sm={3}>
-                            <Image src={awayTeam.logo} rounded responsive/>
-                        </Col>
-                    </Row>
-                </Col>
+                <MatchSide team={awayTeam} userBet={userBet} isHomeTeam={false} betAction={betAction} fixtureId={fixtureId}/>
             </Row>
+
         );
     }
-});
+};
 
 export default Fixture;

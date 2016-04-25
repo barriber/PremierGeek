@@ -2,13 +2,13 @@ import React from 'react';
 import Fixture from './Fixture';
 import {placeBet} from '../actions/actions';
 
-class RoundFixtures extends React.Component {
-    betAction(bet, fixtureId) {
+var RoundFixtures = React.createClass({
+    betAction: function(bet, fixtureId) {
         this.props.dispatch(placeBet(bet, fixtureId));
-    }
-
-    render() {
+    },
+    render: function() {
         const {nextRound, fixtures} = this.props;
+
         return (
             <div>
                 <h1>
@@ -25,7 +25,7 @@ class RoundFixtures extends React.Component {
             </div>
         );
     }
-};
+});
     
 
 export default RoundFixtures;
