@@ -1,19 +1,27 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Fixture from './Fixture';
 import {placeBet} from '../actions/actions';
+import {connect} from 'react-redux';
+import {fetchPostsIfNeeded} from '../actions/actions';
 
-var RoundFixtures = React.createClass({
-    betAction: function(bet, fixtureId) {
+class RoundFixtures extends Component {
+    componentDidMount() {
+        const {dispatch, games} = this.props;
+        dispatch(fetchPostsIfNeeded());
+    }
+
+    betAction(bet, fixtureId) {
         this.props.dispatch(placeBet(bet, fixtureId));
-    },
-    render: function() {
+    }
+
+    render() {
         const {nextRound, fixtures} = this.props;
 
         return (
             <div>
-                <h1>
+                {/*<h1>
                     NextRound: {nextRound}
-                </h1>
+                </h1>*/}
                 {
                     _.map(fixtures, (fixture) => {
                         return (
@@ -25,7 +33,17 @@ var RoundFixtures = React.createClass({
             </div>
         );
     }
-});
-    
+};
 
-export default RoundFixtures;
+function mapStateToProps(state) {
+    let basicReducerJsObj = state.basicReducer.toJS();
+    const {isFetching, lastUpdated, nextRound, fixtures} = basicReducerJsObj || {
+        isFetching: true,
+        fixtures: [],
+        nextRound: -1
+    };
+
+    return {isFetching, lastUpdated, nextRound, fixtures}
+}
+
+export default connect(mapStateToProps)(RoundFixtures);

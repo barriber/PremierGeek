@@ -11,7 +11,7 @@ class MatchSide extends React.Component {
 
     getTeamLogo(team) {
         return (
-            <Col md={4} sm={3} key={team.name + ' logo'} >
+            <Col md={3} sm={3} key={team.name + ' logo'} >
                 <Image src={team.logo} responsive/>
             </Col>
         );
@@ -22,7 +22,7 @@ class MatchSide extends React.Component {
         let teamIndex = isHomeTeam ? 1 : 2;
 
         return (
-            <Col md={8} sm={9} key={team.name + ' button'}>
+            <Col md={9} sm={9} key={team.name + ' button'}>
                 <Button className="team_button" bsStyle={this.styleBet(teamIndex, userBet)} bsSize="large"
                         onClick={() => betAction(teamIndex, fixtureId)} >
                     {team.name}
@@ -37,11 +37,10 @@ class MatchSide extends React.Component {
         let sideClass = isHomeTeam ? 'home-team' : 'away-team';
 
         return (
-            <Col md={5} sm={5} >
+            
                 <Row className={'team ' + sideClass} key={team.name}  >
                     {isHomeTeam ? betSideElements : betSideElements.reverse()}
                 </Row>
-            </Col>
         );
     }
 }
