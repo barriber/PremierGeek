@@ -9,14 +9,13 @@ class RoundFixtures extends Component {
         super(props);
         this.betAction = this.betAction.bind(this);
     }
-    
+
     componentDidMount() {
         const {dispatch, games} = this.props;
         dispatch(fetchPostsIfNeeded());
     }
 
     betAction(bet, fixtureId) {
-        console.log('asd')
         this.props.dispatch(placeBet(bet, fixtureId));
     }
 
