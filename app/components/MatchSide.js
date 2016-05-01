@@ -11,7 +11,7 @@ class MatchSide extends React.Component {
 
     getTeamLogo(team) {
         return (
-            <Col md={3} sm={3} key={team.name + ' logo'} >
+            <Col md={4} sm={4} key={team.name + ' logo'} >
                 <Image src={team.logo} responsive/>
             </Col>
         );
@@ -22,8 +22,8 @@ class MatchSide extends React.Component {
         let teamIndex = isHomeTeam ? 1 : 2;
 
         return (
-            <Col md={9} sm={9} key={team.name + ' button'}>
-                <Button className="team_button" bsStyle={this.styleBet(teamIndex, userBet)} bsSize="large"
+            <Col md={8} sm={8} key={team.name + ' button'}>
+                <Button className="team_button" bsStyle={this.styleBet(teamIndex, userBet)}
                         onClick={() => betAction(teamIndex, fixtureId)} >
                     {team.name}
                 </Button>

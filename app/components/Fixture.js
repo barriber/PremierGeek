@@ -7,14 +7,14 @@ class Fixture extends React.Component {
         const {homeTeam, awayTeam, userBet, fixtureId, betAction} = this.props;
         return (
             <Row className='fixture'>
-                <Col md={4} sm={5} mdOffset={2} >
+                <Col md={3} sm={6} mdOffset={3} smOffset={2} >
                     <MatchSide team={homeTeam} userBet={userBet} isHomeTeam={true} betAction={betAction}
                                fixtureId={fixtureId}/>
                 </Col>
                 <Col className="vs" md={1} sm={1}>
                     vs
                 </Col>
-                <Col md={4} sm={5}>
+                <Col md={3} sm={6}>
                     <MatchSide team={awayTeam} userBet={userBet} isHomeTeam={false} betAction={betAction}
                                fixtureId={fixtureId}/>
                 </Col>
@@ -22,7 +22,6 @@ class Fixture extends React.Component {
 
         );
     }
-}
-;
+};
 
 export default Fixture;

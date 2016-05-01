@@ -1,11 +1,12 @@
 
 @header-height: 5%;
-@footer-height: 3%;
+@border:  1px solid #e7e7e7;
+
 html, body, #app, .container-fluid {
   height: 100%;
 }
 .main-header {
-  background-color: red;
+  border-bottom: @border;
   height: @header-height;
 }
 
@@ -13,9 +14,9 @@ html, body, #app, .container-fluid {
   background-color:pink;
 }
 .main-row {
-  height: 100% - @header-height - @footer-height;
+  height: 100% - @header-height;
   .left-pane {
-    background-color: blue;
+    border-right: @border;
     height: 100%;
   }
 
@@ -24,9 +25,4 @@ html, body, #app, .container-fluid {
     overflow: auto;
     padding-top: 20px;
   }
-}
-
-.footer {
-  background-color: orange;
-  height: @footer-height;
 }
