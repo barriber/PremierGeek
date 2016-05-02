@@ -3,7 +3,7 @@
 var webpack = require('webpack');
 require('html-webpack-plugin');
 var path = require('path');
-var srcPath = path.join(__dirname, 'app');
+var srcPath = path.join(__dirname, 'client');
 var buildPath = path.join(__dirname, 'public', 'build');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
