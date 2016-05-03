@@ -1,4 +1,4 @@
 node_modules
-bower_components
 .idea/*
-public/build/*
+./client/node_modules
+./client/public/build
