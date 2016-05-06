@@ -5,22 +5,27 @@ require('html-webpack-plugin');
 var path = require('path');
 var srcPath = path.join(__dirname, 'app', 'main.js');
 var buildPath = path.join(__dirname, 'public', 'build');
-var pPath = path.join(__dirname, 'public');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry:  srcPath,
+    entry: {
+        app: srcPath,
+        vendor: ['react', 'redux', 'lodash', 'react-bootstrap']
+    },
     output: {
         path: buildPath,
         publicPath: '',
-        filename: 'app.js',
+        filename: '[name].js',
         pathinfo: true
     },
     plugins: [
-        // new webpack.optimize.DedupePlugin(),
-        new ExtractTextPlugin('styles.css')
-        // new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
+        new webpack.optimize.DedupePlugin(),
+        new ExtractTextPlugin('styles.css'),
+        new webpack.optimize.CommonsChunkPlugin('vendor'),
+        new HtmlWebpackPlugin({
+            template: './public/index.html'
+        })
     ],
     resolve: {
         root: path.join(__dirname, 'app'),
