@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import immutable  from 'immutable';
 import {combineReducers} from 'redux';
-import {REQUEST_GAMES, RECEIVE_NEXT_ROUND, PLACE_BET} from './../actions/actions';
+import {REQUEST_GAMES, RECEIVE_NEXT_ROUND, PLACE_BET} from '..//actions/actions';
 
 var initilState = immutable.fromJS({
     isFetching: false,

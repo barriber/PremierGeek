@@ -40,7 +40,9 @@ function fetchGames() {
                 nextRound: result[0].roundNumber,
                 fixtures: result,
                 receivedAt: Date.now()
-            }));
+            })).catch(error => {
+                console.log(error);
+            });
     }
 }
 
