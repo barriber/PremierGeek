@@ -1,9 +1,10 @@
+'use strict'
+
 var express = require('express');
 var path = require('path');
 var mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 var app = express();
-
 
 // process.env.PWD = process.cwd();
 // var pwdPublicPuth = path.join(process.env.PWD, 'public');
