@@ -14,6 +14,7 @@ gulp.task('hub', function() {
 gulp.task('install:client', function () {
     console.log('======install==========')
     return gulp.src('./client/package.json').pipe(install());
+    console.log('======install END==========')
 });
 
 gulp.task('init:client', gulpSequence(['install:client'], ['hub'], ['webpack:build']));
