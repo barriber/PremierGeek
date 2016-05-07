@@ -6,8 +6,7 @@ var mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 var app = express();
 
-// process.env.PWD = process.cwd();
-// var pwdPublicPuth = path.join(process.env.PWD, 'public');
+
 var publicPath = path.join(__dirname, '..', 'client', 'public', 'build');
 
 

@@ -5,7 +5,9 @@ const hub = require('gulp-hub');
 const install = require('gulp-install');
 const gulpSequence = require('gulp-sequence');
 var path = require('path');
-const webpackPath = path.join(__dirname, 'client', 'package.json');
+process.env.PWD = process.cwd();
+// var pwdPublicPuth = path.join(, 'public');
+const webpackPath = path.join(process.env.PWD, 'client', 'package.json');
 
 
 gulp.task('hub', function() {
