@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server/main.js",
+    "start": "node server/app.js",
     "postinstall": "node deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
