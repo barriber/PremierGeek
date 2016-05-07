@@ -1,11 +1,10 @@
 'use strict'
 
-var webpack = require('webpack');
-require('html-webpack-plugin');
-var path = require('path');
-var srcPath = path.join(__dirname, 'app', 'main.js');
-var buildPath = path.join(__dirname, 'public', 'build');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require('webpack');
+const path = require('path');
+const srcPath = path.join(__dirname, 'app', 'main.js');
+const buildPath = path.join(__dirname, 'public', 'build');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -20,9 +19,8 @@ module.exports = {
         pathinfo: true
     },
     plugins: [
-        new webpack.optimize.DedupePlugin(),
         new ExtractTextPlugin('styles.css'),
-        new webpack.optimize.CommonsChunkPlugin('vendor'),
+        new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
         new HtmlWebpackPlugin({
             template: './public/index.html'
         })
@@ -31,9 +29,6 @@ module.exports = {
         root: path.join(__dirname, 'app'),
         extensions: ['', '.js', '.jsx']
     },
-    // resolveLoader: {
-    //     root: path.join(__dirname, 'node_modules')
-    // },
     module: {
         loaders: [
             {
