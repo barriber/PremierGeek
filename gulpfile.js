@@ -7,10 +7,12 @@ const gulpSequence = require('gulp-sequence');
 
 
 gulp.task('hub', function() {
+    console.log('======hub==========')
     hub(['./client/gulpfile.js']);
 });
 
 gulp.task('install:client', function () {
+    console.log('======install==========')
     return gulp.src('./client/package.json').pipe(install());
 });
 
