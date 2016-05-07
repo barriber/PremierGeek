@@ -17,4 +17,4 @@ gulp.task('install:client', function () {
     console.log('======install END==========')
 });
 
-gulp.task('init:client', gulpSequence('install:client', 'hub', 'webpack:build'));
+gulp.task('init:client', gulpSequence('install:client'));
