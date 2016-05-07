@@ -12,9 +12,11 @@ require('./gulpfile');
 //
 // console.log('----' + pwdPublicPuth);
 // console.log('++++' + webpackPath);
+console.log('===========================================================================')
 if (process.env.NODE_ENV === 'production') {
     console.log('=====PRODUCTION MODE ==========')
     var child_process = require('child_process');
+
     gulp.start('init:client');
     // child_process.exec(`webpack -p --config  ${pwdPublicPuth}`, function (error, stdout, stderr) {
     //     if (error !== null) {
