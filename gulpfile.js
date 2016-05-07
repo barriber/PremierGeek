@@ -18,8 +18,8 @@ gulp.task('hub', function() {
 gulp.task('install:client', function () {
     console.log('======install==========')
     console.log(webpackPath);
-    return gulp.src(webpackPath).pipe(install({production: true}));
+    return gulp.src(webpackPath).pipe(install());
     console.log('======install END==========')
 });
 
-gulp.task('init:client', gulpSequence(['install:client'], 'hub'));
+gulp.task('init:client', gulpSequence(['install:client'], 'hub', ['webpack:build']));
