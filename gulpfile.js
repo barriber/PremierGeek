@@ -22,4 +22,4 @@ gulp.task('install:client', function () {
     console.log('======install END==========')
 });
 
-gulp.task('init:client', gulpSequence('install:client'));
+gulp.task('init:client', gulpSequence(['install:client'], 'hub'));
