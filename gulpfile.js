@@ -13,7 +13,7 @@ gulp.task('hub', function() {
 
 gulp.task('install:client', function () {
     console.log('======install==========')
-    return gulp.src('./client/package.json').pipe(install());
+    return gulp.src('./client/package.json').pipe(install({production: true}));
     console.log('======install END==========')
 });
 
