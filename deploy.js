@@ -1,3 +1,4 @@
+var path = require('path');
 const webpackPath = path.join(__dirname, '..', 'client', 'webpack.config.js');
 
 if (process.env.NODE_ENV === 'production') {
