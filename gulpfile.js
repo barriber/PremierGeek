@@ -4,6 +4,8 @@ const gulp = require('gulp');
 const hub = require('gulp-hub');
 const install = require('gulp-install');
 const gulpSequence = require('gulp-sequence');
+var path = require('path');
+const webpackPath = path.join(__dirname, 'client', 'package.json');
 
 
 gulp.task('hub', function() {
@@ -13,7 +15,8 @@ gulp.task('hub', function() {
 
 gulp.task('install:client', function () {
     console.log('======install==========')
-    return gulp.src('./client/package.json').pipe(install({production: true}));
+    console.log(webpackPath);
+    return gulp.src(webpackPath).pipe(install({production: true}));
     console.log('======install END==========')
 });
 
