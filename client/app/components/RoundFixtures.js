@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import _ from 'lodash';
 import Fixture from './Fixture';
 import {placeBet} from '../actions/actions';
 import {connect} from 'react-redux';
@@ -26,8 +27,7 @@ class RoundFixtures extends Component {
             <div>
                 {/*<h1>
                     NextRound: {nextRound}
-                </h1>*/}
-                {
+                </h1>*/
                     _.map(fixtures, (fixture) => {
                         return (
                             <Fixture homeTeam={fixture.homeTeam} awayTeam={fixture.awayTeam} fixtureId={fixture.id}

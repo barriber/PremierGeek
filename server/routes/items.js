@@ -119,7 +119,7 @@ var getNextRound = function (leagueId) {
 };
 
 module.exports = function (app) {
-    app.route('/api/nextRound').get(function (req, res) {
+    app.route('/api/nextRound').get(isLoggedIn, function (req, res) {
         var leagueId = 398;
         getNextRound(leagueId).then(function (upcomingFixtures) {
             Match.populate(upcomingFixtures, 'homeTeamId awayTeamId').then(function (populatedFixtures) {
@@ -144,6 +144,16 @@ module.exports = function (app) {
         });
     });
 };
+
+function isLoggedIn(req, res, next) {
+
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+}
 
 
 // var leagueId = 398;

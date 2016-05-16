@@ -1,11 +1,11 @@
 import React from 'react';
-import {Router, Route, hashHistory, IndexRoute} from 'react-router';
+import {Router, Route, hashHistory, IndexRoute, browserHistory } from 'react-router';
 import MainLayout from './components/MainLayout';
 import RoundFixtures from './components/RoundFixtures';
 import Login from './containers/Login';
 
 export default (
-    <Router history={hashHistory}>
+    <Router history={browserHistory }>
         <Route component={MainLayout}>
             <Route path="/" component={RoundFixtures}/>
             <Route path="login" component={Login}/>

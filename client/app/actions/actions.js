@@ -32,7 +32,7 @@ function receiveMatches(allGames) {
 
 function fetchGames() {
     return dispatch => {
-        dispatch(requestGames())
+        dispatch(requestGames());
         return fetch('/api/nextRound').then(response => response.json())
             .then(result =>
                 dispatch({
