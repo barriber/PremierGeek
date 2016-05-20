@@ -33,7 +33,9 @@ function receiveMatches(allGames) {
 function fetchGames() {
     return dispatch => {
         dispatch(requestGames());
-        return fetch('/api/nextRound').then(response => response.json())
+        return fetch('/api/nextRound', {
+            credentials: 'include' //For cookie login!!!
+        }).then(response => response.json())
             .then(result =>
                 dispatch({
                 type: RECEIVE_NEXT_ROUND,

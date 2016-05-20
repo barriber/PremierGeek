@@ -18,18 +18,39 @@ const publicPath = path.join(__dirname, '..', 'client', 'public', 'build');
 const mongoPass = process.env.MLAB_SCHEME;
 mongoose.connect('mongodb://' + mongoPass + '@ds019990.mlab.com:19990/premier-geek');
 
-app.use(bodyParser.json());
+
+
 app.use(cookieParser());
+app.use(bodyParser.json());
 app.use(express.static(publicPath));
 app.use(expressSession({
+    saveUninitialized: true,
     secret: 'keyboard cat',
     resave: true,
-    maxAge: 360*5,
-    saveUninitialized: true,
-    cookie: {secure: true}
+    cookie : { httpOnly: true, secure : false, maxAge : (4 * 60 * 60 * 1000)}
+
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// app.use(function (req, res, next) {
+//
+//     // Website you wish to allow to connect
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//
+//     // Request methods you wish to allow
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//
+//     // Request headers you wish to allow
+//     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//
+//     // Set to true if you need the website to include cookies in the requests sent
+//     // to the API (e.g. in case you use sessions)
+//     res.setHeader('Access-Control-Allow-Credentials', true);
+//
+//     // Pass to next layer of middleware
+//     next();
+// });
 
 
 

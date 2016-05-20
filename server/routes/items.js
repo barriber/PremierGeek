@@ -119,7 +119,7 @@ var getNextRound = function (leagueId) {
 };
 
 module.exports = function (app) {
-    app.route('/api/nextRound').get(isLoggedIn, function (req, res) {
+    app.route('/api/nextRound').get(function (req, res) {
         var leagueId = 398;
         getNextRound(leagueId).then(function (upcomingFixtures) {
             Match.populate(upcomingFixtures, 'homeTeamId awayTeamId').then(function (populatedFixtures) {
