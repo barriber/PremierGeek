@@ -1,10 +1,6 @@
 const express = require('express');
-// const publicPath = path.join(__dirname, '..', 'client', 'public', 'build');
 
 module.exports = function (app, passport) {
-    app.get('/', function (req, res) {
-        console.log(err);
-    });
     app.get('/api/login', passport.authenticate('facebook', {scope: ['email', 'public_profile']}));
     app.get('/auth/facebook/callback',
         function (req, res, next) {
@@ -23,7 +19,16 @@ module.exports = function (app, passport) {
                 });
             })(req, res, next)
         });
-
+    app.route('/api/session/verify').get(function (req, res) {
+        if(req.isAuthenticated()) {
+            res.send({
+                firstName: req.user.firstName
+            });
+            
+            return;
+        }
+        res.send('notFound');
+    });
     // app.route('/api/login').get(function (req, res) {
     //     console.log(D'login!!!!')
     //     passport.authenticate('facebook', { scope : 'email' });

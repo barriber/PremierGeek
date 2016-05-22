@@ -2,18 +2,26 @@ import fetch from 'isomorphic-fetch';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const SESSION_VERIFY_REQUEST = 'VERIFY_LOGIN';
 
-export function facebookLogin() {
+function loginAction(userDetails) {
+    return {
+        type: LOGIN_SUCCESS,
+        userDetails
+    };
+}
+
+export function verifySession() {
     return (dispatch) => {
-        dispatch({type: LOGIN_REQUEST});
-        return fetch('/api/login').then(response => response.json())
-            .then(result => {
-                dispatch({
-                    type: LOGIN_SUCCESS,
-                    data: result
-                });
-            }).catch((error) => {
-                console.log(error)
-            });
+        dispatch({type: SESSION_VERIFY_REQUEST})
+        return fetch('/api/session/verify', {
+            credentials: 'include'
+        }).then(response => response.json()).then(result => {
+            dispatch(loginAction(result));
+
+        }).catch(error => {
+            console.log('error')
+            console.log(error);
+        });
     }
 }
