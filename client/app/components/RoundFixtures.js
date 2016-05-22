@@ -25,9 +25,7 @@ class RoundFixtures extends Component {
 
         return (
             <div>
-                {/*<h1>
-                    NextRound: {nextRound}
-                </h1>*/
+                {
                     _.map(fixtures, (fixture) => {
                         return (
                             <Fixture homeTeam={fixture.homeTeam} awayTeam={fixture.awayTeam} fixtureId={fixture.id}
@@ -38,7 +36,7 @@ class RoundFixtures extends Component {
             </div>
         );
     }
-};
+}
 
 function mapStateToProps(state) {
     let basicReducerJsObj = state.basicReducer.toJS();

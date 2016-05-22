@@ -9,8 +9,8 @@ export default (
         <Route component={MainLayout}>
              <Redirect from="_=_" to="/" /> // facebook hack
             <Route path="/" component={RoundFixtures}/>
-            <Route path="login" component={Login}/>
             <Route path="results" component={RoundFixtures}/>
         </Route>
+        <Route path="login" component={Login}/>
     </Router>
 );

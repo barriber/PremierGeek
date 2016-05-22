@@ -1,16 +1,25 @@
 import React, {Component} from 'react';
-import {Button} from 'react-bootstrap';
 import {connect} from 'react-redux';
-import {facebookLogin} from '../actions/authentication';
-
+import {Row, Col} from 'react-bootstrap';
 class Login extends Component {
-    loginFaceBook() {
-        this.props.dispatch(facebookLogin())
-    }
     render() {
         return (
-            <div>
-                <a href="/api/login">FaceBook</a>
+            <div className="login-container">
+                <div className="login-box">
+                    <div className="login-welcome">
+                        Welcome to Premier Geek!
+                    </div>
+                    <Row>
+                        <Col md={12}>
+                            <a href="/api/login" className="btn btn-block btn-social btn-lg btn-facebook">
+                                <span className="fa fa-facebook"></span> Sign in with Facebook
+                            </a>
+                            <a href="/api/login" className="btn btn-block btn-social btn-lg btn-google">
+                                <span className="fa fa-google"></span> Sign in with Google
+                            </a>
+                        </Col>
+                    </Row>
+                </div>
             </div>
         );
     }

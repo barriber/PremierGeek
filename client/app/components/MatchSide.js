@@ -11,7 +11,7 @@ function MatchSide(props) {
     };
     const getTeamLogo = function(team) {
         return (
-            <Col md={4} sm={4} key={team.name + ' logo'} >
+            <Col md={6} sm={4} key={team.name + ' logo'} >
                 <Image src={team.logo} responsive/>
             </Col>
         );
@@ -21,7 +21,7 @@ function MatchSide(props) {
         let teamIndex = isHomeTeam ? 1 : 2;
 
         return (
-            <Col md={8} sm={8} key={team.name + ' button'}>
+            <Col md={6} sm={8} key={team.name + ' button'}>
                 <Button className="team_button" bsStyle={styleBet(teamIndex, userBet)}
                         onClick={() => betAction(teamIndex, fixtureId)} >
                     {team.name}
