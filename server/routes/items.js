@@ -75,15 +75,15 @@ var generateNextRoundObj = function (league) {
                 return {
                     homeTeamId: teams[0]._id,
                     awayTeamId: teams[1]._id,
-                    homeTeamPosition: homeTeamPosion.position,
-                    awayTeamPosition: awayTeamPosion.position,
-                    homeTeamPoints: homeTeamPosion.points,
-                    awayTeamPoints: awayTeamPosion.points,
+                    homeTeamPosition: homeTeamPosion ? homeTeamPosion.position : null,
+                    awayTeamPosition: awayTeamPosion ? awayTeamPosion.position : null,
+                    homeTeamPoints: homeTeamPosion ? homeTeamPosion.points : null,
+                    awayTeamPoints: awayTeamPosion ? awayTeamPosion.points : null,
                     leagueId: league._id,
                     homeTeamScore: -1,
                     awayTeamScore: -1,
                     roundNumber: fixture.matchday,
-                    seasonYear: 2015, //Fixme setgeneric number
+                    seasonYear: 2016, //Fixme setgeneric number
                     date: fixture.date,
                     played: false
                 }
@@ -111,7 +111,7 @@ var getNextRound = function (leagueId) {
         return (moment(moment().format()).isSameOrAfter(league.nextRound.startTime)) ?
             generateNextRoundObj(league) :
             Match.find({
-                seasonYear: 2015,
+                seasonYear: 2016,
                 leagueId: league._id,
                 roundNumber: league.nextRound.roundNumber
             }).lean();
@@ -120,7 +120,7 @@ var getNextRound = function (leagueId) {
 
 module.exports = function (app) {
     app.route('/api/nextRound').get(function (req, res) {
-        var leagueId = 398;
+        var leagueId = 424;
         getNextRound(leagueId).then(function (upcomingFixtures) {
             Match.populate(upcomingFixtures, 'homeTeamId awayTeamId').then(function (populatedFixtures) {
                 var fixtures = _.map(populatedFixtures, function (fixture) {
@@ -143,31 +143,13 @@ module.exports = function (app) {
             });
         });
     });
+    app.route('/api/createLeague').post(function (req, res) {
+        fetch('http://api.football-data.org/v1/soccerseasons/424', {
+            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
+        }).then(response => response.json())
+            .then(json => {
+                leagueCtrl.createLeague(json);
+                res(true);
+            });
+    });
 };
-
-function isLoggedIn(req, res, next) {
-
-    // if user is authenticated in the session, carry on
-    if (req.isAuthenticated())
-        return next();
-
-    // if they aren't redirect them to the home page
-    res.redirect('/');
-}
-
-
-// var leagueId = 398;
-// fetch('http://api.football-data.org/v1/soccerseasons/' + leagueId + '/fixtures', {
-//     headers: { 'X-Auth-Token': globals.FOOTBALL_DATA_USER},
-// }).then(response => response.json())
-//     .then(json => {
-//         res.send(generateNextRoundObj(json.fixtures));
-//     })
-// })
-
-// fetch('http://api.football-data.org/v1/soccerseasons/' + leagueId, {
-//     headers: { 'X-Auth-Token': globals.FOOTBALL_DATA_USER},
-// }).then(response => response.json())
-//     .then(json => {
-//         leagueCtrl.createLeague(json, 'england');
-//     });
