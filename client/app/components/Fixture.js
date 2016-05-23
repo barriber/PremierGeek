@@ -7,7 +7,7 @@ function Fixture(props) {
     
     return (
         <Row className='fixture'>
-            <Col md={3} sm={6} mdOffset={3} smOffset={2}>
+            <Col md={3} sm={6} mdOffset={3} smOffset={1}>
                 <MatchSide team={homeTeam} userBet={userBet} isHomeTeam={true} betAction={betAction}
                            fixtureId={fixtureId}/>
             </Col>

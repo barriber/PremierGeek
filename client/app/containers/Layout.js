@@ -1,23 +1,25 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Grid, Row, Col} from 'react-bootstrap';
+import {Grid, Row, Col, Image} from 'react-bootstrap';
 import {verifySession} from '../actions/authentication';
-
+import Header from '../components/Header';
 
 class Layout extends Component {
     componentDidMount() {
         this.props.dispatch(verifySession());
     }
 
+    componentWillReceiveProps(nextProps) {
+        const {isAuthenticated, isFetching, location} = nextProps;
+        if (!isAuthenticated && !isFetching && location.pathname !== '/login') {
+            this.context.router.push('/login');
+        }
+    }
+
     render() {
         return (
             <Grid fluid={true}>
-                <Row className="main-header">
-                    <Col md={12} sm={12}>
-                        <header >
-                        </header>
-                    </Col>
-                </Row>
+                <Header user={this.props.user}/>
                 <Row className="main-row">
                     <Col md={12} sm={12} className="main-section">
                         <main >
@@ -30,15 +32,21 @@ class Layout extends Component {
     }
 }
 
+Layout.contextTypes = {
+    router: React.PropTypes.object.isRequired
+};
+
 function mapStateToProps(state) {
-    let basicReducerJsObj = state.basicReducer.toJS();
-    const {isFetching, lastUpdated, nextRound, fixtures} = basicReducerJsObj || {
-        isFetching: true,
-        fixtures: [],
-        nextRound: -1
+    let authReducer = state.authReducer;
+    const {isAuthenticated, isFetching, user} = authReducer || {
+        isAuthenticated: false,
+        isFetching: false,
+        user: {
+            userImage: ''
+        }
     };
 
-    return {isFetching, lastUpdated, nextRound, fixtures}
+    return {isAuthenticated, isFetching, user}
 }
 
 

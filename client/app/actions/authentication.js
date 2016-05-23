@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 
-export const LOGIN_REQUEST = 'LOGIN_REQUEST';
+export const SESSION_VERIFY_FAIL = 'SESSION_VERIFY_FAIL';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const SESSION_VERIFY_REQUEST = 'VERIFY_LOGIN';
 
@@ -20,8 +20,9 @@ export function verifySession() {
             dispatch(loginAction(result));
 
         }).catch(error => {
-            console.log('error')
-            console.log(error);
+            dispatch({
+                type: SESSION_VERIFY_FAIL,
+            })
         });
     }
 }

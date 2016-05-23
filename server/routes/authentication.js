@@ -22,7 +22,8 @@ module.exports = function (app, passport) {
     app.route('/api/session/verify').get(function (req, res) {
         if(req.isAuthenticated()) {
             res.send({
-                firstName: req.user.firstName
+                firstName: req.user.firstName,
+                userImage: req.user.imageUrl
             });
             
             return;

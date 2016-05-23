@@ -8,7 +8,7 @@ module.exports = function(passport) {
             clientID: fbConfig.appID,
             clientSecret: fbConfig.appSecret,
             callbackURL: fbConfig.callbackUrl,
-            profileFields: ['id', 'emails', 'name', 'photos'] //This
+            profileFields: ['id', 'emails', 'name', 'picture.type(large)']
         },
 
         // facebook will send back the tokens and profile
@@ -31,6 +31,8 @@ module.exports = function(passport) {
 
                         // set all of the facebook information in our user model
                         newUser.userId = profile.id;
+                        newUser.provider = 'facebook';
+                        newUser.imageUrl = profile.photos[0].value;
                         newUser.provider = profile.provider;// set the users facebook id
                         newUser.access_token = access_token; // we will save the token that facebook provides to the user
                         newUser.firstName = profile.name.givenName;
