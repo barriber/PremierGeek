@@ -4,6 +4,7 @@ import Fixture from './Fixture';
 import {placeBet} from '../actions/actions';
 import {connect} from 'react-redux';
 import {fetchPostsIfNeeded} from '../actions/actions';
+import {Col} from 'react-bootstrap'
 
 class RoundFixtures extends Component {
     constructor(props) {
@@ -24,7 +25,7 @@ class RoundFixtures extends Component {
         const {nextRound, fixtures} = this.props;
 
         return (
-            <div>
+            <Col md={6} mdOffset={3} sm={10} smOffset={1} className="fixtures-section">
                 {
                     _.map(fixtures, (fixture) => {
                         return (
@@ -33,7 +34,7 @@ class RoundFixtures extends Component {
                         );
                     })
                 }
-            </div>
+            </Col>
         );
     }
 }

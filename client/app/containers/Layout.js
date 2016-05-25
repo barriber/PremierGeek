@@ -18,16 +18,16 @@ class Layout extends Component {
 
     render() {
         return (
-            <Grid fluid={true}>
+            <div>
                 <Header user={this.props.user}/>
-                <Row className="main-row">
-                    <Col md={12} sm={12} className="main-section">
+                <Grid fluid={true}>
+                    <Row className="main-row">
                         <main >
                             {this.props.children}
                         </main>
-                    </Col>
-                </Row>
-            </Grid>
+                    </Row>
+                </Grid>
+            </div>
         );
     }
 }
