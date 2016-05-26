@@ -136,7 +136,7 @@ module.exports = function (app) {
                         awayTeamPosition: fixture.awayTeamPosition,
                         roundNumber: fixture.roundNumber,
                         date: fixture.date,
-                        bet: 'x'
+                        bet: ''
                     };
                 });
                 res.send(fixtures);

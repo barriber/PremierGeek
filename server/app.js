@@ -62,7 +62,7 @@ app.listen(port, function () {
     console.log('Server running on port ' + port);
 });
 
-require('./routes/items.js')(app);
+require('./routes/fixtures.js')(app);
 require('./routes/authentication')(app, passport);
 
 app.get('*', function (request, response){

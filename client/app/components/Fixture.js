@@ -10,7 +10,7 @@ function Fixture(props) {
             <MatchSide team={homeTeam} userBet={userBet} isHomeTeam={true} betAction={betAction}
                        fixtureId={fixtureId}/>
             <div className="vs">
-                vs
+                {userBet === 'x' ? 'draw' : 'vs'}
             </div>
             <MatchSide team={awayTeam} userBet={userBet} isHomeTeam={false} betAction={betAction}
                        fixtureId={fixtureId}/>

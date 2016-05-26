@@ -1,13 +1,18 @@
 import React from 'react';
-import {Button, Row, Col, Image} from 'react-bootstrap'
+import {Button, Row, Col, Image} from 'react-bootstrap';
 
 export default function MatchSide(props) {
     const {team, isHomeTeam, fixtureId, betAction} = props;
     const styleBet = function (team, bet) {
-        if (bet === 'x') {
-            return 'info';
+        if(bet === '') {
+            return 'info'
         }
-        return team === bet ? 'success' : 'warning';
+
+        if (bet === 'x') {
+            return 'warning';
+        }
+
+        return team === bet ? 'success' : 'danger';
     };
     const getTeamLogo = function (team) {
         return (
