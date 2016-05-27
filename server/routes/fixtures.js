@@ -1,12 +1,12 @@
 'use strict';
 require('isomorphic-fetch');
-var _ = require('lodash');
-var globals = require('../globals');
-var leagueCtrl = require('../controllers/LeagueController');
-var League = require('../models/LeagueSchema');
-var Match = require('../models/MatchSchema');
-var Team = require('../models/TeamSchema').Team;
-var moment = require('moment');
+const _ = require('lodash');
+const globals = require('../globals');
+const leagueCtrl = require('../controllers/LeagueController');
+const League = require('../models/LeagueSchema');
+const Match = require('../models/MatchSchema');
+const Team = require('../models/TeamSchema').Team;
+const moment = require('moment');
 
 var removeTeamNameOverHead = function (teamName) {
     var removedAfc = _.replace(teamName, 'AFC', '');

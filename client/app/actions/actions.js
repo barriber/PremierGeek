@@ -4,6 +4,10 @@ import _ from  'lodash';
 export const REQUEST_GAMES = 'REQUEST_GAMES';
 export const RECEIVE_NEXT_ROUND = 'RECEIVE_NEXT_ROUND';
 export const PLACE_BET = 'PLACE_BET';
+export const SEND_BETS = 'SEND_BET';
+export const BETS_PERSISTED = 'BETS_PERSISTED';
+export const BETS_PERSIST_ERROR = 'BETS_PERSIST_ERROR';
+
 
 function requestGames(currentRound) {
     return {
@@ -38,11 +42,11 @@ function fetchGames() {
         }).then(response => response.json())
             .then(result =>
                 dispatch({
-                type: RECEIVE_NEXT_ROUND,
-                nextRound: result[0].roundNumber,
-                fixtures: result,
-                receivedAt: Date.now()
-            })).catch(error => {
+                    type: RECEIVE_NEXT_ROUND,
+                    nextRound: result[0].roundNumber,
+                    fixtures: result,
+                    receivedAt: Date.now()
+                })).catch(error => {
                 console.log(error);
             });
     }
@@ -60,10 +64,28 @@ export function fetchPostsIfNeeded() {
     }
 }
 
-export function placeBet(team, fixtureId) {
+export function betTeam(team, fixtureId) {
     return {
         type: PLACE_BET,
         team,
         fixtureId
+    }
+}
+
+export function persistBets(bets) {
+    return (dispatch) => {
+        dispatch({type: SEND_BETS})
+        return fetch('/api/bet', {
+            method: 'POST',
+            body: bets,
+            credentials: 'include'
+        }).then(response => response.json()).then(result => {
+            dispatch({type: BETS_PERSISTED});
+        }).catch(error => {
+            dispatch({
+                type: BETS_PERSIST_ERROR,
+                error: error
+            });
+        });
     }
 }

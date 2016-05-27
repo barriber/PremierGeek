@@ -64,6 +64,7 @@ app.listen(port, function () {
 
 require('./routes/fixtures.js')(app);
 require('./routes/authentication')(app, passport);
+require('./routes/bet')(app);
 
 app.get('*', function (request, response){
     response.sendFile(path.resolve(publicPath, 'index.html'))

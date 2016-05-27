@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
 import Fixture from './Fixture';
-import {placeBet} from '../actions/actions';
+import {betTeam} from '../actions/actions';
 import {connect} from 'react-redux';
 import {fetchPostsIfNeeded} from '../actions/actions';
 import {Col} from 'react-bootstrap'
@@ -19,7 +19,7 @@ class RoundFixtures extends Component {
     }
 
     betAction(bet, fixtureId) {
-        this.props.dispatch(placeBet(bet, fixtureId));
+        this.props.dispatch(betTeam(bet, fixtureId));
     }
 
     render() {
@@ -27,7 +27,7 @@ class RoundFixtures extends Component {
 
         return (
             <Col md={6} mdOffset={3} sm={10} smOffset={1} className="fixtures-section">
-                <BetButton />
+                <BetButton fixtures={fixtures} />
                 {
                     _.map(fixtures, (fixture) => {
                         return (
@@ -36,7 +36,7 @@ class RoundFixtures extends Component {
                         );
                     })
                 }
-                <BetButton />
+                <BetButton fixtures={fixtures}/>
             </Col>
         );
     }

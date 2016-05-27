@@ -1,15 +1,21 @@
 import _ from 'lodash';
 import immutable  from 'immutable';
 import {combineReducers} from 'redux';
-import {REQUEST_GAMES, RECEIVE_NEXT_ROUND, PLACE_BET} from '..//actions/actions';
 import authReducer from './authReducer';
+import {
+    REQUEST_GAMES, RECEIVE_NEXT_ROUND, PLACE_BET, SEND_BETS,
+    BETS_PERSISTED, BETS_PERSIST_ERROR
+} from '..//actions/actions';
 
 var initilState = immutable.fromJS({
     isFetching: false,
     didInvalidate: false,
     nextRound: 0,
     fixtures: immutable.List(),
-    lastUpdated: 0
+    lastUpdated: 0,
+    sendBets: false,
+    betsPersisted: false,
+    betsPersistError: false
 });
 
 function footballMatch(state = initilState, action) {
@@ -21,12 +27,13 @@ function footballMatch(state = initilState, action) {
         case RECEIVE_NEXT_ROUND:
             return state.withMutations(obj => {
                 obj.set('isFetching', false).set('didInvalidate', false).set('nextRound', action.nextRound)
-                .set('fixtures', immutable.fromJS(action.fixtures)).set('lastUpdated', action.receivedAt);
+                    .set('fixtures', immutable.fromJS(action.fixtures)).set('lastUpdated', action.receivedAt);
             });
     }
 }
 
 function basicReducer(state = initilState, action) {
+    console.log(action);
     switch (action.type) {
         case REQUEST_GAMES:
         case RECEIVE_NEXT_ROUND:
@@ -41,6 +48,11 @@ function basicReducer(state = initilState, action) {
 
             return state.setIn(['fixtures', index, 'bet'], usetBet);
             break;
+        case SEND_BETS:
+            return state.set('sendBets', true).set('betsPersisted', false);
+        case BETS_PERSISTED:
+            return state.set('sendBets', false).set('betsPersisted', true);
+
         default:
             return state;
     }
