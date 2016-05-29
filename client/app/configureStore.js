@@ -1,8 +1,8 @@
 import {createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers/reducers';
-import createLogger from 'redux-logger'
-import thunkMiddleware from 'redux-thunk'
-import {Iterable} from 'Immutable'
+import createLogger from 'redux-logger';
+import thunkMiddleware from 'redux-thunk';
+import {Iterable} from 'immutable';
 
 const logger = createLogger({
     stateTransformer: (state) => {
