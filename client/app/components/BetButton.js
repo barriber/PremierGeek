@@ -4,7 +4,7 @@ import {Button, Row, Col, Image} from 'react-bootstrap'
 import {persistBets} from '../actions/actions';
 
 export default function (props) {
-    const {fixtures, userId} = props;
+    const {fixtures, persistBets} = props;
     const placeBet = function () {
         const userBettings = _.filter(fixtures, (fixture) => {
             return fixture.bet !== '';

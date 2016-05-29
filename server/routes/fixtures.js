@@ -6,6 +6,8 @@ const leagueCtrl = require('../controllers/LeagueController');
 const League = require('../models/LeagueSchema');
 const Match = require('../models/MatchSchema');
 const Team = require('../models/TeamSchema').Team;
+const Bet = require('../models/BetSchema');
+
 const moment = require('moment');
 
 var removeTeamNameOverHead = function (teamName) {
@@ -106,22 +108,35 @@ var generateNextRoundObj = function (league) {
     });
 };
 
-var getNextRound = function (leagueId) {
+var getCurrentRound = function (league, userId) {
+    return Match.find({
+        seasonYear: 2016,
+        leagueId: league._id,
+        roundNumber: league.nextRound.roundNumber
+    }).lean().then((fixtures) => {
+        return Bet.find({userId: userId, matchId: {$in: _.map(fixtures, '_id')}}).then((userBets) => {
+            _.forEach(userBets, (userBet) => {
+                var fixture = _.find(fixtures, {_id: userBet.matchId});
+                fixture.bet = userBet.bet
+            });
+
+            return fixtures;
+        });
+    });
+}
+
+var getNextRound = function (leagueId, userId) {
     return League.findOne({'football_data_id': leagueId}).then(function (league) {
         return (moment(moment().format()).isSameOrAfter(league.nextRound.startTime)) ?
-            generateNextRoundObj(league) :
-            Match.find({
-                seasonYear: 2016,
-                leagueId: league._id,
-                roundNumber: league.nextRound.roundNumber
-            }).lean();
+            generateNextRoundObj(league) : getCurrentRound(league, userId);
+
     })
 };
 
 module.exports = function (app) {
     app.route('/api/nextRound').get(function (req, res) {
         var leagueId = 424;
-        getNextRound(leagueId).then(function (upcomingFixtures) {
+        getNextRound(leagueId, req.user.id).then(function (upcomingFixtures) {
             Match.populate(upcomingFixtures, 'homeTeamId awayTeamId').then(function (populatedFixtures) {
                 var fixtures = _.map(populatedFixtures, function (fixture) {
                     var homeTeam = fixture.homeTeamId.toObject();
@@ -136,7 +151,7 @@ module.exports = function (app) {
                         awayTeamPosition: fixture.awayTeamPosition,
                         roundNumber: fixture.roundNumber,
                         date: fixture.date,
-                        bet: ''
+                        bet: _.isNumber(fixture.bet) ? fixture.bet : ''
                     };
                 });
                 res.send(fixtures);

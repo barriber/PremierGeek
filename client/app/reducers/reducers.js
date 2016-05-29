@@ -33,7 +33,6 @@ function footballMatch(state = initilState, action) {
 }
 
 function basicReducer(state = initilState, action) {
-    console.log(action);
     switch (action.type) {
         case REQUEST_GAMES:
         case RECEIVE_NEXT_ROUND:
@@ -41,7 +40,7 @@ function basicReducer(state = initilState, action) {
         case PLACE_BET:
             var fixtures = state.get('fixtures');
             var fixture = _.find(fixtures.toJS(), {id: action.fixtureId});
-            var usetBet = fixture.bet === action.team ? 'x' : action.team;
+            var usetBet = fixture.bet === action.team ? 0 : action.team;
             var index = fixtures.findIndex((fixture) => {
                 return fixture.get('id') === action.fixtureId;
             });
@@ -49,6 +48,7 @@ function basicReducer(state = initilState, action) {
             return state.setIn(['fixtures', index, 'bet'], usetBet);
             break;
         case SEND_BETS:
+            console.log(state);
             return state.set('sendBets', true).set('betsPersisted', false);
         case BETS_PERSISTED:
             return state.set('sendBets', false).set('betsPersisted', true);

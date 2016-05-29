@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-fetch';
-import _ from  'lodash';
 
 export const REQUEST_GAMES = 'REQUEST_GAMES';
 export const RECEIVE_NEXT_ROUND = 'RECEIVE_NEXT_ROUND';
@@ -13,24 +12,6 @@ function requestGames(currentRound) {
     return {
         type: REQUEST_GAMES,
         currentRound
-    }
-}
-
-function receiveMatches(allGames) {
-    var unplayedMatches = _.chain(allGames).groupBy('status').get('TIMED').groupBy('matchday').value();
-    var nextRoundNumber = _.findKey(unplayedMatches, function (matchDay) {
-        return matchDay.length === 10; //TODO Assume there are 10 games per league, need to be changed for Multiple leagues
-    });
-
-    var i = 0;
-    var fixturesObj = _.map(unplayedMatches[nextRoundNumber], (fixture) => {
-        return _.assign(fixture, {bet: 'x', id: ++i});
-    });
-    return {
-        type: RECEIVE_NEXT_ROUND,
-        nextRound: nextRoundNumber,
-        matches: fixturesObj,
-        receivedAt: Date.now()
     }
 }
 
@@ -77,7 +58,11 @@ export function persistBets(bets) {
         dispatch({type: SEND_BETS})
         return fetch('/api/bet', {
             method: 'POST',
-            body: bets,
+            body: JSON.stringify(bets),
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            }),
             credentials: 'include'
         }).then(response => response.json()).then(result => {
             dispatch({type: BETS_PERSISTED});

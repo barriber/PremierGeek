@@ -2,13 +2,13 @@ import React from 'react';
 import {Button, Row, Col, Image} from 'react-bootstrap';
 
 export default function MatchSide(props) {
-    const {team, isHomeTeam, fixtureId, betAction} = props;
+    const {team, isHomeTeam} = props;
     const styleBet = function (team, bet) {
         if(bet === '') {
             return 'info'
         }
 
-        if (bet === 'x') {
+        if (bet === 0) {
             return 'warning';
         }
 
