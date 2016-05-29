@@ -28,7 +28,10 @@ class RoundFixtures extends Component {
 
     render() {
         const {nextRound, fixtures} = this.props;
-
+        if (_.isEmpty(fixtures)) {
+            return null;
+        }
+        
         return (
             <Col md={6} mdOffset={3} sm={10} smOffset={1} className="fixtures-section">
                 <BetButton fixtures={fixtures} persistBets={this.persistBets}/>

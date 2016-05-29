@@ -1,7 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import {Button, Row, Col, Image} from 'react-bootstrap'
-import {persistBets} from '../actions/actions';
+import {Button, Row} from 'react-bootstrap'
 
 export default function (props) {
     const {fixtures, persistBets} = props;

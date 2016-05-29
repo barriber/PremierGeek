@@ -16,7 +16,7 @@ export default function Header(props) {
 
                     <Nav pullRight>
                         <NavDropdown eventKey={3} title={user.firstName} id="basic-nav-dropdown">
-                            <MenuItem eventKey={3.1}> logout </MenuItem>
+                            <MenuItem eventKey={3.1}> Log Out </MenuItem>
                         </NavDropdown>
                         <Image src={user.userImage} responsive/>
                     </Nav>
