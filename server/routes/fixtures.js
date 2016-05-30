@@ -7,6 +7,7 @@ const League = require('../models/LeagueSchema');
 const Match = require('../models/MatchSchema');
 const Team = require('../models/TeamSchema').Team;
 const Bet = require('../models/BetSchema');
+const footballDataAPI = globals.FOOTBALL_DATA_API;
 
 const moment = require('moment');
 
@@ -25,7 +26,7 @@ var generateNextRoundObj = function (league) {
     var leagueId = league.football_data_id;
 
     var getLeagueFixtures = function (leagueId) {
-        return fetch('http://api.football-data.org/v1/soccerseasons/' + leagueId + '/fixtures', {
+        return fetch(footballDataAPI + leagueId + '/fixtures', {
             headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
         }).then(response => response.json()).then(json => {
             var allGames = json.fixtures;
@@ -49,7 +50,7 @@ var generateNextRoundObj = function (league) {
     };
 
     var verifyTeams = function (leagueId) {
-        return fetch('http://api.football-data.org/v1/soccerseasons/' + leagueId + '/teams', {
+        return fetch(footballDataAPI + leagueId + '/teams', {
             headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
         }).then((response => response.json())).then(function (result) {
             var x = _.map(result.teams, function (team) {
@@ -159,7 +160,7 @@ module.exports = function (app) {
         });
     });
     app.route('/api/createLeague').post(function (req, res) {
-        fetch('http://api.football-data.org/v1/soccerseasons/424', {
+        fetch(footballDataAPI + '/424', {
             headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
         }).then(response => response.json())
             .then(json => {

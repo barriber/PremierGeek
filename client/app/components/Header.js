@@ -2,7 +2,7 @@ import React from 'react';
 import {Col, Image, Navbar, Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap'
 
 export default function Header(props) {
-    const {user} = props;
+    const {user, navigate} = props;
     if (user) {
         return (
             <Navbar staticTop={true} inverse className="header">
@@ -11,7 +11,7 @@ export default function Header(props) {
                 </Navbar.Brand>
                 <Navbar.Collapse>
                     <Nav>
-                        <NavItem eventKey={1} href="#">Results</NavItem>
+                        <NavItem eventKey={1} href="#/results">Results</NavItem>
                     </Nav>
 
                     <Nav pullRight>
