@@ -87,7 +87,7 @@ var generateNextRoundObj = function (league) {
                     awayTeamScore: -1,
                     roundNumber: fixture.matchday,
                     seasonYear: 2016, //Fixme setgeneric number
-                    date: fixture.date,
+                    date: moment(fixture.date).toDate(),
                     played: false
                 }
             });

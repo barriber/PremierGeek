@@ -13,7 +13,7 @@ var matchSchema = new mongoose.Schema({
     awayTeamScore: Number,
     roundNumber: Number,
     seasonYear: Number,
-    date: Date,
+    date: {type: Date, default: Date.now },
     played: Boolean
 });
 

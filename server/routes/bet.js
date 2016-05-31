@@ -5,25 +5,26 @@ const globals = require('../globals');
 const League = require('../models/LeagueSchema');
 const Match = require('../models/MatchSchema');
 const footballDataAPI = globals.FOOTBALL_DATA_API;
+const moment = require('moment');
 
-
-const updatePlayedMathes = function () {
-     return getMissingResultsFixtures().then((missingFixtures) => {
+const generateUserPoints = function(user, bets) {
+    console.log(bets);
+}
+const updatePlayedMatches = function (leagueId) {
+    return getPersistedFixtures(false, leagueId).then((missingFixtures) => {
         if (!_.isEmpty(missingFixtures)) {
-            return getFinishedFixturesResults().then((finishedFixtures) => {
+            return getFinishedFixturesResults(leagueId).then((finishedFixtures) => {
                 _.forEach(missingFixtures, (fixture) => {
                     const foundMatch = _.find(finishedFixtures, (finishedFixture) => {
                         return finishedFixture.matchday === fixture.roundNumber &&
                             _.includes(finishedFixture.homeTeamName, fixture.homeTeamId.name)
                     });
 
-                    if(!foundMatch) {
-                        console.log('MATCH NOT FOUND!!!!!'); //FIXME
+                    if (foundMatch) {
+                        fixture.awayTeamScore = foundMatch.result.goalsAwayTeam;
+                        fixture.homeTeamScore = foundMatch.result.goalsHomeTeam;
+                        fixture.played = true;
                     }
-
-                    fixture.awayTeamScore = foundMatch.result.goalsAwayTeam;
-                    fixture.homeTeamScore = foundMatch.result.goalsHomeTeam;
-                    fixture.played = true;
                 });
 
                 var updatePromise = _.map(missingFixtures, (match) => {
@@ -34,22 +35,23 @@ const updatePlayedMathes = function () {
             });
         }
 
-         return;
+        return;
     });
 };
 
-const getMissingResultsFixtures = function () {
-    return League.findOne({football_data_id: 398}).then((league) => {
+const getPersistedFixtures = function (isPlayed, leagueId) {
+    return League.findOne({football_data_id: leagueId}).then((league) => {
         return Match.find({
             leagueId: league.id,
-            seasonYear: 2015,
-            played: false
+            seasonYear: 2016,
+            played: isPlayed,
+            date: {$lt: moment().format()}
         }).populate('homeTeamId').lean();
     });
 };
 
-const getFinishedFixturesResults = function () {
-    return fetch(footballDataAPI + '398' + '/fixtures', {
+const getFinishedFixturesResults = function (leagueId) {
+    return fetch(footballDataAPI + leagueId + '/fixtures', {
         headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
     }).then(response => response.json()).then(result => {
         return _.filter(result.fixtures, {status: "FINISHED"})
@@ -70,8 +72,16 @@ module.exports = function (app) {
     });
 
     app.route('/api/bet/results').put(function (req, res) {
-        updatePlayedMathes().then(() => {
-            console.log('sada');
+        const leagueId = 424;
+        updatePlayedMatches(leagueId).then(() => {
+            getPersistedFixtures(true, leagueId).then((playedMatches) => {
+                Bet.find({matchId: {$in: _.map(playedMatches, '_id')}}).populate('matchId userId').lean().then(bets => {
+                    var groupedUsersBets = _.groupBy(bets, 'userId._id');
+                    _.forOwn(groupedUsersBets, (betsArray) => {
+                       const userPoints = generateUserPoints(betsArray[0].userId, betsArray)
+                    });
+                })
+            });
             res.send(true);
         });
     });
