@@ -2,12 +2,13 @@ import _ from 'lodash';
 import immutable  from 'immutable';
 import {combineReducers} from 'redux';
 import authReducer from './authReducer';
+import scoresReducer from './scoresReducer';
 import {
     REQUEST_GAMES, RECEIVE_NEXT_ROUND, PLACE_BET, SEND_BETS,
     BETS_PERSISTED, BETS_PERSIST_ERROR
 } from '..//actions/actions';
 
-var initilState = immutable.fromJS({
+let initilState = immutable.fromJS({
     isFetching: false,
     didInvalidate: false,
     nextRound: 0,
@@ -48,7 +49,6 @@ function basicReducer(state = initilState, action) {
             return state.setIn(['fixtures', index, 'bet'], usetBet);
             break;
         case SEND_BETS:
-            console.log(state);
             return state.set('sendBets', true).set('betsPersisted', false);
         case BETS_PERSISTED:
             return state.set('sendBets', false).set('betsPersisted', true);
@@ -60,7 +60,8 @@ function basicReducer(state = initilState, action) {
 
 const rootReducer = combineReducers({
     basicReducer,
-    authReducer
+    authReducer,
+    scoresReducer
 });
 
 export  default rootReducer;

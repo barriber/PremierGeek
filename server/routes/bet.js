@@ -9,10 +9,17 @@ const moment = require('moment');
 
 const generateUserPoints = function (user, bets) {
     const userBetResults = _.map(bets, (userBet) => {
-        calculateUserMacthBet(userBet);
+         return calculateUserMacthBet(userBet);
     });
 
-    console.log(userBetResults);
+    return {
+        user: {
+            id: user._id,
+            name: user.firstName + ' ' + user.lastName,
+            image: user.imageUrl
+        },
+        bets: userBetResults
+    }
 };
 
 const calculateUserMacthBet = function (userBet) {
@@ -27,7 +34,7 @@ const calculateUserMacthBet = function (userBet) {
         // } else {
         //     const matchGoalDiffrence = matchResult.homeScore - matchResult.awayScore;
         //     const userGoalDiffrence = bet.homeScore - bet.awayScore;
-        //     if (matchGoalDiffrence === userGoalDiffrence) {
+        //     if (userBet.bet !== 0 && matchGoalDiffrence === userGoalDiffrence) {
         //         points *= 1.5;
         //     }
         // }
@@ -111,12 +118,13 @@ module.exports = function (app) {
             getPersistedFixtures(true, leagueId).then((playedMatches) => {
                 Bet.find({matchId: {$in: _.map(playedMatches, '_id')}}).populate('matchId userId').lean().then(bets => {
                     var groupedUsersBets = _.groupBy(bets, 'userId._id');
-                    _.forOwn(groupedUsersBets, (betsArray) => {
-                        const userPoints = generateUserPoints(betsArray[0].userId, betsArray)
+                    const arr = _.map(groupedUsersBets, (betsArray) => {
+                        return generateUserPoints(betsArray[0].userId, betsArray);
                     });
+                    res.send(arr);
+                    return;
                 })
             });
-            res.send(true);
         });
     });
 };

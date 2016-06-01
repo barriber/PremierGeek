@@ -1,12 +1,12 @@
 import fetch from 'isomorphic-fetch';
 
-export const REQUEST_RESULTS = 'REQUEST_RESULTS';
-export const RESULTS_RECIEVE = 'RESULTS_RECIEVE';
-export const RESULTS_FAILURE = 'VERIFY_LOGIN';
+export const REQUEST_SCORES = 'REQUEST_SCORES';
+export const SCORES_RECIEVE = 'SCORES_RECIEVE';
+export const SCORES_FAILURE = ' SCORES_FAILURE';
 
 export function getAllReults() {
     return (dispatch) => {
-        dispatch({type: REQUEST_RESULTS})
+        dispatch({type: REQUEST_SCORES})
         return fetch('/api/bet/results', {
             method: 'PUT',
             headers: new Headers({
@@ -14,15 +14,15 @@ export function getAllReults() {
                 Accept: 'application/json'
             }),
             credentials: 'include'
-        }).then(response => response.json()).then(results => {
+        }).then(response => response.json()).then(scores => {
             dispatch({
-                type: RESULTS_RECIEVE,
-                results
+                type: SCORES_RECIEVE,
+                scores
             });
         }).catch(error => {
             dispatch({
-                type: RESULTS_FAILURE,
-            })
+                type: SCORES_FAILURE,
+            });
         });
     }
 }
