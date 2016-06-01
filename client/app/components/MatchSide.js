@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Row, Col, Image} from 'react-bootstrap';
+import {Button, Row, Col, Image, FormControl} from 'react-bootstrap';
 
 export default function MatchSide(props) {
     const {team, isHomeTeam} = props;
@@ -26,26 +26,31 @@ export default function MatchSide(props) {
         let teamIndex = isHomeTeam ? 1 : 2;
 
         return (
-            <Col md={8} sm={6} key={team.name + ' button'}>
+            <Col md={6} sm={6} key={team.name + ' button'}>
                 <div className="odd text-center">
                     {odd}
                 </div>
                 <Button className="team_button" bsStyle={styleBet(teamIndex, userBet)}
-                        onClick={() => betAction(teamIndex, fixtureId)}>
+                        onClick={() => betAction(teamIndex, fixtureId)} bsSize="large">
                     {team.name}
                 </Button>
             </Col>
         );
     };
+    const scoreInput = function () {
+        return (
+            <Col md={2} sm={2}>
+                <FormControl type="text"/>
+            </Col>
+        )
+    }
 
-    const betSideElements = [getTeamLogo(team), getTeamBetButton()];
+    const betSideElements = [getTeamLogo(team), getTeamBetButton(), scoreInput()];
     const sideClass = isHomeTeam ? 'home-team' : 'away-team';
 
     return (
-        <div className="match-side">
-            <Row className={'team ' + sideClass} key={team.name}>
-                {isHomeTeam ? betSideElements : betSideElements.reverse()}
-            </Row>
+        <div className={'team ' + sideClass + " match-side"} key={team.name}>
+            {isHomeTeam ? betSideElements : betSideElements.reverse()}
         </div>
     );
 }

@@ -46,7 +46,6 @@ class RoundFixtures extends Component {
                         );
                     })
                 }
-                <BetButton fixtures={fixtures} persistBets={this.persistBets}/>
             </Col>
         );
     }
