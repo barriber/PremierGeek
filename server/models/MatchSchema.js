@@ -2,18 +2,26 @@ var mongoose = require('mongoose');
 
 
 var matchSchema = new mongoose.Schema({
-    homeTeamId: { type: mongoose.Schema.Types.ObjectId, ref: 'Team' },
-    awayTeamId: { type: mongoose.Schema.Types.ObjectId, ref: 'Team' },
+    homeTeamId: {type: mongoose.Schema.Types.ObjectId, ref: 'Team'},
+    awayTeamId: {type: mongoose.Schema.Types.ObjectId, ref: 'Team'},
     homeTeamPosition: Number,
     awayTeamPosition: Number,
     homeTeamPoints: Number,
     awayTeamPoints: Number,
-    leagueId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'League' }],
-    homeTeamScore: Number,
-    awayTeamScore: Number,
+    leagueId: [{type: mongoose.Schema.Types.ObjectId, ref: 'League'}],
     roundNumber: Number,
     seasonYear: Number,
-    date: {type: Date, default: Date.now },
+    date: {type: Date, default: Date.now},
+    odds: {
+        homeWin: Number,
+        awayWin: Number,
+        draw: Number
+    },
+    results: {
+        sideResult: '',
+        homeScore: Number,
+        awayScore: Number
+    },
     played: Boolean
 });
 

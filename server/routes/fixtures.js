@@ -83,8 +83,12 @@ var generateNextRoundObj = function (league) {
                     homeTeamPoints: homeTeamPosion ? homeTeamPosion.points : null,
                     awayTeamPoints: awayTeamPosion ? awayTeamPosion.points : null,
                     leagueId: league._id,
-                    homeTeamScore: -1,
-                    awayTeamScore: -1,
+                    results: {
+                        sideResult: null,
+                        homeScore: null,
+                        awayScore: null
+                    },
+                    odds: [0,0,0],
                     roundNumber: fixture.matchday,
                     seasonYear: 2016, //Fixme setgeneric number
                     date: moment(fixture.date).toDate(),

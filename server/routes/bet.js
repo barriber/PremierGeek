@@ -7,9 +7,38 @@ const Match = require('../models/MatchSchema');
 const footballDataAPI = globals.FOOTBALL_DATA_API;
 const moment = require('moment');
 
-const generateUserPoints = function(user, bets) {
-    console.log(bets);
+const generateUserPoints = function (user, bets) {
+    const userBetResults = _.map(bets, (userBet) => {
+        calculateUserMacthBet(userBet);
+    });
+
+    console.log(userBetResults);
+};
+
+const calculateUserMacthBet = function (userBet) {
+    var points = 0;
+    const exactMatch = 2;
+    const goalDiffrence = 1.5;
+    const matchResult = userBet.matchId.results;
+    if (userBet.bet === matchResult.sideResult) {
+        points += userBet.matchId.odds[userBet.bet];
+        // if (matchResult.homeScore === bet.homeScore && matchResult.awayScore === bet.awayScore) {
+        //     points *= 2;
+        // } else {
+        //     const matchGoalDiffrence = matchResult.homeScore - matchResult.awayScore;
+        //     const userGoalDiffrence = bet.homeScore - bet.awayScore;
+        //     if (matchGoalDiffrence === userGoalDiffrence) {
+        //         points *= 1.5;
+        //     }
+        // }
+    }
+
+    return {
+        points,
+        matchId: userBet.matchId._id
+    }
 }
+
 const updatePlayedMatches = function (leagueId) {
     return getPersistedFixtures(false, leagueId).then((missingFixtures) => {
         if (!_.isEmpty(missingFixtures)) {
@@ -21,8 +50,13 @@ const updatePlayedMatches = function (leagueId) {
                     });
 
                     if (foundMatch) {
-                        fixture.awayTeamScore = foundMatch.result.goalsAwayTeam;
-                        fixture.homeTeamScore = foundMatch.result.goalsHomeTeam;
+                        fixture.results.homeScore = foundMatch.result.goalsHomeTeam;
+                        fixture.results.awayScore = foundMatch.result.goalsAwayTeam;
+                        if (fixture.results.homeScore === fixture.results.awayScore) {
+                            fixture.results.sideResult = 0;
+                        } else {
+                            fixture.results.sideResult = fixture.results.homeScore > fixture.results.awayScore ? 1 : 2;
+                        }
                         fixture.played = true;
                     }
                 });
@@ -78,7 +112,7 @@ module.exports = function (app) {
                 Bet.find({matchId: {$in: _.map(playedMatches, '_id')}}).populate('matchId userId').lean().then(bets => {
                     var groupedUsersBets = _.groupBy(bets, 'userId._id');
                     _.forOwn(groupedUsersBets, (betsArray) => {
-                       const userPoints = generateUserPoints(betsArray[0].userId, betsArray)
+                        const userPoints = generateUserPoints(betsArray[0].userId, betsArray)
                     });
                 })
             });
