@@ -4,7 +4,7 @@ import {Button, Row, Col, Image} from 'react-bootstrap';
 export default function MatchSide(props) {
     const {team, isHomeTeam} = props;
     const styleBet = function (team, bet) {
-        if(bet === '') {
+        if (bet === '') {
             return 'info'
         }
 
@@ -22,11 +22,14 @@ export default function MatchSide(props) {
         );
     };
     const getTeamBetButton = function () {
-        const {team, userBet, betAction, isHomeTeam, fixtureId} = props;
+        const {team, userBet, betAction, isHomeTeam, fixtureId, odd} = props;
         let teamIndex = isHomeTeam ? 1 : 2;
 
         return (
             <Col md={8} sm={6} key={team.name + ' button'}>
+                <div className="odd text-center">
+                    {odd}
+                </div>
                 <Button className="team_button" bsStyle={styleBet(teamIndex, userBet)}
                         onClick={() => betAction(teamIndex, fixtureId)}>
                     {team.name}

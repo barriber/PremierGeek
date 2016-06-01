@@ -5,7 +5,7 @@ import {betTeam} from '../actions/actions';
 import {connect} from 'react-redux';
 import {fetchPostsIfNeeded} from '../actions/actions';
 import {persistBets} from '../actions/actions';
-import {Col, Row, Button } from 'react-bootstrap'
+import {Col, Row, Button} from 'react-bootstrap'
 import BetButton from './BetButton';
 
 class RoundFixtures extends Component {
@@ -19,9 +19,11 @@ class RoundFixtures extends Component {
         const {dispatch, games} = this.props;
         dispatch(fetchPostsIfNeeded());
     }
+
     persistBets(persistObj) {
         this.props.dispatch(persistBets(persistObj));
     }
+
     betAction(bet, fixtureId) {
         this.props.dispatch(betTeam(bet, fixtureId));
     }
@@ -31,7 +33,7 @@ class RoundFixtures extends Component {
         if (_.isEmpty(fixtures)) {
             return null;
         }
-        
+
         return (
             <Col md={6} mdOffset={3} sm={10} smOffset={1} className="fixtures-section">
                 <BetButton fixtures={fixtures} persistBets={this.persistBets}/>
@@ -39,7 +41,8 @@ class RoundFixtures extends Component {
                     _.map(fixtures, (fixture) => {
                         return (
                             <Fixture homeTeam={fixture.homeTeam} awayTeam={fixture.awayTeam} fixtureId={fixture.id}
-                                     key={fixture.id} betAction={this.betAction} userBet={fixture.bet}/>
+                                     key={fixture.id} betAction={this.betAction} userBet={fixture.bet}
+                                     odds={fixture.odds} date={fixture.date}/>
                         );
                     })
                 }

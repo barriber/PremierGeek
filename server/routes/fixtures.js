@@ -148,15 +148,16 @@ module.exports = function (app) {
                     var awayTeam = fixture.awayTeamId.toObject();
                     return {
                         id: fixture._id,
-                        homeTeam: homeTeam,
-                        awayTeam: awayTeam,
+                        homeTeam,
+                        awayTeam,
                         homeTeamPoints: fixture.homeTeamPoints,
                         awayTeamPoints: fixture.awayTeamPoints,
                         homeTeamPosition: fixture.homeTeamPosition,
                         awayTeamPosition: fixture.awayTeamPosition,
                         roundNumber: fixture.roundNumber,
                         date: fixture.date,
-                        bet: _.isNumber(fixture.bet) ? fixture.bet : ''
+                        bet: _.isNumber(fixture.bet) ? fixture.bet : '',
+                        odds: fixture.odds
                     };
                 });
                 res.send(fixtures);
