@@ -128,7 +128,7 @@ var getCurrentRound = function (league, userId) {
             return fixtures;
         });
     });
-}
+};
 
 var getNextRound = function (leagueId, userId) {
     return League.findOne({'football_data_id': leagueId}).then(function (league) {

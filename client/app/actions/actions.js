@@ -45,10 +45,11 @@ export function fetchPostsIfNeeded() {
     }
 }
 
-export function betTeam(team, fixtureId) {
+export function betScore(team, fixtureId, score) {
     return {
         type: PLACE_BET,
         team,
+        score,
         fixtureId
     }
 }

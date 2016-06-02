@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
 import Fixture from './Fixture';
-import {betTeam} from '../actions/actions';
+import {betScore} from '../actions/actions';
 import {connect} from 'react-redux';
 import {fetchPostsIfNeeded} from '../actions/actions';
 import {persistBets} from '../actions/actions';
@@ -24,8 +24,9 @@ class RoundFixtures extends Component {
         this.props.dispatch(persistBets(persistObj));
     }
 
-    betAction(bet, fixtureId) {
-        this.props.dispatch(betTeam(bet, fixtureId));
+    betAction(bet, fixtureId, scoreInput) {
+        console.log(scoreInput);
+        this.props.dispatch(betScore(bet, fixtureId));
     }
 
     render() {

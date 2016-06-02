@@ -42,7 +42,8 @@ export default function MatchSide(props) {
     const scoreInput = function () {
         return (
             <Col md={2} sm={2} key={team.name + 'score'}>
-                <ScoreInput/>
+                <ScoreInput betAction={props.betAction} isHomeTeam={props.isHomeTeam}
+                            fixtureId={props.fixtureId}/>
             </Col>
         )
     };

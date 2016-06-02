@@ -13,13 +13,18 @@ export default class ScoreInput extends Component {
     getValidationState() {
         return this.state.score.length === 1 ? 'success' : 'error';
     }
-
-    handleScoreChange(e) {
-        const input = e.target.value;
+    isNumber(input) {
         const numValue = _.toNumber(input);
-        if (input !== null && !_.isNaN(numValue) && input.indexOf('.') === -1 && input.length <= 1
-            && numValue >= 0 && _.isInteger(numValue)) {
+        
+        return input !== null && !_.isNaN(numValue) && input.indexOf('.') === -1 && input.length <= 1
+            && numValue >= 0 && _.isInteger(numValue);
+    }
+    handleScoreChange(e) {
+        const {isHomeTeam, betAction, fixtureId} = this.props
+        const input = e.target.value;
+        if (this.isNumber(input)) {
             this.setState({score: e.target.value});
+            betAction(isHomeTeam ? 1 : 2, fixtureId, _.toInteger(input));
         }
     }
 
