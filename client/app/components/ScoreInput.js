@@ -18,7 +18,7 @@ export default class ScoreInput extends Component {
         const input = e.target.value;
         const numValue = _.toNumber(input);
         if (input !== null && !_.isNaN(numValue) && input.indexOf('.') === -1 && input.length <= 1
-            && numValue < 10 && numValue > -1 && _.isInteger(numValue)) {
+            && numValue >= 0 && _.isInteger(numValue)) {
             this.setState({score: e.target.value});
         }
     }
