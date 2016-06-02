@@ -41,7 +41,7 @@ export default function MatchSide(props) {
     const scoreInput = function () {
         return (
             <Col md={2} sm={2} className="score-column" key={team.name + 'score'}>
-                <FormControl type="text" className="score-input"/>
+                <FormControl type="text" className="score-input text-center"/>
             </Col>
         )
     };
