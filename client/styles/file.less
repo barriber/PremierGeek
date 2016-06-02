@@ -3,11 +3,18 @@
 @import "./login";
 @import "header";
 
+
+@team-vertical-align: 17px;
+
 .fixture-container {
-  margin-bottom: 23px;
+  margin-bottom: 3px;
   .fixture {
     display: flex;
     align-items: center;
+  }
+  .match-date {
+    position: relative;
+    top: -13px
   }
 }
 
@@ -18,6 +25,15 @@
     width: auto;
     max-width: 6em;
     height: 6em;
+    margin-top: @team-vertical-align;
+  }
+  .score-column {
+    .score-input {
+      margin-top: @team-vertical-align;
+    }
+  }
+  .team-button-col {
+    padding: 0;
   }
 
   &.home-team {
@@ -28,7 +44,7 @@
 }
 
 .match-side {
-  width: 46%;
+  width: 47%;
 }
 
 .team_button {
@@ -39,7 +55,7 @@
 
 .vs {
   text-align: center;
-  width: 8%;
+  width: 6%;
 }
 
 .bet-button {
@@ -48,6 +64,6 @@
 }
 
 .fixtures-section {
+  padding-bottom: 45px;
   background-color: #F5F5F5;
 }
-

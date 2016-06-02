@@ -20,7 +20,7 @@ function Fixture(props) {
                 <MatchSide team={awayTeam} userBet={userBet} isHomeTeam={false} betAction={betAction}
                            fixtureId={fixtureId} odd={odds[2]}/>
             </Row>
-            <div className="text-center">
+            <div className="text-center match-date">
                 {moment(date).format("MMMM Do, HH:mm")}
             </div>
         </div>

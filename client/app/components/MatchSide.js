@@ -16,7 +16,7 @@ export default function MatchSide(props) {
     };
     const getTeamLogo = function (team) {
         return (
-            <Col md={4} sm={6} key={team.name + ' logo'}>
+            <Col md={4} sm={4} key={team.name + ' logo'}>
                 <Image src={team.logo} responsive circle/>
             </Col>
         );
@@ -26,7 +26,7 @@ export default function MatchSide(props) {
         let teamIndex = isHomeTeam ? 1 : 2;
 
         return (
-            <Col md={6} sm={6} key={team.name + ' button'}>
+            <Col md={6} sm={6} key={team.name + ' button'} className="team-button-col">
                 <div className="odd text-center">
                     {odd}
                 </div>
@@ -37,13 +37,14 @@ export default function MatchSide(props) {
             </Col>
         );
     };
+
     const scoreInput = function () {
         return (
-            <Col md={2} sm={2}>
-                <FormControl type="text"/>
+            <Col md={2} sm={2} className="score-column" key={team.name + 'score'}>
+                <FormControl type="text" className="score-input"/>
             </Col>
         )
-    }
+    };
 
     const betSideElements = [getTeamLogo(team), getTeamBetButton(), scoreInput()];
     const sideClass = isHomeTeam ? 'home-team' : 'away-team';
