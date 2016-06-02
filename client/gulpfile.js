@@ -15,7 +15,6 @@ gulp.task('webpack:build', function (callback) {
             console.log('ERROR'); //FIXME
         }
 
-        console.log('SUCCESS!!');
         console.log(stats.toString({
             colors: true
         }));

@@ -1,5 +1,6 @@
 import React from 'react';
-import {Button, Row, Col, Image, FormControl} from 'react-bootstrap';
+import {Button, Row, Col, Image, FormControl, FormGroup} from 'react-bootstrap';
+import ScoreInput from './ScoreInput';
 
 export default function MatchSide(props) {
     const {team, isHomeTeam} = props;
@@ -40,8 +41,8 @@ export default function MatchSide(props) {
 
     const scoreInput = function () {
         return (
-            <Col md={2} sm={2} className="score-column" key={team.name + 'score'}>
-                <FormControl type="text" className="score-input text-center"/>
+            <Col md={2} sm={2} key={team.name + 'score'}>
+                <ScoreInput betAction={betAction}/>
             </Col>
         )
     };
