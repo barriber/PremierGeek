@@ -21,13 +21,14 @@ function fetchGames() {
         return fetch('/api/nextRound', {
             credentials: 'include' //For cookie login!!!
         }).then(response => response.json())
-            .then(result =>
+            .then(result => {
+                console.log(result);
                 dispatch({
                     type: RECEIVE_NEXT_ROUND,
                     nextRound: result[0].roundNumber,
                     fixtures: result,
                     receivedAt: Date.now()
-                })).catch(error => {
+                })}).catch(error => {
                 console.log(error);
             });
     }
@@ -45,10 +46,10 @@ export function fetchPostsIfNeeded() {
     }
 }
 
-export function betScore(team, fixtureId, score) {
+export function betScore(teamSide, fixtureId, score) {
     return {
         type: PLACE_BET,
-        team,
+        teamSide,
         score,
         fixtureId
     }

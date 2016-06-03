@@ -24,9 +24,8 @@ class RoundFixtures extends Component {
         this.props.dispatch(persistBets(persistObj));
     }
 
-    betAction(bet, fixtureId, scoreInput) {
-        console.log(scoreInput);
-        this.props.dispatch(betScore(bet, fixtureId));
+    betAction(teamSide, fixtureId, scoreInput) {
+        this.props.dispatch(betScore(teamSide, fixtureId, scoreInput));
     }
 
     render() {

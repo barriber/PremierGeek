@@ -41,13 +41,12 @@ function basicReducer(state = initilState, action) {
         case PLACE_BET:
             var fixtures = state.get('fixtures');
             var fixture = _.find(fixtures.toJS(), {id: action.fixtureId});
-            var usetBet = fixture.bet === action.team ? 0 : action.team;
+            const teamSide = action.teamSide === 1 ? 'homeTeamScore' : 'awayTeamScore';
             var index = fixtures.findIndex((fixture) => {
                 return fixture.get('id') === action.fixtureId;
             });
 
-            return state.setIn(['fixtures', index, 'bet'], usetBet);
-            break;
+            return state.setIn(['fixtures', index, 'bet', teamSide], action.score);
         case SEND_BETS:
             return state.set('sendBets', true).set('betsPersisted', false);
         case BETS_PERSISTED:
