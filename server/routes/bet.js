@@ -44,7 +44,7 @@ const calculateUserMacthBet = function (userBet) {
         points,
         matchId: userBet.matchId._id
     }
-}
+};
 
 const updatePlayedMatches = function (leagueId) {
     return getPersistedFixtures(false, leagueId).then((missingFixtures) => {
@@ -101,12 +101,14 @@ const getFinishedFixturesResults = function (leagueId) {
 
 module.exports = function (app) {
     app.route('/api/bet').post(function (req, res) {
-        _.forEach(req.body, (bet) => {
-            Bet.update({matchId: bet.fixtureId, userId: req.user.id}, bet, {upsert: true}, (err) => {
+        _.forEach(req.body, (userBetObj) => {
+            userBetObj.updateTime = Date.now();
+            if(_.isNumber(userBetObj.bet.homeTeamScore) && _.isNumber(userBetObj.bet.awayTeamScore)) // another validation
+            Bet.update({matchId: userBetObj.matchId, userId: req.user.id}, userBetObj, {upsert: true}, (err) => {
                 if (err) {
                     res(500, 'No Bet persist')
                 }
-            })
+            });
         });
 
         res.send(true);
