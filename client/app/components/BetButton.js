@@ -18,7 +18,7 @@ export default function ({fixtures, persistBets}) {
     return (
         <Row className="text-center">
             <Button bsStyle="primary" className="bet-button" bsSize="large" onClick={() => placeBet()}>
-                submit bets
+                Submit your bets
             </Button>
         </Row>
     )

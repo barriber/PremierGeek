@@ -6,7 +6,7 @@ export default class ScoreInput extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            score: props.score || ''
+            score: _.isNumber(props.score) ? props.score : ''
         }
     }
 
