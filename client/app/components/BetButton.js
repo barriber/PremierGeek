@@ -2,14 +2,13 @@ import React from 'react';
 import _ from 'lodash';
 import {Button, Row} from 'react-bootstrap'
 
-export default function (props) {
-    const {fixtures, persistBets} = props;
+export default function ({fixtures, persistBets}) {
     const placeBet = function () {
-        const userBettings = _.filter(fixtures, (fixture) => {
-            return fixture.bet !== '';
+        const userBets = _.filter(fixtures, (fixture) => {
+            return fixture.bet.homeTeamScore !== null && fixture.bet.awayTeamScore !== null;
         });
 
-        const persistObj = _.map(userBettings, (userBet) => {
+        const persistObj = _.map(userBets, (userBet) => {
             return {matchId: userBet.id, bet: userBet.bet};
         });
 
@@ -19,7 +18,7 @@ export default function (props) {
     return (
         <Row className="text-center">
             <Button bsStyle="primary" className="bet-button" bsSize="large" onClick={() => placeBet()}>
-                place your bet
+                submit bets
             </Button>
         </Row>
     )

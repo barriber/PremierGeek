@@ -156,7 +156,7 @@ module.exports = function (app) {
                         awayTeamPosition: fixture.awayTeamPosition,
                         roundNumber: fixture.roundNumber,
                         date: fixture.date,
-                        bet: fixture.bet || {homeTeamScore: '', awayTeamScore: ''},
+                        bet: fixture.bet || {homeTeamScore: null, awayTeamScore: null, betSide: null},
                         odds: fixture.odds
                     };
                 });

@@ -4,16 +4,16 @@ import ScoreInput from './ScoreInput';
 
 export default function MatchSide(props) {
     const {team, isHomeTeam} = props;
-    const styleBet = function (team, bet) {
-        if (bet === '') {
+    const styleBet = function (team, betIndex) {
+        if (betIndex === null) { // no bet
             return 'info'
         }
 
-        if (bet === 0) {
+        if (betIndex === 0) { // draw
             return 'warning';
         }
 
-        return team === bet ? 'success' : 'danger';
+        return team === betIndex ? 'success' : 'danger';
     };
     const getTeamLogo = function (team) {
         return (
@@ -23,7 +23,7 @@ export default function MatchSide(props) {
         );
     };
     const getTeamBetButton = function () {
-        const {team, userBet, betAction, isHomeTeam, fixtureId, odd} = props;
+        const {team, betIndex, isHomeTeam, odd} = props;
         let teamIndex = isHomeTeam ? 1 : 2;
 
         return (
@@ -31,8 +31,8 @@ export default function MatchSide(props) {
                 <div className="odd text-center">
                     {odd}
                 </div>
-                <Button className="team_button" bsStyle={styleBet(teamIndex, userBet)}
-                        onClick={() => betAction(teamIndex, fixtureId)} bsSize="large">
+                <Button className="team_button" bsStyle={styleBet(teamIndex, betIndex)}bsSize="large">
+                    {/*onClick={() => betAction(teamIndex, fixtureId)}*/}
                     {team.name}
                 </Button>
             </Col>
@@ -43,7 +43,7 @@ export default function MatchSide(props) {
         return (
             <Col md={2} sm={2} key={team.name + 'score'}>
                 <ScoreInput betAction={props.betAction} isHomeTeam={props.isHomeTeam}
-                            fixtureId={props.fixtureId}/>
+                            fixtureId={props.fixtureId} score={props.score}/>
             </Col>
         )
     };

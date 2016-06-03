@@ -6,7 +6,7 @@ export default class ScoreInput extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            score: ''
+            score: props.score || ''
         }
     }
 
@@ -24,7 +24,8 @@ export default class ScoreInput extends Component {
         const input = e.target.value;
         if (this.isNumber(input)) {
             this.setState({score: e.target.value});
-            betAction(isHomeTeam ? 1 : 2, fixtureId, _.toInteger(input));
+            const scoreValue = input === '' ? null : _.toInteger(input);
+            betAction(isHomeTeam ? 1 : 2, fixtureId, scoreValue);
         }
     }
 

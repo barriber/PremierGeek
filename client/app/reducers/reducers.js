@@ -33,20 +33,34 @@ function footballMatch(state = initilState, action) {
     }
 }
 
+const getBetIndex = function (homeScore, awayScore) {
+    if(_.isInteger(homeScore) && _.isInteger(awayScore)) {
+        if(homeScore === awayScore) {
+            return 0;
+        } else {
+            return homeScore > awayScore ? 1 : 2;
+        }
+    }
+
+    return null;
+};
+
 function basicReducer(state = initilState, action) {
     switch (action.type) {
         case REQUEST_GAMES:
         case RECEIVE_NEXT_ROUND:
             return footballMatch(state, action);
         case PLACE_BET:
-            var fixtures = state.get('fixtures');
-            var fixture = _.find(fixtures.toJS(), {id: action.fixtureId});
+            let fixtures = state.get('fixtures');
             const teamSide = action.teamSide === 1 ? 'homeTeamScore' : 'awayTeamScore';
             var index = fixtures.findIndex((fixture) => {
                 return fixture.get('id') === action.fixtureId;
             });
 
             return state.setIn(['fixtures', index, 'bet', teamSide], action.score);
+            // const fixture = _.find(fixtures.toJS(), {id: action.fixtureId});
+            // const betIndex = getBetIndex(fixture.bet.homeTeamScore, fixture.bet.awayTeamScore);
+            // return state.setIn(['fixtures', index, 'bet', 'betSide'], betIndex);
         case SEND_BETS:
             return state.set('sendBets', true).set('betsPersisted', false);
         case BETS_PERSISTED:
