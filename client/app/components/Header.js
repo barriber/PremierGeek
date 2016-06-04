@@ -12,6 +12,7 @@ export default function Header(props) {
                 <Navbar.Collapse>
                     <Nav>
                         <NavItem eventKey={1} href="#/results">Results</NavItem>
+                        <NavItem eventKey={2} href="#/rules">Rules</NavItem>
                     </Nav>
 
                     <Nav pullRight>

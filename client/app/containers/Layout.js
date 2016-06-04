@@ -17,16 +17,12 @@ class Layout extends Component {
     }
 
     render() {
-        if(this.props.isAuthenticated || location.pathname === '/login') {
+        if (this.props.isAuthenticated || location.pathname === '/login') {
             return (
                 <div>
                     <Header user={this.props.user}/>
                     <Grid fluid={true}>
-                        <Row className="main-row">
-                            <main >
-                                {this.props.children}
-                            </main>
-                        </Row>
+                        {this.props.children}
                     </Grid>
                 </div>
             );
