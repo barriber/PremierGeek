@@ -53,7 +53,7 @@ var generateNextRoundObj = function (league) {
         return fetch(footballDataAPI + leagueId + '/teams', {
             headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
         }).then((response => response.json())).then(function (result) {
-            var x = _.map(result.teams, function (team) {
+            var teams = _.map(result.teams, function (team) {
                 var fixedTeamName = removeTeamNameOverHead(team.name);
 
                 return Team.findOneAndUpdate({name: fixedTeamName}, {
@@ -62,7 +62,7 @@ var generateNextRoundObj = function (league) {
                 }, {upsert: true});
             });
 
-            return Promise.all(x);
+            return Promise.all(teams);
         });
     };
 
@@ -88,14 +88,13 @@ var generateNextRoundObj = function (league) {
                         homeScore: null,
                         awayScore: null
                     },
-                    odds: [0,0,0],
+                    odds: [0, 0, 0],
                     roundNumber: fixture.matchday,
                     seasonYear: 2016, //Fixme setgeneric number
                     date: moment(fixture.date).toDate(),
                     played: false
                 }
             });
-
         });
 
         return Promise.all(upcomingFixtures).then(function (fixtures) {
@@ -105,10 +104,8 @@ var generateNextRoundObj = function (league) {
                 startTime: lastBidTime
             };
 
-            Match.collection.insert(fixtures);
             league.save();
-
-            return fixtures;
+            return Match.collection.insert(fixtures);
         });
     });
 };
@@ -117,7 +114,7 @@ var getCurrentRound = function (league, userId) {
     return Match.find({
         seasonYear: 2016,
         leagueId: league._id,
-        roundNumber: league.nextRound.roundNumber
+        date: {$gt: moment().add(1, 'hour')}
     }).lean().then((fixtures) => {
         return Bet.find({userId: userId, matchId: {$in: _.map(fixtures, '_id')}}).then((userBets) => {
             _.forEach(userBets, (userBet) => {
@@ -132,9 +129,13 @@ var getCurrentRound = function (league, userId) {
 
 var getNextRound = function (leagueId, userId) {
     return League.findOne({'football_data_id': leagueId}).then(function (league) {
-        return (moment(moment().format()).isSameOrAfter(league.nextRound.startTime)) ?
-            generateNextRoundObj(league) : getCurrentRound(league, userId);
+        if (moment().isSameOrAfter(league.nextRound.startTime)) {
+            return generateNextRoundObj(league).then(() => {
+                return getCurrentRound(league, userId);
+            })
+        }
 
+        return getCurrentRound(league, userId);
     })
 };
 

@@ -1,11 +1,13 @@
 import React from 'react';
 import _ from 'lodash';
 import {Button, Row} from 'react-bootstrap'
+import moment from 'moment';
 
 export default function ({fixtures, persistBets}) {
     const placeBet = function () {
         const userBets = _.filter(fixtures, (fixture) => {
-            return fixture.bet.homeTeamScore !== null && fixture.bet.awayTeamScore !== null;
+            return fixture.bet.homeTeamScore !== null && fixture.bet.awayTeamScore !== null
+                && moment().add(1, 'hour').isSameOrBefore(fixture.date);
         });
 
         const persistObj = _.map(userBets, (userBet) => {
