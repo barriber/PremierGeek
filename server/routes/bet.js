@@ -7,6 +7,7 @@ const Match = require('../models/MatchSchema');
 const footballDataAPI = globals.FOOTBALL_DATA_API;
 const moment = require('moment');
 
+
 const generateUserPoints = function (user, bets) {
     const userBetResults = _.map(bets, (userBet) => {
          return calculateUserMacthBet(userBet);
@@ -18,26 +19,29 @@ const generateUserPoints = function (user, bets) {
             name: user.firstName + ' ' + user.lastName,
             image: user.imageUrl
         },
-        bets: userBetResults
+        points: _.sumBy(userBetResults, 'points')
     }
 };
 
 const calculateUserMacthBet = function (userBet) {
+    const utils = require('../utils/matchCalculations');
     var points = 0;
     const exactMatch = 2;
     const goalDiffrence = 1.5;
     const matchResult = userBet.matchId.results;
-    if (userBet.bet === matchResult.sideResult) {
-        points += userBet.matchId.odds[userBet.bet];
-        // if (matchResult.homeScore === bet.homeScore && matchResult.awayScore === bet.awayScore) {
-        //     points *= 2;
-        // } else {
-        //     const matchGoalDiffrence = matchResult.homeScore - matchResult.awayScore;
-        //     const userGoalDiffrence = bet.homeScore - bet.awayScore;
-        //     if (userBet.bet !== 0 && matchGoalDiffrence === userGoalDiffrence) {
-        //         points *= 1.5;
-        //     }
-        // }
+    const bet = userBet.bet;
+    const userBetSide = utils.getSide(bet.homeTeamScore, bet.awayTeamScore);
+    if (userBetSide === matchResult.sideResult) {
+        points += userBet.matchId.odds[userBetSide];
+        if (matchResult.homeScore === bet.homeTeamScore && matchResult.awayScore === bet.awayTeamScore) {
+            points *= exactMatch;
+        } else {
+            const matchGoalDifference = matchResult.homeScore - matchResult.awayScore;
+            const userGoalDifference = bet.homeScore - bet.awayScore;
+            if (userBet.bet !== 0 && matchGoalDifference === userGoalDifference) {
+                points *= goalDiffrence;
+            }
+        }
     }
 
     return {

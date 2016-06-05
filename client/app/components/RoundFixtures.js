@@ -5,7 +5,7 @@ import {betScore} from '../actions/actions';
 import {connect} from 'react-redux';
 import {fetchPostsIfNeeded} from '../actions/actions';
 import {persistBets} from '../actions/actions';
-import {Col, Row, Button} from 'react-bootstrap'
+import {Col} from 'react-bootstrap';
 import BetButton from './BetButton';
 
 class RoundFixtures extends Component {

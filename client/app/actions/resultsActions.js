@@ -4,7 +4,7 @@ export const REQUEST_SCORES = 'REQUEST_SCORES';
 export const SCORES_RECIEVE = 'SCORES_RECIEVE';
 export const SCORES_FAILURE = ' SCORES_FAILURE';
 
-export function getAllReults() {
+export function fetchScores() {
     return (dispatch) => {
         dispatch({type: REQUEST_SCORES})
         return fetch('/api/bet/results', {

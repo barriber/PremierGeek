@@ -15,7 +15,8 @@ export default function authReducer(state = initialScoresState, action) {
             return state.set('scoresRequest', false).set('scoresReceived', true)
                 .set('scores', immutable.fromJS(action.scores)).set('scoresFailure', false);
         case REQUEST_SCORES:
-            return state.set('scoresRequest', true).set('scoresReceived', false).set('scoresFailure', false);
+            return state.set('scoresRequest', true).set('scoresReceived', false)
+                .set('scoresFailure', false).set('scores', action.scores);
         case SCORES_FAILURE:
             return state.set('scoresRequest', false).set('scoresReceived', false).set('scoresFailure', true);
         default:

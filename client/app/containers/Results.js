@@ -1,31 +1,47 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {getAllReults} from '../actions/resultsActions'
+import {fetchScores} from '../actions/resultsActions'
+import {Col} from 'react-bootstrap';
+import isArray from 'lodash/isArray';
+import orderBy from 'lodash/orderBy';
+import map from 'lodash/map'
+import UserScore from '../components/UserScore';
 
-export default class Results extends Component {
+class Results extends Component {
     componentDidMount() {
-        this.props.dispatch(getAllReults());
+        this.props.dispatch(fetchScores());
     }
 
     render() {
+        const {scores} = this.props;
+        if (isArray(scores)) {
+            const orderedScores = orderBy(scores, ['points'], ['desc']);
+            let position = 0;
             return (
-                <h1>
-                    Results
-                </h1>
+                <Col md={6} mdOffset={3} sm={10} smOffset={1} className="fixtures-section">
+                    {
+                        map(orderedScores, (userScore) => {
+                           return (
+                               <UserScore points={userScore.points} userName={userScore.user.name} position={++position}
+                                              image={userScore.user.image} key={userScore.user.name} />
+                           );
+                        })
+                    }
+                </Col>
             );
+        }
+
+        return (
+            <h1>
+                no results yet
+            </h1>
+        );
     }
 }
 
 function mapStateToProps(state) {
-    let authReducer = state.authReducer;
-    const {isAuthenticated, isFetching, user} = authReducer || {
-        isAuthenticated: false,
-        isFetching: false,
-        user: {
-            userImage: ''
-        }
-    };
+    let scoresReducer = state.scoresReducer.toJS();
+    return {scores: scoresReducer.scores}
 
-    return {isAuthenticated, isFetching, user}
 }
 export default connect(mapStateToProps)(Results);
