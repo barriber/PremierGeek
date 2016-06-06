@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {fetchScores} from '../actions/resultsActions'
-import {Col} from 'react-bootstrap';
+import {Col, Row} from 'react-bootstrap';
+
 import isArray from 'lodash/isArray';
 import orderBy from 'lodash/orderBy';
 import map from 'lodash/map'
@@ -19,12 +20,18 @@ class Results extends Component {
             let position = 0;
             return (
                 <Col md={6} mdOffset={3} sm={10} smOffset={1} className="fixtures-section">
+                    <Row>
+                        <Col md={2} mdOffset={10} sm={2} smOffset={10} className="text-center scores-title">
+                            Scores
+                        </Col>
+                    </Row>
                     {
                         map(orderedScores, (userScore) => {
-                           return (
-                               <UserScore points={userScore.points} userName={userScore.user.name} position={++position}
-                                              image={userScore.user.image} key={userScore.user.name} />
-                           );
+                            return (
+                                <UserScore points={userScore.points} userName={userScore.user.name}
+                                           position={++position}
+                                           image={userScore.user.image} key={userScore.user.name}/>
+                            );
                         })
                     }
                 </Col>
