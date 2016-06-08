@@ -11,7 +11,7 @@ export default function UserScroe({points, userName, image, position}) {
             <Col md={2} sm={3}>
                 <Image src={image} responsive circle/>
             </Col>
-            <Col md={4} sm={4}>
+            <Col md={4} sm={4} className="scores-user-name">
                 {userName}
             </Col>
             <Col md={2} mdOffset={3} sm={2} smOffset={2} className="text-center">

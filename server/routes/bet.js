@@ -8,45 +8,61 @@ const footballDataAPI = globals.FOOTBALL_DATA_API;
 const moment = require('moment');
 
 
-const generateUserPoints = function (user, bets) {
+const generateUserPoints = function (user, bets, playedMatches) {
     const userBetResults = _.map(bets, (userBet) => {
-         return calculateUserMacthBet(userBet);
+        const match = _.find(playedMatches, {_id: userBet.matchId});
+         return calculateUserMatchBet(userBet, match);
     });
 
     return {
+        userBetResults,
         user: {
             id: user._id,
             name: user.firstName + ' ' + user.lastName,
             image: user.imageUrl
         },
-        points: _.sumBy(userBetResults, 'points')
+        totalScore: _.sumBy(userBetResults, 'points')
     }
 };
 
-const calculateUserMacthBet = function (userBet) {
+const calculateUserMatchBet = function (userBet, match) {
     const utils = require('../utils/matchCalculations');
     var points = 0;
     const exactMatch = 2;
-    const goalDiffrence = 1.5;
-    const matchResult = userBet.matchId.results;
+    const goalDifference = 1.5;
+    const matchResult = match.results;
     const bet = userBet.bet;
     const userBetSide = utils.getSide(bet.homeTeamScore, bet.awayTeamScore);
+    var isSideCorrect = false;
+    var isGoalDifference = false;
+    var isExactMatch = false;
     if (userBetSide === matchResult.sideResult) {
-        points += userBet.matchId.odds[userBetSide];
+        isSideCorrect = true;
+        points += match.odds[userBetSide];
         if (matchResult.homeScore === bet.homeTeamScore && matchResult.awayScore === bet.awayTeamScore) {
+            isExactMatch = true;
             points *= exactMatch;
         } else {
             const matchGoalDifference = matchResult.homeScore - matchResult.awayScore;
             const userGoalDifference = bet.homeScore - bet.awayScore;
             if (userBet.bet !== 0 && matchGoalDifference === userGoalDifference) {
-                points *= goalDiffrence;
+                isGoalDifference = true;
+                points *= goalDifference;
             }
         }
     }
 
     return {
         points,
-        matchId: userBet.matchId._id
+        matchResult,
+        bet,
+        isGoalDifference,
+        isExactMatch,
+        isSideCorrect,
+        teams: {
+            homeTeamLogo: match.homeTeamId.logo,
+            awayTeamLogo: match.awayTeamId.logo
+        }
     }
 };
 
@@ -91,7 +107,7 @@ const getPersistedFixtures = function (isPlayed, leagueId) {
             seasonYear: 2016,
             played: isPlayed,
             date: {$lt: moment().format()}
-        }).populate('homeTeamId').lean();
+        }).populate('homeTeamId awayTeamId').lean();
     });
 };
 
@@ -122,10 +138,10 @@ module.exports = function (app) {
         const leagueId = 424;
         updatePlayedMatches(leagueId).then(() => {
             getPersistedFixtures(true, leagueId).then((playedMatches) => {
-                Bet.find({matchId: {$in: _.map(playedMatches, '_id')}}).populate('matchId userId').lean().then(bets => {
+                Bet.find({matchId: {$in: _.map(playedMatches, '_id')}}).populate('userId').lean().then(bets => {
                     var groupedUsersBets = _.groupBy(bets, 'userId._id');
                     const arr = _.map(groupedUsersBets, (betsArray) => {
-                        return generateUserPoints(betsArray[0].userId, betsArray);
+                        return generateUserPoints(betsArray[0].userId, betsArray, playedMatches);
                     });
                     res.send(arr);
                     return;

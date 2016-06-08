@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import {fetchScores} from '../actions/resultsActions'
 import {Col, Row} from 'react-bootstrap';
 
-import isArray from 'lodash/isArray';
 import orderBy from 'lodash/orderBy';
+import isEmpty from 'lodash/isEmpty';
 import map from 'lodash/map'
 import UserScore from '../components/UserScore';
 
@@ -15,8 +15,8 @@ class Results extends Component {
 
     render() {
         const {scores} = this.props;
-        if (isArray(scores)) {
-            const orderedScores = orderBy(scores, ['points'], ['desc']);
+        if (!isEmpty(scores)) {
+            const orderedScores = orderBy(scores, ['totalScore'], ['desc']);
             let position = 0;
             return (
                 <Col md={6} mdOffset={3} sm={10} smOffset={1} className="scores-section">
@@ -28,7 +28,7 @@ class Results extends Component {
                     {
                         map(orderedScores, (userScore) => {
                             return (
-                                <UserScore points={userScore.points} userName={userScore.user.name}
+                                <UserScore points={userScore.totalScore} userName={userScore.user.name}
                                            position={++position}
                                            image={userScore.user.image} key={userScore.user.name}/>
                             );
