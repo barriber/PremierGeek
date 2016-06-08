@@ -29,7 +29,7 @@ class Results extends Component {
                         map(orderedScores, (userScore) => {
                             return (
                                 <UserScore points={userScore.totalScore} userName={userScore.user.name}
-                                           position={++position}
+                                           position={++position} bets={userScore.userBetResults}
                                            image={userScore.user.image} key={userScore.user.name}/>
                             );
                         })
