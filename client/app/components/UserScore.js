@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Row, Col, Image, Modal} from 'react-bootstrap';
+import {Row, Col, Image} from 'react-bootstrap';
+import PastResultsModal from './PastResultsModal';
 
 export default class UserScore extends Component {
     constructor(props) {
@@ -9,7 +10,7 @@ export default class UserScore extends Component {
         }
     }
 
-    close() {
+    closeModal() {
         this.setState({showModal: false});
     }
 
@@ -17,10 +18,6 @@ export default class UserScore extends Component {
         this.setState({showModal: true});
     }
 
-    showUserResults(bet) {
-        console.log(bet);
-        return (<div>asdsad</div>)
-    }
 
     render() {
         const {points, userName, image, position, bets} = this.props;
@@ -41,15 +38,8 @@ export default class UserScore extends Component {
                         {points}
                     </Col>
                 </Row>
-                <Modal show={this.state.showModal} onHide={() =>this.close()}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>{userName}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        {this.showUserResults(bets)}
-                    </Modal.Body>
-
-                </Modal>
+                <PastResultsModal bets={bets} showModal={this.state.showModal} closeModal={() => this.closeModal()}
+                                  userName={userName}/>
 
             </div>
         )

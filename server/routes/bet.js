@@ -44,8 +44,8 @@ const calculateUserMatchBet = function (userBet, match) {
             points *= exactMatch;
         } else {
             const matchGoalDifference = matchResult.homeScore - matchResult.awayScore;
-            const userGoalDifference = bet.homeScore - bet.awayScore;
-            if (userBet.bet !== 0 && matchGoalDifference === userGoalDifference) {
+            const userGoalDifference = bet.homeTeamScore - bet.awayTeamScore;
+            if (matchResult.sideResult !== 0 && matchGoalDifference === userGoalDifference) {
                 isGoalDifference = true;
                 points *= goalDifference;
             }

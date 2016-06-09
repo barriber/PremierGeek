@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Row, Col, Image, FormControl, FormGroup} from 'react-bootstrap';
+import {Button, Row, Col, Image} from 'react-bootstrap';
 import ScoreInput from './ScoreInput';
 
 export default function MatchSide(props) {
