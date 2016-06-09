@@ -2,6 +2,7 @@ const passport = require('passport');
 const fbConfig = require('../fb');
 const Strategy = require('passport-facebook').Strategy;
 const User = require('../models/UserSchema').User;
+const _ = require('lodash');
 
 module.exports = function(passport) {
     passport.use('facebook', new Strategy({
@@ -33,11 +34,14 @@ module.exports = function(passport) {
                         newUser.userId = profile.id;
                         newUser.provider = 'facebook';
                         newUser.imageUrl = profile.photos[0].value;
-                        newUser.provider = profile.provider;// set the users facebook id
-                        newUser.access_token = access_token; // we will save the token that facebook provides to the user
+                        newUser.access_token = access_token;
                         newUser.firstName = profile.name.givenName;
-                        newUser.lastName = profile.name.familyName; // look at the passport user profile to see how names are returned
-                        newUser.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
+                        newUser.lastName = profile.name.familyName;
+                        if(profile.emails && !_.isEmpty(profile.emails)) {
+                            newUser.email = profile.emails[0].value;
+                        } else {
+                            newUser.email = '';
+                        }
 
                         // save our user to the database
                         newUser.save(function (err, x) {
