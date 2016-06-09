@@ -7,7 +7,7 @@ export default function ({fixtures, persistBets}) {
     const placeBet = function () {
         const userBets = _.filter(fixtures, (fixture) => {
             return fixture.bet.homeTeamScore !== null && fixture.bet.awayTeamScore !== null
-                && moment().add(1, 'hour').isSameOrBefore(fixture.date);
+                && moment().add(1, 'minute').isSameOrBefore(fixture.date);
         });
 
         const persistObj = _.map(userBets, (userBet) => {

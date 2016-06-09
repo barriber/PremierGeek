@@ -19,7 +19,7 @@ export default function Rules() {
                     </p>
 
                     <p>
-                        Betting and changes to your bets will be allowed up until 1 hour before match starts.
+                        Betting and changes to your bets will be allowed up until 1 minute before match starts.
                     </p>
 
                     <p>

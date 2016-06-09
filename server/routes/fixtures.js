@@ -27,7 +27,7 @@ var generateNextRoundObj = function (league) {
 
     var getLeagueFixtures = function (leagueId) {
         return fetch(footballDataAPI + leagueId + '/fixtures', {
-            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
+            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER}
         }).then(response => response.json()).then(json => {
             var allGames = json.fixtures;
             var fixturesPerRound = league.numberOfTeams / 2;
@@ -45,13 +45,13 @@ var generateNextRoundObj = function (league) {
 
     var getLeagueTable = function (leagueId) {
         return fetch('http://api.football-data.org/v1/soccerseasons/' + leagueId + '/leagueTable', {
-            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
+            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER}
         }).then(response => response.json());
     };
 
     var verifyTeams = function (leagueId) {
         return fetch(footballDataAPI + leagueId + '/teams', {
-            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
+            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER}
         }).then((response => response.json())).then(function (result) {
             var teams = _.map(result.teams, function (team) {
                 var fixedTeamName = removeTeamNameOverHead(team.name);
@@ -114,7 +114,7 @@ var getCurrentRound = function (league, userId) {
     return Match.find({
         seasonYear: 2016,
         leagueId: league._id,
-        date: {$gt: moment().add(1, 'hour')}
+        date: {$gt: moment().add(1, 'minute')}
     }).lean().then((fixtures) => {
         return Bet.find({userId: userId, matchId: {$in: _.map(fixtures, '_id')}}).then((userBets) => {
             _.forEach(userBets, (userBet) => {
@@ -167,7 +167,7 @@ module.exports = function (app) {
     });
     app.route('/api/createLeague').post(function (req, res) {
         fetch(footballDataAPI + '/424', {
-            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
+            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER}
         }).then(response => response.json())
             .then(json => {
                 leagueCtrl.createLeague(json);
