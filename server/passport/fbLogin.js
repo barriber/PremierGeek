@@ -16,6 +16,7 @@ module.exports = function(passport) {
             // asynchronous
             process.nextTick(function () {
                 // find the user in the database based on their facebook id
+                console.log('profile' + profile)
                 User.findOne({'userId': profile.id}, function (err, user) {
                     // if there is an error, stop everything and return that
                     // ie an error connecting to the database
@@ -32,16 +33,21 @@ module.exports = function(passport) {
                         // set all of the facebook information in our user model
                         newUser.userId = profile.id;
                         newUser.provider = 'facebook';
+                        console.log('photos--' + profile.photos)
                         newUser.imageUrl = profile.photos[0].value;
+                        console.log('provider--' + profile.provider)
                         newUser.provider = profile.provider;// set the users facebook id
                         newUser.access_token = access_token; // we will save the token that facebook provides to the user
+                        console.log('name---' + profile.name)
                         newUser.firstName = profile.name.givenName;
                         newUser.lastName = profile.name.familyName; // look at the passport user profile to see how names are returned
+                        console.log('emails--' + profile.emails)
                         newUser.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
 
                         // save our user to the database
                         newUser.save(function (err, x) {
                             if (err)
+                                console.log(err);
                                 throw err;
 
                             // if successful, return the new user
