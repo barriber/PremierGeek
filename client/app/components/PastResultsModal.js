@@ -36,7 +36,7 @@ export default function PastResultsModal({bets, showModal, closeModal, userName}
                                     <Image src={bet.teams.awayTeamLogo} responsive circle/>
                                 </Col>
 
-                                <Col md={1} mdOffset={4} sm={1} smOffset={1} className="text-center">
+                                <Col md={1} mdOffset={4} sm={2} className="text-center">
                                     {bet.points}
                                 </Col>
                             </Row>

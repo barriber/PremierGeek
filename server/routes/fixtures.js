@@ -110,6 +110,12 @@ var generateNextRoundObj = function (league) {
     });
 };
 
+var isRequestNextRound = function (leagueId) {
+    return Match.count({played: false, leagueId}).then((notPlayedMatches) => {
+        return notPlayedMatches <= 4;
+    });
+};
+
 var getCurrentRound = function (league, userId) {
     return Match.find({
         seasonYear: 2016,
@@ -128,15 +134,17 @@ var getCurrentRound = function (league, userId) {
 };
 
 var getNextRound = function (leagueId, userId) {
-    return League.findOne({'football_data_id': leagueId}).then(function (league) {
-        if (moment().isSameOrAfter(league.nextRound.startTime)) {
-            return generateNextRoundObj(league).then(() => {
-                return getCurrentRound(league, userId);
-            })
-        }
+    return League.findOne({'football_data_id': leagueId}).then((league) => {
+        return isRequestNextRound(league._id).then((isRequestNextRound) => {
+            if (isRequestNextRound) {
+                return generateNextRoundObj(league).then(() => {
+                    return getCurrentRound(league, userId);
+                })
+            }
 
-        return getCurrentRound(league, userId);
-    })
+            return getCurrentRound(league, userId);
+        })
+    });
 };
 
 module.exports = function (app) {
