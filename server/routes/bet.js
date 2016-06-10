@@ -53,7 +53,7 @@ const calculateUserMatchBet = function (userBet, match) {
     }
 
     return {
-        points,
+        points: _.round(points, 3),
         matchResult,
         bet,
         isGoalDifference,
