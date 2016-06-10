@@ -112,6 +112,7 @@ var generateNextRoundObj = function (league) {
 
 var isRequestNextRound = function (leagueId) {
     return Match.count({played: false, leagueId}).then((notPlayedMatches) => {
+        console.log(notPlayedMatches)
         return notPlayedMatches <= 4;
     });
 };
