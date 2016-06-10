@@ -16,12 +16,6 @@ var removeTeamNameOverHead = function (teamName) {
     return _.replace(removedAfc, 'FC', '');
 };
 
-var getNextRoundLastBidTime = function (fixtures) {
-    var firstMatch = _.minBy(fixtures, 'date');
-
-    return moment(firstMatch.date).subtract(30, 'minutes').format();
-};
-
 var generateNextRoundObj = function (league) {
     var leagueId = league.football_data_id;
 
@@ -37,7 +31,7 @@ var generateNextRoundObj = function (league) {
             });
 
             return {
-                nextRoundNumber: nextRoundNumber,
+                nextRoundNumber,
                 fixtures: unplayedMatches[nextRoundNumber]
             };
         });
@@ -90,7 +84,7 @@ var generateNextRoundObj = function (league) {
                     },
                     odds: [0, 0, 0],
                     roundNumber: fixture.matchday,
-                    seasonYear: 2016, //Fixme setgeneric number
+                    seasonYear: 2016, //Fixme set generic number
                     date: moment(fixture.date).toDate(),
                     played: false
                 }
@@ -98,10 +92,9 @@ var generateNextRoundObj = function (league) {
         });
 
         return Promise.all(upcomingFixtures).then(function (fixtures) {
-            var lastBidTime = getNextRoundLastBidTime(nextRoundObj.fixtures);
             league.nextRound = {
                 roundNumber: nextRoundObj.nextRoundNumber,
-                startTime: lastBidTime
+                startTime: null
             };
 
             league.save();
@@ -112,18 +105,17 @@ var generateNextRoundObj = function (league) {
 
 var isRequestNextRound = function (leagueId) {
     return Match.count({played: false, leagueId}).then((notPlayedMatches) => {
-        console.log(notPlayedMatches)
-        return notPlayedMatches <= 4;
+        return notPlayedMatches <= 3;
     });
 };
 
-var getCurrentRound = function (league, userId) {
+var getNextFixtures = function (league, userId) {
     return Match.find({
         seasonYear: 2016,
         leagueId: league._id,
         date: {$gt: moment().add(1, 'minute')}
     }).lean().then((fixtures) => {
-        return Bet.find({userId: userId, matchId: {$in: _.map(fixtures, '_id')}}).then((userBets) => {
+        return Bet.find({userId, matchId: {$in: _.map(fixtures, '_id')}}).then((userBets) => {
             _.forEach(userBets, (userBet) => {
                 var fixture = _.find(fixtures, {_id: userBet.matchId});
                 fixture.bet = userBet.bet
@@ -139,11 +131,11 @@ var getNextRound = function (leagueId, userId) {
         return isRequestNextRound(league._id).then((isRequestNextRound) => {
             if (isRequestNextRound) {
                 return generateNextRoundObj(league).then(() => {
-                    return getCurrentRound(league, userId);
+                    return getNextFixtures(league, userId);
                 })
             }
 
-            return getCurrentRound(league, userId);
+            return getNextFixtures(league, userId);
         })
     });
 };
