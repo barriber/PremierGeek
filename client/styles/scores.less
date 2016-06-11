@@ -6,18 +6,22 @@
     margin-top: 0.5em;
   }
   .user-score {
+    &:hover {
+      background-color: #83BDE1;
+      cursor: pointer;
+    }
+
     &.first-place {
       background-color: #81D6AC;
+      &:hover {
+        background-color: #83BDE1;
+      }
     }
 
     display: flex;
     align-items: center;
     margin-bottom: 1.5em;
     .scores-user-name {
-      &:hover {
-        color: blue;
-        cursor: pointer;
-      }
     }
   }
 }

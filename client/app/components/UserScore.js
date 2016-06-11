@@ -24,14 +24,14 @@ export default class UserScore extends Component {
         const firstPlaceClass = position === 1 ? 'first-place' : '';
         return (
             <div>
-                <Row className={`user-score ${firstPlaceClass}`}>
+                <Row className={`user-score ${firstPlaceClass}`} onClick={() => this.openModal()}>
                     <Col md={1} sm={1}>
                         {position}
                     </Col>
                     <Col md={2} sm={3}>
                         <Image src={image} responsive circle/>
                     </Col>
-                    <Col md={4} sm={4} className="scores-user-name" onClick={() => this.openModal()}>
+                    <Col md={4} sm={4} className="scores-user-name" >
                         {userName}
                     </Col>
                     <Col md={2} mdOffset={3} sm={2} smOffset={2} className="text-center">
@@ -40,7 +40,6 @@ export default class UserScore extends Component {
                 </Row>
                 <PastResultsModal bets={bets} showModal={this.state.showModal} closeModal={() => this.closeModal()}
                                   userName={userName}/>
-
             </div>
         )
     }
