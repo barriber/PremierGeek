@@ -21,7 +21,7 @@ const generateUserPoints = function (user, bets, playedMatches) {
             name: user.firstName + ' ' + user.lastName,
             image: user.imageUrl
         },
-        totalScore: _.sumBy(userBetResults, 'points')
+        totalScore: _.chain(userBetResults).sumBy('points').round(2).value()
     }
 };
 
@@ -53,7 +53,7 @@ const calculateUserMatchBet = function (userBet, match) {
     }
 
     return {
-        points: _.round(points, 3),
+        points: _.round(points, 2),
         matchResult,
         bet,
         isGoalDifference,
