@@ -12,11 +12,21 @@ export default function PastResultsModal({bets, showModal, closeModal, userName}
         );
     };
 
-    const betResult = function (score, bet) {
+    const betResult = function (result, bet) {
         return (
-            <Col md={1} sm={1}>
-                {score}
-                ({bet})
+            <Col md={2} sm={2} className="bet-result text-center" >
+                <div>
+                    Result
+                    <div>
+                        {result.homeScore} : {result.awayScore}
+                    </div>
+                </div>
+                <div>
+                    Bet
+                    <div>
+                        {bet.homeTeamScore} : {bet.awayTeamScore}
+                    </div>
+                </div>
             </Col>
         )
     }
@@ -32,8 +42,7 @@ export default function PastResultsModal({bets, showModal, closeModal, userName}
                                 <Col md={2} sm={3}>
                                     <Image src={bet.teams.homeTeamLogo} responsive circle/>
                                 </Col>
-                                {betResult(bet.matchResult.homeScore, bet.bet.homeTeamScore)}
-                                {betResult(bet.matchResult.awayScore, bet.bet.awayTeamScore)}
+                                {betResult(bet.matchResult, bet.bet)}
                                 <Col md={2} sm={3}>
                                     <Image src={bet.teams.awayTeamLogo} responsive circle/>
                                 </Col>
