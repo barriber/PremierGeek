@@ -6,18 +6,36 @@
     margin-top: 0.5em;
   }
   .user-score {
+    &:hover {
+      background-color: #83BDE1;
+      cursor: pointer;
+    }
+
     &.first-place {
       background-color: #81D6AC;
+      &:hover {
+        background-color: #83BDE1;
+      }
     }
 
     display: flex;
     align-items: center;
     margin-bottom: 1.5em;
     .scores-user-name {
-      &:hover {
-        color: blue;
-        cursor: pointer;
-      }
     }
+  }
+}
+
+.historical-bet-row {
+  display: flex;
+  align-items: center;
+  font-size: 1.6em;
+  margin-bottom: 1em;
+  .on-going-match {
+    color: red;
+  }
+  .bet-result {
+    font-size: 0.9em;
+    font-weight: bold;
   }
 }

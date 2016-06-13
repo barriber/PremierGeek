@@ -6,12 +6,13 @@ const League = require('../models/LeagueSchema');
 const Match = require('../models/MatchSchema');
 const footballDataAPI = globals.FOOTBALL_DATA_API;
 const moment = require('moment');
+const utils = require('../utils/matchCalculations');
 
 
-const generateUserPoints = function (user, bets, playedMatches) {
+const generateUserPoints = function (user, bets, matches) {
     const userBetResults = _.map(bets, (userBet) => {
-        const match = _.find(playedMatches, {_id: userBet.matchId});
-         return calculateUserMatchBet(userBet, match);
+        const match = _.find(matches, {_id: userBet.matchId});
+        return calculateUserMatchBet(userBet, match);
     });
 
     return {
@@ -21,12 +22,11 @@ const generateUserPoints = function (user, bets, playedMatches) {
             name: user.firstName + ' ' + user.lastName,
             image: user.imageUrl
         },
-        totalScore: _.sumBy(userBetResults, 'points')
+        totalScore: _.chain(userBetResults).sumBy('points').round(2).value()
     }
 };
 
 const calculateUserMatchBet = function (userBet, match) {
-    const utils = require('../utils/matchCalculations');
     var points = 0;
     const exactMatch = 2;
     const goalDifference = 1.5;
@@ -44,8 +44,8 @@ const calculateUserMatchBet = function (userBet, match) {
             points *= exactMatch;
         } else {
             const matchGoalDifference = matchResult.homeScore - matchResult.awayScore;
-            const userGoalDifference = bet.homeScore - bet.awayScore;
-            if (userBet.bet !== 0 && matchGoalDifference === userGoalDifference) {
+            const userGoalDifference = bet.homeTeamScore - bet.awayTeamScore;
+            if (matchResult.sideResult !== 0 && matchGoalDifference === userGoalDifference) {
                 isGoalDifference = true;
                 points *= goalDifference;
             }
@@ -53,12 +53,14 @@ const calculateUserMatchBet = function (userBet, match) {
     }
 
     return {
-        points,
+        points: _.round(points, 2),
         matchResult,
         bet,
         isGoalDifference,
         isExactMatch,
         isSideCorrect,
+        isEnded: match.played,
+        startTime: match.date,
         teams: {
             homeTeamLogo: match.homeTeamId.logo,
             awayTeamLogo: match.awayTeamId.logo
@@ -69,22 +71,21 @@ const calculateUserMatchBet = function (userBet, match) {
 const updatePlayedMatches = function (leagueId) {
     return getPersistedFixtures(false, leagueId).then((missingFixtures) => {
         if (!_.isEmpty(missingFixtures)) {
-            return getFinishedFixturesResults(leagueId).then((finishedFixtures) => {
+            return getFinishedFixturesResults(leagueId).then((result) => {
+                var inPlayMatches = [];
                 _.forEach(missingFixtures, (fixture) => {
-                    const foundMatch = _.find(finishedFixtures, (finishedFixture) => {
-                        return finishedFixture.matchday === fixture.roundNumber &&
-                            _.includes(finishedFixture.homeTeamName, fixture.homeTeamId.name)
-                    });
-
-                    if (foundMatch) {
-                        fixture.results.homeScore = foundMatch.result.goalsHomeTeam;
-                        fixture.results.awayScore = foundMatch.result.goalsAwayTeam;
-                        if (fixture.results.homeScore === fixture.results.awayScore) {
-                            fixture.results.sideResult = 0;
-                        } else {
-                            fixture.results.sideResult = fixture.results.homeScore > fixture.results.awayScore ? 1 : 2;
-                        }
+                    const foundFinishedMatch = getCorrespondingApiFixture(fixture, result.finished);
+                    if (foundFinishedMatch) {
+                        var fixtureObj = fixture.results;
+                        fixtureObj.homeScore = foundFinishedMatch.result.goalsHomeTeam;
+                        fixtureObj.awayScore = foundFinishedMatch.result.goalsAwayTeam;
+                        fixtureObj.sideResult = utils.getSide(fixtureObj.homeScore, fixtureObj.awayScore);
                         fixture.played = true;
+                    } else {
+                        const foundInPlayMatch = getCorrespondingApiFixture(fixture, result.inPlay);
+                        if (foundInPlayMatch) {
+                            inPlayMatches.push(foundInPlayMatch);
+                        }
                     }
                 });
 
@@ -92,7 +93,9 @@ const updatePlayedMatches = function (leagueId) {
                     return Match.update({_id: match._id}, match);
                 });
 
-                return Promise.all(updatePromise);
+                return Promise.all(updatePromise).then(() => {
+                    return inPlayMatches;
+                });
             });
         }
 
@@ -102,12 +105,17 @@ const updatePlayedMatches = function (leagueId) {
 
 const getPersistedFixtures = function (isPlayed, leagueId) {
     return League.findOne({football_data_id: leagueId}).then((league) => {
-        return Match.find({
+        var matchQuery = {
             leagueId: league.id,
             seasonYear: 2016,
-            played: isPlayed,
             date: {$lt: moment().format()}
-        }).populate('homeTeamId awayTeamId').lean();
+        };
+
+        if (_.isBoolean(isPlayed)) {
+            matchQuery.played = isPlayed;
+        }
+
+        return Match.find(matchQuery).populate('homeTeamId awayTeamId').lean();
     });
 };
 
@@ -115,20 +123,44 @@ const getFinishedFixturesResults = function (leagueId) {
     return fetch(footballDataAPI + leagueId + '/fixtures', {
         headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
     }).then(response => response.json()).then(result => {
-        return _.filter(result.fixtures, {status: "FINISHED"})
+        const groupedFixtures = _.groupBy(result.fixtures, 'status');
+        return {
+            finished: groupedFixtures.FINISHED,
+            inPlay: groupedFixtures.IN_PLAY
+        }
     });
+};
+
+const getCorrespondingApiFixture = function (persistedFixture, apiFixtures) {
+    return _.find(apiFixtures, (apiFixture) => {
+        return apiFixture.matchday === persistedFixture.roundNumber &&
+            _.includes(apiFixture.homeTeamName, persistedFixture.homeTeamId.name)
+    });
+};
+
+const updateInPlayMatches = function (persistedFixtures, inPlayApiResults) {
+    _.forEach(persistedFixtures, (fixture) => {
+        var correspondingFixture = getCorrespondingApiFixture(fixture, inPlayApiResults);
+        if (correspondingFixture) {
+            var resultObj = fixture.results;
+            resultObj.homeScore = correspondingFixture.result.goalsHomeTeam;
+            resultObj.awayScore = correspondingFixture.result.goalsAwayTeam;
+            resultObj.sideResult = utils.getSide(resultObj.homeScore, resultObj.awayScore);
+        }
+    })
 };
 
 module.exports = function (app) {
     app.route('/api/bet').post(function (req, res) {
         _.forEach(req.body, (userBetObj) => {
             userBetObj.updateTime = Date.now();
-            if(_.isNumber(userBetObj.bet.homeTeamScore) && _.isNumber(userBetObj.bet.awayTeamScore)) // another validation
-            Bet.update({matchId: userBetObj.matchId, userId: req.user.id}, userBetObj, {upsert: true}, (err) => {
-                if (err) {
-                    res(500, 'No Bet persist')
-                }
-            });
+            if (_.isNumber(userBetObj.bet.homeTeamScore) && _.isNumber(userBetObj.bet.awayTeamScore)) { // score validation
+                Bet.update({matchId: userBetObj.matchId, userId: req.user.id}, userBetObj, {upsert: true}, (err) => {
+                    if (err) {
+                        res(500, 'No Bet persist')
+                    }
+                });
+            }
         });
 
         res.send(true);
@@ -136,8 +168,9 @@ module.exports = function (app) {
 
     app.route('/api/bet/results').put(function (req, res) {
         const leagueId = 424;
-        updatePlayedMatches(leagueId).then(() => {
-            getPersistedFixtures(true, leagueId).then((playedMatches) => {
+        updatePlayedMatches(leagueId).then((onGoingMatches) => {
+            getPersistedFixtures(null, leagueId).then((playedMatches) => {
+                updateInPlayMatches(_.filter(playedMatches, {played: false}), onGoingMatches);
                 Bet.find({matchId: {$in: _.map(playedMatches, '_id')}}).populate('userId').lean().then(bets => {
                     var groupedUsersBets = _.groupBy(bets, 'userId._id');
                     const arr = _.map(groupedUsersBets, (betsArray) => {

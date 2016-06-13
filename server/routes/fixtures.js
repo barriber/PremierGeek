@@ -16,18 +16,12 @@ var removeTeamNameOverHead = function (teamName) {
     return _.replace(removedAfc, 'FC', '');
 };
 
-var getNextRoundLastBidTime = function (fixtures) {
-    var firstMatch = _.minBy(fixtures, 'date');
-
-    return moment(firstMatch.date).subtract(30, 'minutes').format();
-};
-
 var generateNextRoundObj = function (league) {
     var leagueId = league.football_data_id;
 
     var getLeagueFixtures = function (leagueId) {
         return fetch(footballDataAPI + leagueId + '/fixtures', {
-            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
+            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER}
         }).then(response => response.json()).then(json => {
             var allGames = json.fixtures;
             var fixturesPerRound = league.numberOfTeams / 2;
@@ -37,7 +31,7 @@ var generateNextRoundObj = function (league) {
             });
 
             return {
-                nextRoundNumber: nextRoundNumber,
+                nextRoundNumber,
                 fixtures: unplayedMatches[nextRoundNumber]
             };
         });
@@ -45,13 +39,13 @@ var generateNextRoundObj = function (league) {
 
     var getLeagueTable = function (leagueId) {
         return fetch('http://api.football-data.org/v1/soccerseasons/' + leagueId + '/leagueTable', {
-            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
+            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER}
         }).then(response => response.json());
     };
 
     var verifyTeams = function (leagueId) {
         return fetch(footballDataAPI + leagueId + '/teams', {
-            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
+            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER}
         }).then((response => response.json())).then(function (result) {
             var teams = _.map(result.teams, function (team) {
                 var fixedTeamName = removeTeamNameOverHead(team.name);
@@ -90,7 +84,7 @@ var generateNextRoundObj = function (league) {
                     },
                     odds: [0, 0, 0],
                     roundNumber: fixture.matchday,
-                    seasonYear: 2016, //Fixme setgeneric number
+                    seasonYear: 2016, //Fixme set generic number
                     date: moment(fixture.date).toDate(),
                     played: false
                 }
@@ -98,10 +92,9 @@ var generateNextRoundObj = function (league) {
         });
 
         return Promise.all(upcomingFixtures).then(function (fixtures) {
-            var lastBidTime = getNextRoundLastBidTime(nextRoundObj.fixtures);
             league.nextRound = {
                 roundNumber: nextRoundObj.nextRoundNumber,
-                startTime: lastBidTime
+                startTime: null
             };
 
             league.save();
@@ -110,13 +103,19 @@ var generateNextRoundObj = function (league) {
     });
 };
 
-var getCurrentRound = function (league, userId) {
+var isRequestNextRound = function (leagueId) {
+    return Match.count({played: false, leagueId}).then((notPlayedMatches) => {
+        return notPlayedMatches <= 3;
+    });
+};
+
+var getNextFixtures = function (league, userId) {
     return Match.find({
         seasonYear: 2016,
         leagueId: league._id,
-        date: {$gt: moment().add(1, 'hour')}
+        date: {$gt: moment().add(1, 'minute')}
     }).lean().then((fixtures) => {
-        return Bet.find({userId: userId, matchId: {$in: _.map(fixtures, '_id')}}).then((userBets) => {
+        return Bet.find({userId, matchId: {$in: _.map(fixtures, '_id')}}).then((userBets) => {
             _.forEach(userBets, (userBet) => {
                 var fixture = _.find(fixtures, {_id: userBet.matchId});
                 fixture.bet = userBet.bet
@@ -128,15 +127,17 @@ var getCurrentRound = function (league, userId) {
 };
 
 var getNextRound = function (leagueId, userId) {
-    return League.findOne({'football_data_id': leagueId}).then(function (league) {
-        if (moment().isSameOrAfter(league.nextRound.startTime)) {
-            return generateNextRoundObj(league).then(() => {
-                return getCurrentRound(league, userId);
-            })
-        }
+    return League.findOne({'football_data_id': leagueId}).then((league) => {
+        return isRequestNextRound(league._id).then((isRequestNextRound) => {
+            if (isRequestNextRound) {
+                return generateNextRoundObj(league).then(() => {
+                    return getNextFixtures(league, userId);
+                })
+            }
 
-        return getCurrentRound(league, userId);
-    })
+            return getNextFixtures(league, userId);
+        })
+    });
 };
 
 module.exports = function (app) {
@@ -167,7 +168,7 @@ module.exports = function (app) {
     });
     app.route('/api/createLeague').post(function (req, res) {
         fetch(footballDataAPI + '/424', {
-            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER},
+            headers: {'X-Auth-Token': globals.FOOTBALL_DATA_USER}
         }).then(response => response.json())
             .then(json => {
                 leagueCtrl.createLeague(json);

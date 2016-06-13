@@ -38,11 +38,7 @@ class Results extends Component {
             );
         }
 
-        return (
-            <h1>
-                no results yet
-            </h1>
-        );
+        return null;
     }
 }
 
