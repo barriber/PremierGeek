@@ -16,7 +16,8 @@ let initilState = immutable.fromJS({
     lastUpdated: 0,
     sendBets: false,
     betsPersisted: false,
-    betsPersistError: false
+    betsPersistError: false,
+    persistedAt: null
 });
 
 function footballMatch(state = initilState, action) {
@@ -64,7 +65,7 @@ function basicReducer(state = initilState, action) {
         case SEND_BETS:
             return state.set('sendBets', true).set('betsPersisted', false);
         case BETS_PERSISTED:
-            return state.set('sendBets', false).set('betsPersisted', true);
+            return state.set('sendBets', false).set('betsPersisted', true).set('persistedAt', Date.now());
 
         default:
             return state;

@@ -66,7 +66,7 @@ export function persistBets(bets) {
                 Accept: 'application/json'
             }),
             credentials: 'include'
-        }).then(response => response.json()).then(result => {
+        }).then(response => response.json()).then(() => {
             dispatch({type: BETS_PERSISTED});
         }).catch(error => {
             dispatch({

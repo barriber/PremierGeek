@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
+
 import Fixture from './Fixture';
 import {betScore} from '../actions/actions';
 import {connect} from 'react-redux';
@@ -29,14 +30,13 @@ class RoundFixtures extends Component {
     }
 
     render() {
-        const {nextRound, fixtures} = this.props;
+        const {fixtures, persistedAt} = this.props;
         if (_.isEmpty(fixtures)) {
             return null;
         }
-
         return (
             <Col md={6} mdOffset={3} sm={10} smOffset={1} className="fixtures-section">
-                <BetButton fixtures={fixtures} persistBets={this.persistBets}/>
+                <BetButton fixtures={fixtures} persistBets={this.persistBets} persistedDate={persistedAt}/>
                 {
                     _.map(fixtures, (fixture) => {
                         return (
@@ -53,13 +53,13 @@ class RoundFixtures extends Component {
 
 function mapStateToProps(state) {
     let basicReducerJsObj = state.basicReducer.toJS();
-    const {isFetching, lastUpdated, nextRound, fixtures} = basicReducerJsObj || {
+    const {isFetching, lastUpdated, nextRound, fixtures, persistedAt} = basicReducerJsObj || {
         isFetching: true,
         fixtures: [],
-        nextRound: -1
+        nextRound: -1,
+        persistedAt: ''
     };
-
-    return {isFetching, lastUpdated, nextRound, fixtures}
+    return {isFetching, lastUpdated, nextRound, fixtures, persistedAt}
 }
 
 export default connect(mapStateToProps)(RoundFixtures);
