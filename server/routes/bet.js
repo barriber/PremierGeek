@@ -20,7 +20,8 @@ const generateUserPoints = function (user, bets, matches) {
         user: {
             id: user._id,
             name: user.firstName + ' ' + user.lastName,
-            image: user.imageUrl
+            image: user.imageUrl,
+            isPaid: user.isPaid || false
         },
         totalScore: _.chain(userBetResults).sumBy('points').round(2).value()
     }
@@ -163,7 +164,7 @@ module.exports = function (app) {
                 }
             });
 
-            res.send();
+            res.send(true);
         } else {
             res.sendStatus(404);
         }
