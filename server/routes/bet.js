@@ -148,18 +148,26 @@ const updateInPlayMatches = function (persistedFixtures, inPlayApiResults) {
 
 module.exports = function (app) {
     app.route('/api/bet').post(function (req, res) {
-        _.forEach(req.body, (userBetObj) => {
-            userBetObj.updateTime = Date.now();
-            if (_.isNumber(userBetObj.bet.homeTeamScore) && _.isNumber(userBetObj.bet.awayTeamScore)) { // score validation
-                Bet.update({matchId: userBetObj.matchId, userId: req.user.id}, userBetObj, {upsert: true}, (err) => {
-                    if (err) {
-                        res(500, 'No Bet persist')
-                    }
-                });
-            }
-        });
+        if(req.isAuthenticated()) {
+            _.forEach(req.body, (userBetObj) => {
+                userBetObj.updateTime = Date.now();
+                if (_.isNumber(userBetObj.bet.homeTeamScore) && _.isNumber(userBetObj.bet.awayTeamScore)) { // score validation
+                    Bet.update({
+                        matchId: userBetObj.matchId,
+                        userId: req.user.id
+                    }, userBetObj, {upsert: true}, (err) => {
+                        if (err) {
+                            res(500, 'No Bet persist')
+                        }
+                    });
+                }
+            });
 
-        res.send(true);
+            res.send();
+        } else {
+            res.sendStatus(404);
+        }
+        return;
     });
 
     app.route('/api/bet/results').put(function (req, res) {

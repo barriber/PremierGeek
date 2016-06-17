@@ -2,6 +2,11 @@ const express = require('express');
 
 module.exports = function (app, passport) {
     app.get('/api/login', passport.authenticate('facebook', {scope: ['email', 'public_profile']}));
+    app.get('/api/logout', function (req, res) {
+        req.logout();
+        res.send();
+        return;
+    })
     app.get('/auth/facebook/callback',
         function (req, res, next) {
             passport.authenticate('facebook', function (err, user, info) {

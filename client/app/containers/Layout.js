@@ -1,12 +1,16 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Grid, Row, Col, Image} from 'react-bootstrap';
-import {verifySession} from '../actions/authentication';
+import {verifySession, logoutRequset} from '../actions/authentication';
 import Header from '../components/Header';
 
 class Layout extends Component {
     componentDidMount() {
         this.props.dispatch(verifySession());
+    }
+    
+    logout() {
+        this.props.dispatch(logoutRequset());
     }
 
     componentWillReceiveProps(nextProps) {
@@ -20,7 +24,7 @@ class Layout extends Component {
         if (this.props.isAuthenticated || location.pathname === '/login') {
             return (
                 <div>
-                    <Header user={this.props.user}/>
+                    <Header user={this.props.user} logout={() => this.logout()}/>
                     <Grid fluid={true}>
                         {this.props.children}
                     </Grid>

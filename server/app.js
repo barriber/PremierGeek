@@ -27,7 +27,7 @@ app.use(expressSession({
     saveUninitialized: true,
     secret: 'keyboard cat',
     resave: true,
-    cookie : { httpOnly: true, secure : false, maxAge : (4 * 60 * 60 * 1000)}
+    cookie : { httpOnly: true, secure : false, maxAge : null}
 
 }));
 app.use(passport.initialize());

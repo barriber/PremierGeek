@@ -1,4 +1,5 @@
-import {SESSION_VERIFY_REQUEST, LOGIN_SUCCESS, SESSION_VERIFY_FAIL} from '../actions/authentication';
+import {SESSION_VERIFY_REQUEST, LOGIN_SUCCESS, SESSION_VERIFY_FAIL,
+    LOGOUT_REQUEST, LOGOUT_SUCCESS} from '../actions/authentication';
 
 export default function authReducer(state = {isFetching: false}, action) {
     switch (action.type) {
@@ -14,6 +15,16 @@ export default function authReducer(state = {isFetching: false}, action) {
                 isAuthenticated: false
             });
         case SESSION_VERIFY_FAIL:
+            return Object.assign({}, state, {
+                isFetching: false,
+                isAuthenticated: false,
+                user: null
+            });
+        case LOGOUT_REQUEST:
+            return Object.assign({}, state, {
+                logoutRequest: true
+            });
+        case LOGOUT_SUCCESS:
             return Object.assign({}, state, {
                 isFetching: false,
                 isAuthenticated: false,
