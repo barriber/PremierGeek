@@ -72,7 +72,6 @@ const updatePlayedMatches = function (leagueId) {
     return getPersistedFixtures(false, leagueId).then((missingFixtures) => {
         if (!_.isEmpty(missingFixtures)) {
             return getFinishedFixturesResults(leagueId).then((result) => {
-                var inPlayMatches = [];
                 _.forEach(missingFixtures, (fixture) => {
                     const foundFinishedMatch = getCorrespondingApiFixture(fixture, result.finished);
                     if (foundFinishedMatch) {
@@ -81,11 +80,6 @@ const updatePlayedMatches = function (leagueId) {
                         fixtureObj.awayScore = foundFinishedMatch.result.goalsAwayTeam;
                         fixtureObj.sideResult = utils.getSide(fixtureObj.homeScore, fixtureObj.awayScore);
                         fixture.played = true;
-                    } else {
-                        const foundInPlayMatch = getCorrespondingApiFixture(fixture, result.inPlay);
-                        if (foundInPlayMatch) {
-                            inPlayMatches.push(foundInPlayMatch);
-                        }
                     }
                 });
 
@@ -94,7 +88,7 @@ const updatePlayedMatches = function (leagueId) {
                 });
 
                 return Promise.all(updatePromise).then(() => {
-                    return inPlayMatches;
+                    return result.inPlay;
                 });
             });
         }
@@ -139,15 +133,17 @@ const getCorrespondingApiFixture = function (persistedFixture, apiFixtures) {
 };
 
 const updateInPlayMatches = function (persistedFixtures, inPlayApiResults) {
-    _.forEach(persistedFixtures, (fixture) => {
-        var correspondingFixture = getCorrespondingApiFixture(fixture, inPlayApiResults);
-        if (correspondingFixture) {
-            var resultObj = fixture.results;
-            resultObj.homeScore = correspondingFixture.result.goalsHomeTeam;
-            resultObj.awayScore = correspondingFixture.result.goalsAwayTeam;
-            resultObj.sideResult = utils.getSide(resultObj.homeScore, resultObj.awayScore);
-        }
-    })
+   if(_.isArray(inPlayApiResults) && !_.isEmpty(persistedFixtures)) {
+       _.forEach(persistedFixtures, (fixture) => {
+           var correspondingFixture = getCorrespondingApiFixture(fixture, inPlayApiResults);
+           if (correspondingFixture) {
+               var resultObj = fixture.results;
+               resultObj.homeScore = correspondingFixture.result.goalsHomeTeam;
+               resultObj.awayScore = correspondingFixture.result.goalsAwayTeam;
+               resultObj.sideResult = utils.getSide(resultObj.homeScore, resultObj.awayScore);
+           }
+       })
+   }
 };
 
 module.exports = function (app) {
