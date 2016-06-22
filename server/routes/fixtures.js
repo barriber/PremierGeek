@@ -26,9 +26,15 @@ var generateNextRoundObj = function (league) {
             var allGames = json.fixtures;
             var fixturesPerRound = league.numberOfTeams / 2;
             var unplayedMatches = _.chain(allGames).groupBy('status').get('TIMED').groupBy('matchday').value();
-            var nextRoundNumber = _.findKey(unplayedMatches, function (matchDay) {
-                return matchDay.length === fixturesPerRound;
-            });
+            var nextRoundNumber;
+            var roundNumbers = _.chain(unplayedMatches).keys().value();
+            if (roundNumbers.length === 1) { // for cup knockouts
+                nextRoundNumber = roundNumbers[0];
+            } else { // for leagues
+                nextRoundNumber = _.findKey(unplayedMatches, function (matchDay) {
+                    return matchDay.length === fixturesPerRound;
+                });
+            }
 
             return {
                 nextRoundNumber,
@@ -64,42 +70,55 @@ var generateNextRoundObj = function (league) {
         var nextRoundObj = result[0];
         var leagueTableObj = result[1].standing;
 
-        var upcomingFixtures = _.map(nextRoundObj.fixtures, (fixture) => {
-            var homeTeamPosion = _.find(leagueTableObj, {teamName: fixture.homeTeamName});
-            var awayTeamPosion = _.find(leagueTableObj, {teamName: fixture.awayTeamName});
-            return Promise.all([Team.findOne({name: removeTeamNameOverHead(fixture.homeTeamName)}),
-                Team.findOne({name: removeTeamNameOverHead(fixture.awayTeamName)})]).then(function (teams) {
-                return {
-                    homeTeamId: teams[0]._id,
-                    awayTeamId: teams[1]._id,
-                    homeTeamPosition: homeTeamPosion ? homeTeamPosion.position : null,
-                    awayTeamPosition: awayTeamPosion ? awayTeamPosion.position : null,
-                    homeTeamPoints: homeTeamPosion ? homeTeamPosion.points : null,
-                    awayTeamPoints: awayTeamPosion ? awayTeamPosion.points : null,
-                    leagueId: league._id,
-                    results: {
-                        sideResult: null,
-                        homeScore: null,
-                        awayScore: null
-                    },
-                    odds: [0, 0, 0],
-                    roundNumber: fixture.matchday,
-                    seasonYear: 2016, //Fixme set generic number
-                    date: moment(fixture.date).toDate(),
-                    played: false
-                }
+        if (_.isArray(nextRoundObj.fixtures) && _.isString(nextRoundObj.nextRoundNumber)) {
+            var upcomingFixtures = _.map(nextRoundObj.fixtures, (fixture) => {
+                var homeTeamPosion = _.find(leagueTableObj, {teamName: fixture.homeTeamName});
+                var awayTeamPosion = _.find(leagueTableObj, {teamName: fixture.awayTeamName});
+                return Promise.all([Team.findOne({name: removeTeamNameOverHead(fixture.homeTeamName)}),
+                    Team.findOne({name: removeTeamNameOverHead(fixture.awayTeamName)})]).then(function (teams) {
+                    return {
+                        homeTeamId: teams[0]._id,
+                        awayTeamId: teams[1]._id,
+                        homeTeamPosition: homeTeamPosion ? homeTeamPosion.position : null,
+                        awayTeamPosition: awayTeamPosion ? awayTeamPosion.position : null,
+                        homeTeamPoints: homeTeamPosion ? homeTeamPosion.points : null,
+                        awayTeamPoints: awayTeamPosion ? awayTeamPosion.points : null,
+                        leagueId: league._id,
+                        results: {
+                            sideResult: null,
+                            homeScore: null,
+                            awayScore: null
+                        },
+                        odds: [0, 0, 0],
+                        roundNumber: fixture.matchday,
+                        seasonYear: 2016, //Fixme set generic number
+                        date: moment(fixture.date).toDate(),
+                        played: false
+                    }
+                });
             });
-        });
 
-        return Promise.all(upcomingFixtures).then(function (fixtures) {
-            league.nextRound = {
-                roundNumber: nextRoundObj.nextRoundNumber,
-                startTime: null
-            };
+            return Promise.all(upcomingFixtures).then(function (fixtures) {
+                league.nextRound = {
+                    roundNumber: nextRoundObj.nextRoundNumber,
+                    startTime: null
+                };
 
-            league.save();
-            return Match.collection.insert(fixtures);
-        });
+                league.save();
+                var persistedFixtures = _.map(fixtures, (fixture) => {
+                    return Match.update({
+                        homeTeamId: fixture.homeTeamId,
+                        roundNumber: fixture.roundNumber,
+                        leagueId: league._id,
+                        seasonYear: 2016
+                    }, fixture, {upsert: true}).exec();
+                });
+
+                return Promise.all(persistedFixtures);
+            });
+        }
+
+        return;
     });
 };
 
