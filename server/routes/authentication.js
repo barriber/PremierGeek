@@ -28,22 +28,12 @@ module.exports = function (app, passport) {
         if(req.isAuthenticated()) {
             res.send({
                 firstName: req.user.firstName,
-                userImage: req.user.imageUrl
+                userImage: req.user.imageUrl,
+                isPaid: req.user._doc.isPaid || false
             });
             
             return;
         }
         res.send('notFound');
     });
-    // app.route('/api/login').get(function (req, res) {
-    //     console.log(D'login!!!!')
-    //     passport.authenticate('facebook', { scope : 'email' });
-    // });
-    // app.route('/auth/facebook/callback').get(function(req, res) {
-    //     console.log(req);
-    //     passport.authenticate('facebook', {
-    //         successRedirect : '/profile',
-    //         failureRedirect : '/'
-    //     });
-    // })
 }

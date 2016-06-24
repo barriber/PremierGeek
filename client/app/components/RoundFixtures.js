@@ -38,7 +38,7 @@ class RoundFixtures extends Component {
             <Col md={6} mdOffset={3} sm={10} smOffset={1} className="fixtures-section">
                 <BetButton fixtures={fixtures} persistBets={this.persistBets} persistedDate={persistedAt}/>
                 {
-                    _.map(fixtures, (fixture) => {
+                    _.map(_.orderBy(fixtures, ['date'], ['asc']), (fixture) => {
                         return (
                             <Fixture homeTeam={fixture.homeTeam} awayTeam={fixture.awayTeam} fixtureId={fixture.id}
                                      key={fixture.id} betAction={this.betAction} userBet={fixture.bet}
