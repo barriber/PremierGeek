@@ -37,14 +37,15 @@ export default function PastResultsModal({bets, showModal, closeModal, userName}
             <div>
                 {
                     map(orderedScores, (bet) => {
+                        const teams = bet.teams;
                         return (
-                            <Row className="historical-bet-row" key={bet.teams.homeTeamLogo}>
+                            <Row className="historical-bet-row" key={teams.homeTeamLogo + teams.awayTeamLogo}>
                                 <Col md={2} sm={3}>
-                                    <Image src={bet.teams.homeTeamLogo} responsive circle/>
+                                    <Image src={teams.homeTeamLogo} responsive circle/>
                                 </Col>
                                 {betResult(bet.matchResult, bet.bet)}
                                 <Col md={2} sm={3}>
-                                    <Image src={bet.teams.awayTeamLogo} responsive circle/>
+                                    <Image src={teams.awayTeamLogo} responsive circle/>
                                 </Col>
                                 {onGoingMatch(bet.isEnded)}
                                 <Col md={1} mdOffset={1} sm={2} className="text-center">
