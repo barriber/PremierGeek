@@ -76,7 +76,7 @@ var generateNextRoundObj = function (league) {
                 var awayTeamPosion = _.find(leagueTableObj, {teamName: fixture.awayTeamName});
                 return Promise.all([Team.findOne({name: removeTeamNameOverHead(fixture.homeTeamName)}),
                     Team.findOne({name: removeTeamNameOverHead(fixture.awayTeamName)})]).then(function (teams) {
-                    return {
+                    return new Match({
                         homeTeamId: teams[0]._id,
                         awayTeamId: teams[1]._id,
                         homeTeamPosition: homeTeamPosion ? homeTeamPosion.position : null,
@@ -94,7 +94,7 @@ var generateNextRoundObj = function (league) {
                         seasonYear: 2016, //Fixme set generic number
                         date: moment(fixture.date).toDate(),
                         played: false
-                    }
+                    });
                 });
             });
 
@@ -106,12 +106,18 @@ var generateNextRoundObj = function (league) {
 
                 league.save();
                 var persistedFixtures = _.map(fixtures, (fixture) => {
-                    return Match.update({
+                    return Match.findOne({
                         homeTeamId: fixture.homeTeamId,
                         roundNumber: fixture.roundNumber,
                         leagueId: league._id,
                         seasonYear: 2016
-                    }, fixture, {upsert: true}).exec();
+                    }).then(result => {
+                        if(_.isObject(result)) {
+                            return;
+                        } else {
+                            return fixture.save();
+                        }
+                    });
                 });
 
                 return Promise.all(persistedFixtures);
@@ -151,11 +157,11 @@ var getNextRound = function (leagueId, userId) {
             if (isRequestNextRound) {
                 return generateNextRoundObj(league).then(() => {
                     return getNextFixtures(league, userId);
-                })
+                });
             }
 
             return getNextFixtures(league, userId);
-        })
+        });
     });
 };
 
