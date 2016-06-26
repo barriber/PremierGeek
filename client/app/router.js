@@ -5,6 +5,7 @@ import RoundFixtures from './components/RoundFixtures';
 import Results from './containers/Results';
 import Login from './containers/Login';
 import Rules from './components/Rules';
+import Statistics from './containers/Statistics';
 
 export default (
     <Router history={hashHistory}>
@@ -13,6 +14,7 @@ export default (
             <Redirect from="_=_" to="/"/> // facebook hack
             <Route path="results" component={Results}/>
             <Route path="rules" component={Rules}/>
+            <Route path="statistics" component={Statistics}/>
         </Route>
         <Route path="login" component={Login}/>
     </Router>

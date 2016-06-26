@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {fetchScores} from '../actions/resultsActions'
+import {fetchScores} from '../actions/resultsActions';
 import {Col, Row, Checkbox} from 'react-bootstrap';
 
 import filter from 'lodash/filter';

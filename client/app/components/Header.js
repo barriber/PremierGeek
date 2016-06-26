@@ -12,6 +12,7 @@ export default function Header({user, logout}) {
                     <Nav>
                         <NavItem eventKey={1} href="#/results">Results</NavItem>
                         <NavItem eventKey={2} href="#/rules">Rules</NavItem>
+                        <NavItem eventKey={3} href="#/statistics">Statistics</NavItem>
                     </Nav>
 
                     <Nav pullRight>
