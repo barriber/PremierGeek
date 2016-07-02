@@ -12,11 +12,7 @@ var matchSchema = new mongoose.Schema({
     roundNumber: Number,
     seasonYear: Number,
     date: {type: Date, default: Date.now},
-    odds: {
-        homeWin: Number,
-        awayWin: Number,
-        draw: Number
-    },
+    odds: [],
     results: {
         sideResult: '',
         homeScore: Number,

@@ -188,6 +188,7 @@ module.exports = function (app) {
                     };
                 });
                 res.send(fixtures);
+                return;
             });
         });
     });
