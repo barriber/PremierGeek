@@ -5,15 +5,16 @@ let initialScoresState = immutable.fromJS({
     scoresReceived: false,
     scoresRequest: false,
     scoresFailure: false,
-    scores: immutable.List()
-
+    scores: immutable.List(),
+    totalMatches: 0
 });
 
 export default function authReducer(state = initialScoresState, action) {
     switch (action.type) {
         case SCORES_RECIEVE:
             return state.set('scoresRequest', false).set('scoresReceived', true)
-                .set('scores', immutable.fromJS(action.scores)).set('scoresFailure', false);
+                .set('scores', immutable.fromJS(action.scores.usersBets)).set('scoresFailure', false)
+                .set('totalMatches', action.scores.totalMatches);
         case REQUEST_SCORES:
             return state.set('scoresRequest', true).set('scoresReceived', false)
                 .set('scoresFailure', false).set('scores', action.scores);

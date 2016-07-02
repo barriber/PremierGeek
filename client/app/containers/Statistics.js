@@ -15,14 +15,14 @@ class Statistics extends Component {
     }
 
     render() {
-        const {scores} = this.props;
+        const {scores, totalMatches} = this.props;
         if (!isEmpty(scores)) {
             return (
-                <Col md={12} className="scores-section">
+                <Col md={12} >
                     <Row>
                         <Col md={5} mdOffset={3}>
-                            <StatisticsGenerator statisticProp="isSideCorrect" bets={scores} title="hit percentage"
-                                                 isPercentage={true}/>
+                            <StatisticsGenerator statisticProp="isSideCorrect" bets={scores} title="hit %"
+                                                 isPercentage={true} totalMatches={totalMatches}/>
                         </Col>
                     </Row>
                     <Row>
@@ -42,7 +42,8 @@ class Statistics extends Component {
 
 function mapStateToProps(state) {
     let scoresReducer = state.scoresReducer.toJS();
-    return {scores: scoresReducer.scores}
+    return {scores: scoresReducer.scores,
+        totalMatches: scoresReducer.totalMatches}
 
 }
 export default connect(mapStateToProps)(Statistics);

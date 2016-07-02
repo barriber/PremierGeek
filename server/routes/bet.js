@@ -181,8 +181,13 @@ module.exports = function (app) {
                     const arr = _.map(groupedUsersBets, (betsArray) => {
                         return generateUserPoints(betsArray[0].userId, betsArray, playedMatches);
                     });
-                    arr.matchesAmount = playedMatches.length;
-                    res.send(arr);
+
+                    res.send({
+                        usersBets: arr,
+                        totalMatches: playedMatches.length
+
+                    });
+
                     return;
                 })
             });
