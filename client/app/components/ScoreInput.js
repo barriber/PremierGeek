@@ -13,26 +13,20 @@ export default class ScoreInput extends Component {
     getValidationState() {
         return this.state.score.length === 1 ? 'success' : 'error';
     }
-    isNumber(input) {
-        const numValue = _.toNumber(input);
-        
-        return input !== null && !_.isNaN(numValue) && input.indexOf('.') === -1 && input.length <= 1
-            && numValue >= 0 && _.isInteger(numValue);
-    }
+
     handleScoreChange(e) {
         const {isHomeTeam, betAction, fixtureId} = this.props
-        const input = e.target.value;
-        if (this.isNumber(input)) {
+        const regNumber = new RegExp('^[0-9]$');
+        if (regNumber.test(e.target.value)) {
             this.setState({score: e.target.value});
-            const scoreValue = input === '' ? null : _.toInteger(input);
-            betAction(isHomeTeam ? 1 : 2, fixtureId, scoreValue);
+            betAction(isHomeTeam ? 1 : 2, fixtureId, _.toInteger(input));
         }
     }
 
     render() {
         return (
             <FormGroup controlId="scoreInput" className="score-column" validationState={this.getValidationState()}>
-                <FormControl className="score-input text-center"
+                <FormControl className="score-input text-center" type="number"
                              onChange={(e) => this.handleScoreChange(e)} value={this.state.score}/>
             </FormGroup>
         );
