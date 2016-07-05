@@ -17,9 +17,12 @@ export default class ScoreInput extends Component {
     handleScoreChange(e) {
         const {isHomeTeam, betAction, fixtureId} = this.props
         const regNumber = new RegExp('^[0-9]$');
-        if (regNumber.test(e.target.value)) {
+        const input = e.target.value;
+        if (regNumber.test(input) || input === '') {
             this.setState({score: e.target.value});
-            betAction(isHomeTeam ? 1 : 2, fixtureId, _.toInteger(input));
+            if(_.isInteger(input)) {
+                betAction(isHomeTeam ? 1 : 2, fixtureId, _.toInteger(input));
+            }
         }
     }
 
