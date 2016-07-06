@@ -20,7 +20,7 @@ export default class ScoreInput extends Component {
         const input = e.target.value;
         if (regNumber.test(input) || input === '') {
             this.setState({score: e.target.value});
-            if(_.isInteger(input)) {
+            if(input !== '' ) {
                 betAction(isHomeTeam ? 1 : 2, fixtureId, _.toInteger(input));
             }
         }
