@@ -46,6 +46,7 @@ require('./routes/fixtures.js')(app);
 require('./routes/authentication')(app, passport);
 require('./routes/bet')(app);
 
-app.get('*', function (request, response){
-    response.sendFile(path.resolve(publicPath, 'index.html'))
-})
+app.get('football-data.events', function(req, res) {
+    console.log('-------get EVENT---------');
+    res.send(apiToken)
+});
