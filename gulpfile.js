@@ -31,7 +31,7 @@ gulp.task('client:install', () => {
 });
 
 gulp.task('pull', function(){
-    git.pull('origin', 'master', {args: '--rebase'}, function (err) {
+    git.pull('master', 'master', {args: '--rebase'}, function (err) {
         if (err) throw err;
     });
 });
