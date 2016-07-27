@@ -16,7 +16,11 @@ const publicPath = path.join(__dirname, '..', 'client', 'public', 'build');
 
 //conect to mongoDB
 const mongoPass = process.env.MLAB_SCHEME;
-mongoose.connect('mongodb://' + mongoPass + '@ds019990.mlab.com:19990/premier-geek');
+console.log(process.env.MLAB_SCHEME);
+mongoose.connect('mongodb://' + mongoPass + '@ds019990.mlab.com:19990/premier-geek').then(function () {
+}).catch(function(e) {
+    console.log(e);
+});
 
 
 

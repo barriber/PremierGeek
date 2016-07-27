@@ -4,22 +4,44 @@ const gulp = require('gulp');
 const hub = require('gulp-hub');
 const install = require('gulp-install');
 const gulpSequence = require('gulp-sequence');
-var path = require('path');
-process.env.PWD = process.cwd();
-// var pwdPublicPuth = path.join(, 'public');
-const webpackPath = path.join(process.env.PWD, 'client', 'package.json');
+const path = require('path');
+const server = require('gulp-develop-server');
+const clientGulp = path.join('./client/gulpfile.js');
+var git = require('gulp-git');
 
+// We cannot load the internal gulpfiles if we didn't initialize the folders yet
+if (process.argv[process.argv.length - 1].indexOf('prod:deploy') !== 0) {
+    hub([clientGulp]);
+}
 
-gulp.task('hub', function() {
-    console.log('======hub==========')
-    hub(['./client/gulpfile.js']);
+gulp.task('hub:client', function () {
+    hub([clientGulp]);
 });
 
-gulp.task('install:client', function () {
-    console.log('======install==========')
-    console.log(webpackPath);
-    return gulp.src(webpackPath).pipe(install());
-    console.log('======install END==========')
+gulp.task('server:start', function () {
+    server.listen({path: './server/app.js'});
 });
 
-gulp.task('init:client', gulpSequence(['install:client'], 'hub', ['webpack:build']));
+gulp.task('server:install', () => {
+    return gulp.src('./server/package.json').pipe(install());
+});
+
+gulp.task('client:install', () => {
+    return gulp.src('./client/package.json').pipe(install());
+});
+
+gulp.task('pull', function(){
+    git.pull('origin', 'master', {args: '--rebase'}, function (err) {
+        if (err) throw err;
+    });
+});
+
+gulp.task('init:client', gulpSequence(['install:client'], ['webpack:build']));
+
+gulp.task('prod:deploy', gulpSequence('pull', ['server:install', 'client:install'], 'hub:client',
+    ['webpack:build', 'server:start']));
+
+
+
+
+
