@@ -45,11 +45,12 @@ app.listen(port, function () {
     console.log('Server running on port ' + port);
 });
 
-require('./routes/fixtures.js')(app);
-require('./routes/authentication')(app, passport);
-require('./routes/bet')(app);
-
 app.get('*', function(req, res) {
     console.log('-------got EVENT---------');
     res.send(apiToken)
 });
+
+require('./routes/fixtures.js')(app);
+require('./routes/authentication')(app, passport);
+require('./routes/bet')(app);
+
