@@ -45,6 +45,7 @@ app.listen(port, function () {
     console.log('Server running on port ' + port);
 });
 
+app.get('/', function(req, res) {
     console.log('-------got EVENT---------');
     res.send(apiToken)
 });
