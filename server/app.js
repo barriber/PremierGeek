@@ -50,6 +50,7 @@ app.get('/', function(req, res) {
 
 app.get('*', function(req, res) {
     console.log('-------got EVENT---------');
+    console.log(req.originalUrl);
     // res.send(apiToken)
 });
 
