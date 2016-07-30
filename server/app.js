@@ -47,8 +47,11 @@ app.get('/', function(req, res) {
     console.log('-------got EVENT---------');
     // res.send(apiToken)
 });
+app.route('/').post(function (req, res) {
+    console.log('recive!!!!!!');
+})
 
-app.post('*', function (req, res) {
+app.route('*').post(function (req, res) {
     console.log('recive!!!!!!');
 })
 
