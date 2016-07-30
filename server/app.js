@@ -52,6 +52,18 @@ app.post('*', function (req, res) {
     console.log('recive!!!!!!');
 })
 
+app.post('/', function (req, res) {
+    console.log('recive!!!!!!');
+})
+
+app.put('*', function (req, res) {
+    console.log('recive!!!!!!');
+})
+
+app.put('/', function (req, res) {
+    console.log('recive!!!!!!');
+})
+
 app.get('*', function(req, res) {
     console.log('-------got EVENT---------');
     console.log(req.originalUrl);
