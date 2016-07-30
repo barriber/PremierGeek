@@ -47,7 +47,12 @@ app.listen(port, function () {
 
 app.get('/', function(req, res) {
     console.log('-------got EVENT---------');
-    res.send(apiToken)
+    // res.send(apiToken)
+});
+
+app.get('*', function(req, res) {
+    console.log('-------got EVENT---------');
+    // res.send(apiToken)
 });
 
 require('./routes/fixtures.js')(app);
