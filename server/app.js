@@ -11,11 +11,9 @@ const initPassport = require('./passport/init');
 const _ = require('lodash');
 
 const publicPath = path.join(__dirname, '..', 'client', 'public', 'build');
-console.log('==============================================' + publicPath);
 
 //conect to mongoDB
 const mongoPass = process.env.MLAB_SCHEME;
-console.log(process.env.MLAB_SCHEME);
 mongoose.connect('mongodb://' + mongoPass + '@ds019990.mlab.com:19990/premier-geek').then(function () {
 }).catch(function(e) {
     console.log(e);
@@ -41,7 +39,7 @@ initPassport(passport);
 const port = process.env.NODE_ENV === 'production' ? process.env.PORT : 5555;
 app.set('port', port);
 
-app.listen(port, function () {
+app.listen(port, '0.0.0.0.', function () {
     console.log('Server running on port ' + port);
 });
 
