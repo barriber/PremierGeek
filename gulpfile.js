@@ -19,10 +19,12 @@ gulp.task('hub:client', function () {
 });
 
 gulp.task('server:start', function () {
+    console.log('SERVER START====================')
     server.listen({path: './server/app.js'});
 });
 
 gulp.task('server:install', () => {
+    
     return gulp.src('./server/package.json').pipe(install());
 });
 
