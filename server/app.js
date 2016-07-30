@@ -39,7 +39,7 @@ initPassport(passport);
 const port = process.env.NODE_ENV === 'production' ? process.env.PORT : 5555;
 app.set('port', port);
 
-app.listen(port, '0.0.0.0.', function () {
+app.listen(port, function () {
     console.log('Server running on port ' + port);
 });
 
