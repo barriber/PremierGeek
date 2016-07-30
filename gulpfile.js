@@ -10,9 +10,9 @@ const clientGulp = path.join('./client/gulpfile.js');
 var git = require('gulp-git');
 
 // We cannot load the internal gulpfiles if we didn't initialize the folders yet
-if (process.argv[process.argv.length - 1].indexOf('prod:deploy') !== 0) {
-    hub([clientGulp]);
-}
+//if (process.argv[process.argv.length - 1].indexOf('prod:deploy') !== 0) {
+//    hub([clientGulp]);
+//}
 
 gulp.task('hub:client', function () {
     hub([clientGulp]);
