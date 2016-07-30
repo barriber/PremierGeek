@@ -19,8 +19,9 @@ gulp.task('hub:client', function () {
 });
 
 gulp.task('server:start', function () {
-    console.log('SERVER START====================')
-    server.listen({path: './server/app.js'});
+    const serverPath = path.join('./server/app.js');
+    console.log(serverPath+ '+++++++++++++++++')
+    server.listen({path: serverPath});
 });
 
 gulp.task('server:install', () => {
