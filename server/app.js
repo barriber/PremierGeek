@@ -1,5 +1,4 @@
 'use strict'
-console.log('ENTER FILE==================================')
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -50,7 +49,7 @@ require('./routes/fixtures.js')(app);
 require('./routes/authentication')(app, passport);
 require('./routes/bet')(app);
 
-app.get('football-data.events', function(req, res) {
-    console.log('-------get EVENT---------');
+app.get('*', function(req, res) {
+    console.log('-------got EVENT---------');
     res.send(apiToken)
 });
