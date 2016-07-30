@@ -12,7 +12,7 @@ const initPassport = require('./passport/init');
 const _ = require('lodash');
 
 const publicPath = path.join(__dirname, '..', 'client', 'public', 'build');
-
+console.log('==============================================' + publicPath);
 
 //conect to mongoDB
 const mongoPass = process.env.MLAB_SCHEME;
