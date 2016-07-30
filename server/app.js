@@ -48,6 +48,10 @@ app.get('/', function(req, res) {
     // res.send(apiToken)
 });
 
+app.post('*', function (req, res) {
+    console.log('recive!!!!!!');
+})
+
 app.get('*', function(req, res) {
     console.log('-------got EVENT---------');
     console.log(req.originalUrl);
