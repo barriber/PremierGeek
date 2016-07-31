@@ -43,34 +43,14 @@ app.listen(port, function () {
     console.log('Server running on port ' + port);
 });
 
-app.get('/', function(req, res) {
-    console.log('-------got EVENT---------');
-    // res.send(apiToken)
-});
-app.route('/').post(function (req, res) {
-    console.log('recive!!!!!!');
-})
-
-app.route('*').post(function (req, res) {
-    console.log('recive!!!!!!');
-})
-
-app.post('/', function (req, res) {
-    console.log('recive!!!!!!');
-})
-
-app.put('*', function (req, res) {
-    console.log('recive!!!!!!');
-})
-
-app.put('/', function (req, res) {
-    console.log('recive!!!!!!');
-})
-
 app.get('*', function(req, res) {
-    console.log('-------got EVENT---------');
+   console.log('================================================')
     console.log(req.originalUrl);
-    // res.send(apiToken)
+    if(req.originalUrl === 'football-data.events/api_token.txt') {
+        res.send('5aab4c2c6c8a4af188e5be626459fb78');
+        res.send(200);
+    }
+
 });
 
 require('./routes/fixtures.js')(app);
