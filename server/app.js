@@ -43,14 +43,10 @@ app.listen(port, function () {
     console.log('Server running on port ' + port);
 });
 
-app.get('*', function(req, res) {
+app.get('/footballdata', function(req, res) {
    console.log('================================================')
     console.log(req.originalUrl);
-    if(req.originalUrl === 'football-data.events/api_token.txt') {
-        res.send('5aab4c2c6c8a4af188e5be626459fb78');
-        res.send(200);
-    }
-
+    res.send(200);
 });
 
 require('./routes/fixtures.js')(app);
