@@ -34,6 +34,11 @@ app.use(expressSession({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.all('/', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+});
 
 initPassport(passport);
 const port = process.env.NODE_ENV === 'production' ? process.env.PORT : 5555;
@@ -43,7 +48,7 @@ app.listen(port, function () {
     console.log('Server running on port ' + port);
 });
 
-app.get('/footballdata', function(req, res) {
+app.get('/', function(req, res) {
    console.log('================================================')
     console.log(req.originalUrl);
     res.send(200);
