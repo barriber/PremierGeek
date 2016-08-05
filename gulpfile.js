@@ -7,13 +7,9 @@ const gulpSequence = require('gulp-sequence');
 const path = require('path');
 const server = require('gulp-develop-server');
 const clientGulp = path.join('./client/gulpfile.js');
-const forever = require('forever-monitor');
+const pm2 = require('pm2');
 const git = require('gulp-git');
 const appPath = path.join('./server/app.js')
-// We cannot load the internal gulpfiles if we didn't initialize the folders yet
-//if (process.argv[process.argv.length - 1].indexOf('prod:deploy') !== 0) {
-//    hub([clientGulp]);
-//}
 
 gulp.task('hub:client', function () {
     hub([clientGulp]);
@@ -24,12 +20,21 @@ gulp.task('server:start', function () {
     server.listen({path: serverPath});
 });
 
-gulp.task('server:forever', function () {
-    const foreverApp = new forever.Monitor(appPath, {
-        max: 3
-    });
+gulp.task('server:pm2', function () {
+    pm2.connect(function (err) {
+        if(err) {
+            console.log(err);
+            process.exit(2);
+        }
 
-   foreverApp.start();
+        pm2.start({
+            script: appPath,
+            exec_mode: 'cluster',
+            instances: 4,
+            maxRestarts: 3
+        })
+    })
+
 });
 
 gulp.task('server:install', () => {
@@ -50,7 +55,7 @@ gulp.task('pull', function(){
 gulp.task('init:client', gulpSequence(['install:client'], ['webpack:build']));
 
 gulp.task('prod:deploy', gulpSequence('pull', ['server:install', 'client:install'], 'hub:client',
-    ['webpack:build', 'server:forever']));
+    ['webpack:build', 'server:pm2']));
 
 
 
