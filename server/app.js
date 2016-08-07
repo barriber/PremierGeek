@@ -9,12 +9,14 @@ const app = express();
 const passport = require('passport');
 const initPassport = require('./passport/init');
 const _ = require('lodash');
+const mongoConnectionString = require('./globals').MONGO_CONNECTION;
+const logger = require('./logger');
 
 const publicPath = path.join(__dirname, '..', 'client', 'public', 'build');
 
 //conect to mongoDB
-const mongoPass = process.env.MLAB_SCHEME;
-mongoose.connect('mongodb://' + mongoPass + '@ds019990.mlab.com:19990/premier-geek').then(function () {
+mongoose.Promise = global.Promise;
+mongoose.connect(mongoConnectionString).then(function () {
 }).catch(function(e) {
     console.log(e);
 });
@@ -43,11 +45,14 @@ app.all('*', function(req, res, next) {
 initPassport(passport);
 const port = process.env.NODE_ENV === 'production' ? process.env.PORT : 5555;
 app.set('port', port);
-
 app.listen(port, function () {
     console.log('Server running on port ' + port);
 });
 
+app.post('api.football-data', (req, res) => {
+    logger.log(req.data);
+   res.send(200);
+});
 require('./routes/fixtures.js')(app);
 require('./routes/authentication')(app, passport);
 require('./routes/bet')(app);
