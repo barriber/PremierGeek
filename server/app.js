@@ -35,7 +35,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.all('*', function(req, res, next) {
-    console.log('xxxx');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
@@ -47,12 +46,6 @@ app.set('port', port);
 
 app.listen(port, function () {
     console.log('Server running on port ' + port);
-});
-
-app.get('*', function(req, res) {
-   console.log('================================================')
-    console.log(req.originalUrl);
-    res.send(200);
 });
 
 require('./routes/fixtures.js')(app);
