@@ -10,7 +10,7 @@ const passport = require('passport');
 const initPassport = require('./passport/init');
 const _ = require('lodash');
 const mongoConnectionString = require('./globals').MONGO_CONNECTION;
-const logger = require('./logger');
+const logger = require('./bunyanLogger');
 
 const publicPath = path.join(__dirname, '..', 'client', 'public', 'build');
 
@@ -47,10 +47,11 @@ const port = process.env.NODE_ENV === 'production' ? process.env.PORT : 5555;
 app.set('port', port);
 app.listen(port, function () {
     console.log('Server running on port ' + port);
+    logger.info('Server running on port %d', port);
 });
 
-app.post('api.football-data', (req, res) => {
-    logger.log(req.data);
+app.post('/football-data.events', (req, res) => {
+    logger.info({req});
    res.send(200);
 });
 require('./routes/fixtures.js')(app);
