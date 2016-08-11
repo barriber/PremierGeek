@@ -1,11 +1,9 @@
 const bunyan = require('bunyan');
 const path = require('path');
-const filePath = path.join(__dirname, '..', '..', 'logs', 'foo.log')
+const filePath = path.join(__dirname, '..', '..', 'logs', 'premierLogger.log')
 function reqSerializer(req) {
     return {
-        method: req.method,
         url: req.url,
-        headers: req.headers,
         body: req.body
     };
 }
