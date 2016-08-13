@@ -57,7 +57,7 @@ app.post('/football-data.events', (req, res) => {
    res.send(200);
 });
 
-app.post('/footballData ', (req, res) => {
+app.post('/footballData', (req, res) => {
     logger.info('====football data event====');
     logger.info({req});
     res.send(200);
