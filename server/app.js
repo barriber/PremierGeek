@@ -54,6 +54,13 @@ app.post('/football-data.events', (req, res) => {
     logger.info({req});
    res.send(200);
 });
+
+app.post('/footballData ', (req, res) => {
+    logger.info('====football data event====');
+    logger.info({req});
+    res.send(200);
+});
+
 require('./routes/fixtures.js')(app);
 require('./routes/authentication')(app, passport);
 require('./routes/bet')(app);
