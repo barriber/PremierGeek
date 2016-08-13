@@ -37,6 +37,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.all('*', function(req, res, next) {
+    logger.info('====ALL REQUEST====');
+    logger.info({req});
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
