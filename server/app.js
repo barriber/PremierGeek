@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
+const MongoStore = require('connect-mongo')(expressSession);
 const app = express();
 const passport = require('passport');
 const initPassport = require('./passport/init');
@@ -29,6 +30,7 @@ app.use(express.static(publicPath));
 app.use(expressSession({
     saveUninitialized: true,
     secret: 'keyboard cat',
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
     resave: true,
     cookie : { httpOnly: true, secure : false, maxAge : 3600000*24*365}
 
