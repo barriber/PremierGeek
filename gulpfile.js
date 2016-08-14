@@ -53,7 +53,8 @@ gulp.task('client:install', () => {
 gulp.task('pull', function(done){
     git.pull('git@github.com:barriber/PremierGeek.git', 'master', {args: '--rebase'}, function (err) {
         if (err) throw err;
-    }, done);
+        done();
+    });
 });
 
 gulp.task('init:client', gulpSequence(['install:client'], ['webpack:build']));
