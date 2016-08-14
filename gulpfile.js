@@ -16,8 +16,7 @@ gulp.task('hub:client', function () {
 });
 
 gulp.task('server:start', function () {
-    const serverPath = path.join(appPath);
-    server.listen({path: serverPath});
+    server.listen({path: appPath});
 });
 
 gulp.task('server:pm2', function () {
@@ -28,14 +27,16 @@ gulp.task('server:pm2', function () {
         }
 
         pm2.start({
-            script    : 'app.js',         // Script to be run
+            script    : 'server/app.js',         // Script to be run
             exec_mode : 'cluster',        // Allow your app to be clustered
-            instances : 4,                // Optional: Scale your app by 4
+            instances : 2,                // Optional: Scale your app by 4
             max_memory_restart : '100M',
             maxMemoryRestart: 3
         }, function(err, apps) {
             pm2.disconnect();   // Disconnect from PM2
-            if (err) throw err
+            if (err) {
+                throw err
+            }
         });
     });
 
