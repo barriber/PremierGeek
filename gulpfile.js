@@ -29,7 +29,7 @@ gulp.task('server:pm2', function () {
         pm2.start({
             script    : 'server/app.js',         // Script to be run
             exec_mode : 'cluster',        // Allow your app to be clustered
-            maxMemoryRestart: 3
+            maxMemoryRestart: 3,
             instances : 1,                // Optional: Scale your app by 4
             max_memory_restart : '50M',
         }, function(err, apps) {
