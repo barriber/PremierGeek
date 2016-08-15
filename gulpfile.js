@@ -29,9 +29,9 @@ gulp.task('server:pm2', function () {
         pm2.start({
             script    : 'server/app.js',         // Script to be run
             exec_mode : 'cluster',        // Allow your app to be clustered
-            instances : 2,                // Optional: Scale your app by 4
-            max_memory_restart : '100M',
             maxMemoryRestart: 3
+            instances : 1,                // Optional: Scale your app by 4
+            max_memory_restart : '50M',
         }, function(err, apps) {
             pm2.disconnect();   // Disconnect from PM2
             if (err) {
